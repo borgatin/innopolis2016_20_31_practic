@@ -1,0 +1,7 @@
+\.gradle
+\.idea
+\build
+\out
+TestWebApplication.iml
+TestWebApplication.ipr
+TestWebApplication.iws
