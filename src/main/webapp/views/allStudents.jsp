@@ -19,7 +19,7 @@ All students
     <input type="submit" value="Filter"><a href="/students/all">Clear filter</a>
 </form>
 <br/>
-<table>
+<table border="1">
     <thead>
     <td>ID</td>
     <td>firstname</td>
@@ -38,7 +38,7 @@ All students
             <td>${item.lastname}</td>
             <td>${item.gender}</td>
             <td>${item.birthdate}</td>
-            <td>${skip}</td>
+            <td>${item.lessonsCount}</td>
             <td>
                 <a href="${pageContext.request.contextPath}/students/view/${item.id}">View</a>
                 <a href="${pageContext.request.contextPath}/students/edit/${item.id}">Edit</a>

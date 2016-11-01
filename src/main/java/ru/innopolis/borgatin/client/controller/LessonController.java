@@ -1,4 +1,4 @@
-package ru.innopolis.borgatin.server.controller;
+package ru.innopolis.borgatin.client.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -6,13 +6,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
-import ru.innopolis.borgatin.common.ILessonService;
-import ru.innopolis.borgatin.common.IStudentService;
+import ru.innopolis.borgatin.common.service.ILessonService;
 import ru.innopolis.borgatin.server.editor.DateCustomEditor;
 import ru.innopolis.borgatin.server.model.Lesson;
 import ru.innopolis.borgatin.server.model.Student;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 

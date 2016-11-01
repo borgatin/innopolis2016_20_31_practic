@@ -1,4 +1,4 @@
-package ru.innopolis.borgatin.common;
+package ru.innopolis.borgatin.common.service;
 
 import ru.innopolis.borgatin.server.model.Lesson;
 import ru.innopolis.borgatin.server.model.Student;

@@ -6,10 +6,16 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
- * Created by avborg on 31.10.2016.
+ * Created by avborg on 01.11.2016.
  */
-public class Student implements IStudent {
+public class StudentModel implements IStudent {
+
     private int id;
+    private String lastname;
+    private String firstname;
+    private String gender;
+    private Date birthdate;
+    private int lessonsCount;
 
     @Override
     public int getId() {
@@ -19,35 +25,6 @@ public class Student implements IStudent {
     @Override
     public void setId(int id) {
         this.id = id;
-    }
-
-    private String lastname;
-    private String firstname;
-    private String gender;
-    private Date birthdate;
-
-    @Override
-    public String getGender() {
-        return gender;
-    }
-
-    @Override
-    public void setGender(String gender) {
-        this.gender = gender;
-    }
-
-    @Override
-    public Date getBirthdate() {
-        return birthdate;
-    }
-    @Override
-    public String getBirthdateStr() {
-        return new SimpleDateFormat("dd.MM.yyyy").format(birthdate);
-    }
-
-    @Override
-    public void setBirthdate(Date birthdate) {
-        this.birthdate = birthdate;
     }
 
     @Override
@@ -69,4 +46,39 @@ public class Student implements IStudent {
     public void setFirstname(String firstname) {
         this.firstname = firstname;
     }
+
+    @Override
+    public String getGender() {
+        return gender;
+    }
+
+    @Override
+    public void setGender(String gender) {
+        this.gender = gender;
+    }
+
+    @Override
+    public Date getBirthdate() {
+        return birthdate;
+    }
+
+    @Override
+    public String getBirthdateStr() {
+        return new SimpleDateFormat("dd.MM.yyyy").format(birthdate);
+    }
+
+    @Override
+    public void setBirthdate(Date birthdate) {
+        this.birthdate = birthdate;
+    }
+
+    public int getLessonsCount() {
+        return lessonsCount;
+    }
+
+    public void setLessonsCount(int lessonsCount) {
+        this.lessonsCount = lessonsCount;
+    }
+
+
 }

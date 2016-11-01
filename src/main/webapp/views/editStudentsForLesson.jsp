@@ -11,6 +11,8 @@ Student by lesson ${lesson.topic}
 <br/>
 <a href="${pageContext.request.contextPath}/"> Home </a>
 <br/>
+<a href="${pageContext.request.contextPath}/lessons/all">Back</a>
+<br/>
 
 
 

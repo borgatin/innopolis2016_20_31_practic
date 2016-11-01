@@ -1,4 +1,4 @@
-package ru.innopolis.borgatin.server.controller;
+package ru.innopolis.borgatin.client.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -9,9 +9,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
-import ru.innopolis.borgatin.common.IStudentService;
+import ru.innopolis.borgatin.common.service.IStudentService;
 import ru.innopolis.borgatin.server.editor.DateCustomEditor;
 import ru.innopolis.borgatin.server.model.Student;
+import ru.innopolis.borgatin.server.model.StudentModel;
 
 import java.util.Date;
 import java.util.List;
@@ -66,13 +67,13 @@ public class StudentController {
 
         @RequestMapping(value = "/view/{id}")
     public ModelAndView viewStudent(@PathVariable("id") int id) {
-        ModelAndView modelAndView = new ModelAndView();
-        Student student = studentService.getStudentById(id);
-        modelAndView.addObject("student", student);
+            ModelAndView modelAndView = new ModelAndView();
+            StudentModel studentModel = studentService.getStudentById(id);
+            modelAndView.addObject("student", studentModel);
 
-        modelAndView.setViewName("viewStudent");
-        return modelAndView;
-    }
+            modelAndView.setViewName("viewStudent");
+            return modelAndView;
+        }
     @RequestMapping(value = "/add-student")
     public ModelAndView addStudentView() {
         ModelAndView modelAndView = new ModelAndView();
@@ -83,7 +84,7 @@ public class StudentController {
 
     @RequestMapping(value = "/edit/{id}")
     public ModelAndView editStudentView(@PathVariable("id") int id) {
-        Student student = studentService.getStudentById(id);
+        StudentModel student = studentService.getStudentById(id);
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.addObject("student", student);
         modelAndView.setViewName("editStudents");
@@ -91,7 +92,7 @@ public class StudentController {
     }
 
     @RequestMapping(value = "/add")
-    public ModelAndView addStudent(Student student) {
+    public ModelAndView addStudent(StudentModel student) {
         student = studentService.createStudent(student);
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.addObject("student", student);
@@ -99,7 +100,7 @@ public class StudentController {
         return modelAndView;
     }
     @RequestMapping(value = "/update")
-    public ModelAndView updateStudent(Student student) {
+    public ModelAndView updateStudent(StudentModel student) {
         student = studentService.updateStudent(student);
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.addObject("student", student);

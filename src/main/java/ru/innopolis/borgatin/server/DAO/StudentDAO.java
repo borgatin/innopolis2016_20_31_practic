@@ -57,4 +57,5 @@ public abstract class StudentDAO {
     }
 
 
+    public abstract int getLessonsCount(int id) ;
 }

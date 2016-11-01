@@ -166,5 +166,23 @@ public class StudentDAOImpl extends StudentDAO {
         return student;
     }
 
+    @Override
+    public int getLessonsCount(int id) {
+        try (Connection connection = getConnection();
+             PreparedStatement statement = connection.prepareStatement("SELECT DISTINCT count(lesson_id) lessons_count FROM StudentsLesson WHERE student_id=?");
+        ) {
+            statement.setInt(1, id);
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) {
+                    return resultSet.getInt("lessons_count");
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return 0;
+    }
+
 
 }
