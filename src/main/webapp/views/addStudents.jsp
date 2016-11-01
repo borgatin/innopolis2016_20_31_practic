@@ -5,19 +5,20 @@
 <html>
 
 <head>
-    <title>Index Page</title>
+    <title>Add student</title>
 </head>
 
 <body>
-Добавление студента
-<spring:form method="post"  modelAttribute="student" action="/add">
-
+Adding student
+<spring:form method="post"  modelAttribute="student" action="/students/add">
     First Name: <spring:input  path="firstname"/>   <br/>
     Last Name: <spring:input path="lastname"/>   <br/>
     Gender: <spring:input path="gender"/>   <br/>
     Birthdate: <spring:input path="birthdate"/>   <br/>
     <spring:button>Add</spring:button>
-    <a href="${pageContext.request.contextPath}/"> All </a>
+    <br/>
+    <a href="${pageContext.request.contextPath}/students/all"> All </a><br/>
+    <a href="${pageContext.request.contextPath}/"> Home </a>
 
 </spring:form>
 

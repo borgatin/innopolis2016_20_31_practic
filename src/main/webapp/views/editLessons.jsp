@@ -5,21 +5,21 @@
 <html>
 
 <head>
-    <title>Edit student</title>
+    <title>Edit lesson</title>
 </head>
 
 <body>
-Edit student
-<spring:form method="post"  modelAttribute="student" action="/students/update">
+Edit lesson
+<spring:form method="post"  modelAttribute="lesson" action="/lessons/update">
 
     ID: <spring:input readonly="true" path="id"/>   <br/>
-    First Name: <spring:input path="firstname"/>   <br/>
-    Last Name: <spring:input path="lastname"/>   <br/>
-    Gender: <spring:input path="gender"/>   <br/>
-    Birthdate: <spring:input path="birthdate"/>   <br/>
+    Topic: <spring:input path="topic"/>   <br/>
+    Description: <spring:input path="description"/>   <br/>
+    Duration: <spring:input path="duration"/>   <br/>
+    Date: <spring:input path="date"/>   <br/>
     <spring:button>Update</spring:button>
     <br/>
-    <a href="${pageContext.request.contextPath}/students/all"> All </a><br/>
+    <a href="${pageContext.request.contextPath}/lessons/all"> All </a><br/>
     <a href="${pageContext.request.contextPath}/"> Home </a>
 
 </spring:form>

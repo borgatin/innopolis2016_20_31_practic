@@ -120,7 +120,10 @@ public class StudentDAOImpl extends StudentDAO {
     public boolean delete(int id) {
         try (Connection connection = getConnection();
              PreparedStatement statement = connection.prepareStatement("DELETE FROM students WHERE id = ?");
+             PreparedStatement statement2 = connection.prepareStatement("DELETE FROM StudentsLesson WHERE student_id = ?");
         ) {
+            statement2.setInt(1, id);
+            statement2.executeUpdate();
             statement.setInt(1, id);
             int count = statement.executeUpdate();
             if (count > 0) {
