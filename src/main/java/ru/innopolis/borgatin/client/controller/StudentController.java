@@ -3,6 +3,7 @@ package ru.innopolis.borgatin.client.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,7 +23,7 @@ import java.util.List;
  */
 @Controller
 @Component
-@RequestMapping(value = "/students")
+//@RequestMapping(value = "/students")
 public class StudentController {
 
     private final IStudentService studentService;
@@ -42,14 +43,14 @@ public class StudentController {
     }
 
 
-    @RequestMapping(value = "/all")
-    public ModelAndView getAllStudents() {
-        ModelAndView modelAndView = new ModelAndView();
+    @RequestMapping(value = "/students/all")
+    public String getAllStudents(Model model) {
+//        ModelAndView modelAndView = new ModelAndView();
         List list = studentService.getAllStudents();
-        modelAndView.addObject("list", list);
-        modelAndView.addObject("sortType", SORT_TYPE_ASC);
-        modelAndView.setViewName("allStudents");
-        return modelAndView;
+//        modelAndView.addObject("list", list);
+//        modelAndView.addObject("sortType", SORT_TYPE_ASC);
+//        modelAndView.setViewName("allStudents");
+        return "allStudents";
     }
 
 

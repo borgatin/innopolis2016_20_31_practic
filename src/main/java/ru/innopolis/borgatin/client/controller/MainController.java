@@ -11,7 +11,6 @@ import org.springframework.web.servlet.ModelAndView;
  * Created by avborg on 01.11.2016.
  */
 @Controller
-@RequestMapping(value = "/")
 public class MainController {
 
     @RequestMapping(/*method = RequestMethod.GET,*/ value = "/login")

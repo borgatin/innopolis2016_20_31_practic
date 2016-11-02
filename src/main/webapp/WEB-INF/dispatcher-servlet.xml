@@ -13,19 +13,21 @@
         <!--<import resource="SecurityContext.xml"/>-->
 
 
-    <mvc:annotation-driven/>
+    <mvc:annotation-driven />
 
     <mvc:resources mapping="/resources/**" location="/resources/"/>
 
     <context:component-scan base-package="ru.innopolis.borgatin.client.controller"/>
 
-    <!--<mvc:view-controller path="/" view-name="welcome"/>-->
+    <mvc:view-controller path="/" view-name="welcome"/>
 
     <bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
         <property name="viewClass" value="org.springframework.web.servlet.view.JstlView"/>
         <property name="prefix" value="/views/"/>
         <property name="suffix" value=".jsp"/>
     </bean>
+
+    <security:global-method-security pre-post-annotations="enabled" secured-annotations="enabled"/>
 
 
 </beans>
