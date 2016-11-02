@@ -20,7 +20,16 @@ dependencies {
     compile "org.apache.taglibs:taglibs-standard-jstlel:1.2.5"
 
     compile group: 'org.postgresql', name: 'postgresql', version: '9.3-1102-jdbc41'
-    compile group: 'org.springframework', name: 'spring-webmvc', version: '4.3.3.RELEASE'
-    compile group: 'org.springframework', name: 'spring-context', version: '4.3.3.RELEASE'
+
+    compile "org.springframework:spring-context:4.3.3.RELEASE"
+    compile "org.springframework:spring-webmvc:4.3.3.RELEASE"
+    compile "org.springframework.data:spring-data-jpa:1.10.3.RELEASE"
+    compile "org.springframework.security:spring-security-config:3.2.5.RELEASE"
+    compile "org.springframework.security:spring-security-core:3.2.5.RELEASE"
+    compile "org.springframework.security:spring-security-web:3.2.5.RELEASE"
+    compile "org.springframework.security:spring-security-taglibs:3.2.5.RELEASE"
+
+
+
 
 }

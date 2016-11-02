@@ -144,7 +144,9 @@ public class StudentDAOImpl extends StudentDAO {
         ) {
             statement.setString(1, student.getLastname());
             statement.setString(2, student.getFirstname());
-            statement.setDate(3, new Date(student.getBirthdate().getTime()));
+            if (student.getBirthdate()!= null) {
+                statement.setDate(3, new Date(student.getBirthdate().getTime()));
+            }
             statement.setString(4, student.getGender());
             statement.executeUpdate();
 
