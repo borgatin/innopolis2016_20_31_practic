@@ -8,11 +8,11 @@
         <div class="main">
             <div class="field">
                 <label> <b>Логин:</b></label>
-                <input type="text" size="20" name="username">
+                <input type="text" size="20" name="j_username">
             </div>
             <div class="field">
                 <label>  <b>Пароль:</b></label>
-                <input type="password" size="20" name="password">
+                <input type="password" size="20" name="j_password">
             </div>
 
             <input type="submit" value="Войти">
