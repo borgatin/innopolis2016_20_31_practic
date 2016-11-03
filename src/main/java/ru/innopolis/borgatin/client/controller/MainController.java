@@ -20,7 +20,7 @@ public class MainController {
         return "login";
     }
 
-    @Secured("ROLE_USER, ROLE_ADMIN")
+    @Secured({"ROLE_USER, ROLE_ADMIN"})
     @RequestMapping(/*method = RequestMethod.GET,*/ value = "/")
     public String start(Model model){
         return "welcome";

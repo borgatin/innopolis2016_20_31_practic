@@ -41,7 +41,7 @@ public class LessonController {
     }
 
 
-    @Secured("ROLE_USER, ROLE_ADMIN")
+    @Secured({"ROLE_USER, ROLE_ADMIN"})
     @RequestMapping(value = "/all")
     public ModelAndView getAllLessons() {
         ModelAndView modelAndView = new ModelAndView();
@@ -66,7 +66,7 @@ public class LessonController {
     }
 
 
-    @Secured("ROLE_USER, ROLE_ADMIN")
+    @Secured({"ROLE_USER, ROLE_ADMIN"})
     @RequestMapping(value = "/view/{id}")
     public ModelAndView viewLesson(@PathVariable("id") int id) {
         ModelAndView modelAndView = new ModelAndView();
@@ -126,7 +126,7 @@ public class LessonController {
         return modelAndView;
     }
 
-    @Secured("ROLE_USER, ROLE_ADMIN")
+    @Secured({"ROLE_USER, ROLE_ADMIN"})
     @RequestMapping(value = "/sort/{sortType}")
     public ModelAndView sortAllByName(@PathVariable("sortType") String sortType) {
         ModelAndView modelAndView = new ModelAndView();
@@ -139,7 +139,7 @@ public class LessonController {
     }
 
 
-    @Secured("ROLE_USER, ROLE_ADMIN")
+    @Secured({"ROLE_USER, ROLE_ADMIN"})
     @RequestMapping(value = "/edit-students/{id}")
     public ModelAndView editStudentsForLesson(@PathVariable("id") int id) {
         ModelAndView modelAndView = new ModelAndView();
@@ -158,7 +158,7 @@ public class LessonController {
         return modelAndView;
     }
 
-    @Secured("ROLE_USER, ROLE_ADMIN")
+    @Secured({"ROLE_USER, ROLE_ADMIN"})
     @RequestMapping(value = "/{id}/add-students")
     public ModelAndView addStudentsForLesson(@PathVariable("id") int id) {
         ModelAndView modelAndView = new ModelAndView();
@@ -178,7 +178,7 @@ public class LessonController {
         return modelAndView;
     }
 
-    @Secured("ROLE_USER, ROLE_ADMIN")
+    @Secured({"ROLE_USER, ROLE_ADMIN"})
     @RequestMapping(value = "/{id}/add-student")
     public ModelAndView addStudentOnLesson(@PathVariable("id") int id, @RequestParam("student") int studentId) {
         //добавляем студента на урок
@@ -186,7 +186,7 @@ public class LessonController {
         return editStudentsForLesson(id);
     }
 
-    @Secured("ROLE_USER, ROLE_ADMIN")
+    @Secured({"ROLE_USER, ROLE_ADMIN"})
     @RequestMapping(value = "/{id}/del/{studentId}")
     public ModelAndView deleteStudentFromLesson(@PathVariable("id") int id,@PathVariable("studentId") int studentId) {
         lessonService.deleteStudentFromLesson(id, studentId);

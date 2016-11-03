@@ -43,7 +43,7 @@ public class StudentController {
         binder.registerCustomEditor(Date.class, new DateCustomEditor());
     }
 
-    @Secured("ROLE_USER, ROLE_ADMIN")
+    @Secured({"ROLE_USER, ROLE_ADMIN"})
     @RequestMapping(value = "/all")
     public ModelAndView getAllStudents(Model model) {
         ModelAndView modelAndView = new ModelAndView();
@@ -55,7 +55,7 @@ public class StudentController {
     }
 
 
-    @Secured("ROLE_USER, ROLE_ADMIN")
+    @Secured({"ROLE_USER, ROLE_ADMIN"})
     @RequestMapping(value = "/filter")
     public ModelAndView getAllStudents(@RequestParam("filter") String filter) {
         ModelAndView modelAndView = new ModelAndView();
@@ -68,7 +68,7 @@ public class StudentController {
     }
 
 
-    @Secured("ROLE_USER, ROLE_ADMIN")
+    @Secured({"ROLE_USER, ROLE_ADMIN"})
     @RequestMapping(value = "/view/{id}")
     public ModelAndView viewStudent(@PathVariable("id") int id) {
             ModelAndView modelAndView = new ModelAndView();
@@ -128,7 +128,7 @@ public class StudentController {
         return modelAndView;
     }
 
-    @Secured("ROLE_USER, ROLE_ADMIN")
+    @Secured({"ROLE_USER, ROLE_ADMIN"})
     @RequestMapping(value = "/sort/{sortType}")
     public ModelAndView sortAllByName(@PathVariable("sortType") String sortType) {
         ModelAndView modelAndView = new ModelAndView();
