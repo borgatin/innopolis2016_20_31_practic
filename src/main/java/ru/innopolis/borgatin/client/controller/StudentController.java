@@ -1,6 +1,7 @@
 package ru.innopolis.borgatin.client.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,7 +24,7 @@ import java.util.List;
  */
 @Controller
 @Component
-//@RequestMapping(value = "/students")
+@RequestMapping(value = "/students")
 public class StudentController {
 
     private final IStudentService studentService;
@@ -42,18 +43,19 @@ public class StudentController {
         binder.registerCustomEditor(Date.class, new DateCustomEditor());
     }
 
-
-    @RequestMapping(value = "/students/all")
-    public String getAllStudents(Model model) {
-//        ModelAndView modelAndView = new ModelAndView();
+    @Secured("ROLE_USER, ROLE_ADMIN")
+    @RequestMapping(value = "/all")
+    public ModelAndView getAllStudents(Model model) {
+        ModelAndView modelAndView = new ModelAndView();
         List list = studentService.getAllStudents();
-//        modelAndView.addObject("list", list);
-//        modelAndView.addObject("sortType", SORT_TYPE_ASC);
-//        modelAndView.setViewName("allStudents");
-        return "allStudents";
+        modelAndView.addObject("list", list);
+        modelAndView.addObject("sortType", SORT_TYPE_ASC);
+        modelAndView.setViewName("allStudents");
+        return modelAndView;
     }
 
 
+    @Secured("ROLE_USER, ROLE_ADMIN")
     @RequestMapping(value = "/filter")
     public ModelAndView getAllStudents(@RequestParam("filter") String filter) {
         ModelAndView modelAndView = new ModelAndView();
@@ -66,7 +68,8 @@ public class StudentController {
     }
 
 
-        @RequestMapping(value = "/view/{id}")
+    @Secured("ROLE_USER, ROLE_ADMIN")
+    @RequestMapping(value = "/view/{id}")
     public ModelAndView viewStudent(@PathVariable("id") int id) {
             ModelAndView modelAndView = new ModelAndView();
             StudentModel studentModel = studentService.getStudentById(id);
@@ -75,6 +78,8 @@ public class StudentController {
             modelAndView.setViewName("viewStudent");
             return modelAndView;
         }
+
+    @Secured("ROLE_ADMIN")
     @RequestMapping(value = "/add-student")
     public ModelAndView addStudentView() {
         ModelAndView modelAndView = new ModelAndView();
@@ -83,6 +88,7 @@ public class StudentController {
         return modelAndView;
     }
 
+    @Secured("ROLE_ADMIN")
     @RequestMapping(value = "/edit/{id}")
     public ModelAndView editStudentView(@PathVariable("id") int id) {
         StudentModel student = studentService.getStudentById(id);
@@ -92,6 +98,7 @@ public class StudentController {
         return modelAndView;
     }
 
+    @Secured("ROLE_ADMIN")
     @RequestMapping(value = "/add")
     public ModelAndView addStudent(StudentModel student) {
         student = studentService.createStudent(student);
@@ -100,6 +107,8 @@ public class StudentController {
         modelAndView.setViewName("viewStudent");
         return modelAndView;
     }
+
+    @Secured("ROLE_ADMIN")
     @RequestMapping(value = "/update")
     public ModelAndView updateStudent(StudentModel student) {
         student = studentService.updateStudent(student);
@@ -109,6 +118,7 @@ public class StudentController {
         return modelAndView;
     }
 
+    @Secured("ROLE_ADMIN")
     @RequestMapping(value = "/del/{id}")
     public ModelAndView deleteStudent(@PathVariable("id") int id) {
         studentService.deleteStudentById(id);
@@ -118,6 +128,7 @@ public class StudentController {
         return modelAndView;
     }
 
+    @Secured("ROLE_USER, ROLE_ADMIN")
     @RequestMapping(value = "/sort/{sortType}")
     public ModelAndView sortAllByName(@PathVariable("sortType") String sortType) {
         ModelAndView modelAndView = new ModelAndView();

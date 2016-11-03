@@ -9,9 +9,9 @@
 </head>
 
 <body>
-<a href="/students/all">All students</a>
+<a href="${pageContext.request.contextPath}/students/all">All students</a>
 <br/>
-<a href="/lessons/all">All lessons</a>
+<a href="${pageContext.request.contextPath}/lessons/all">All lessons</a>
 
 
 </body>

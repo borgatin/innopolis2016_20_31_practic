@@ -11,11 +11,11 @@ All lessons
 <br/>
 <a href="${pageContext.request.contextPath}/"> Home </a>
 
-<form method="post" action="/lessons/filter">
+<form method="post" action="${pageContext.request.contextPath}/lessons/filter">
     <label>Фильтр:</label>
     <input type="text" name="filter">
     <input type="submit" value="Filter">
-</form> <a href="/lessons/all">Clear filter</a>
+</form> <a href="${pageContext.request.contextPath}/lessons/all">Clear filter</a>
 <br/>
 <table>
     <thead>
@@ -27,7 +27,7 @@ All lessons
     <td>Controls</td>
     </thead>
     <tbody>
-    <a href="/lessons/add-lesson">Add</a>
+    <a href="${pageContext.request.contextPath}/lessons/add-lesson">Add</a>
     <c:forEach items="${list}" var="item">
         <tr>
             <td>${item.id}</td>

@@ -32,6 +32,12 @@
         <property name="suffix" value=".jsp" />
     </bean>
 
+    <bean name="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+        <property name="driverClassName" value="org.postgresql.Driver"/>
+        <property name="url" value="jdbc:postgresql://localhost:5434/testDB"/>
+        <property name="username" value="postgres"/>
+        <property name="password" value="1Qwerty"/>
+    </bean>
 
     <security:global-method-security pre-post-annotations="enabled" secured-annotations="enabled"/>
 

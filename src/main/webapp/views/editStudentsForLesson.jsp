@@ -38,7 +38,10 @@ Student by lesson ${lesson.topic}
             </td>
         </tr>
     </c:forEach>
-    ${btnAddStudents}
+    <tr><td></td><td></td><td></td><td></td><td></td><td>
+        <a href="${pageContext.request.contextPath}/lessons/${lesson.id}/add-students">Add</a>
+    </td></tr>
+    ${msgError}
     </tbody>
 
 </table>

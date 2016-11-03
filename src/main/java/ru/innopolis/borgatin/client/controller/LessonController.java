@@ -1,6 +1,7 @@
 package ru.innopolis.borgatin.client.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.WebDataBinder;
@@ -40,6 +41,7 @@ public class LessonController {
     }
 
 
+    @Secured("ROLE_USER, ROLE_ADMIN")
     @RequestMapping(value = "/all")
     public ModelAndView getAllLessons() {
         ModelAndView modelAndView = new ModelAndView();
@@ -51,6 +53,7 @@ public class LessonController {
     }
 
 
+    @Secured("ROLE_USER")
     @RequestMapping(value = "/filter")
     public ModelAndView getAllLessons(@RequestParam("filter") String filter) {
         ModelAndView modelAndView = new ModelAndView();
@@ -63,6 +66,7 @@ public class LessonController {
     }
 
 
+    @Secured("ROLE_USER, ROLE_ADMIN")
     @RequestMapping(value = "/view/{id}")
     public ModelAndView viewLesson(@PathVariable("id") int id) {
         ModelAndView modelAndView = new ModelAndView();
@@ -72,6 +76,8 @@ public class LessonController {
         modelAndView.setViewName("viewLesson");
         return modelAndView;
     }
+
+    @Secured("ROLE_ADMIN")
     @RequestMapping(value = "/add-lesson")
     public ModelAndView addLessonView() {
         ModelAndView modelAndView = new ModelAndView();
@@ -80,6 +86,7 @@ public class LessonController {
         return modelAndView;
     }
 
+    @Secured("ROLE_ADMIN")
     @RequestMapping(value = "/edit/{id}")
     public ModelAndView editLessonView(@PathVariable("id") int id) {
         Lesson lesson = lessonService.getLessonById(id);
@@ -89,6 +96,7 @@ public class LessonController {
         return modelAndView;
     }
 
+    @Secured("ROLE_ADMIN")
     @RequestMapping(value = "/add")
     public ModelAndView addLesson(Lesson lesson) {
         lesson = lessonService.createLesson(lesson);
@@ -97,6 +105,8 @@ public class LessonController {
         modelAndView.setViewName("viewLesson");
         return modelAndView;
     }
+
+    @Secured("ROLE_ADMIN")
     @RequestMapping(value = "/update")
     public ModelAndView updateLesson(Lesson lesson) {
         lesson = lessonService.updateLesson(lesson);
@@ -106,6 +116,7 @@ public class LessonController {
         return modelAndView;
     }
 
+    @Secured("ROLE_ADMIN")
     @RequestMapping(value = "/del/{id}")
     public ModelAndView deleteLesson(@PathVariable("id") int id) {
         lessonService.deleteLessonById(id);
@@ -115,6 +126,7 @@ public class LessonController {
         return modelAndView;
     }
 
+    @Secured("ROLE_USER, ROLE_ADMIN")
     @RequestMapping(value = "/sort/{sortType}")
     public ModelAndView sortAllByName(@PathVariable("sortType") String sortType) {
         ModelAndView modelAndView = new ModelAndView();
@@ -127,6 +139,7 @@ public class LessonController {
     }
 
 
+    @Secured("ROLE_USER, ROLE_ADMIN")
     @RequestMapping(value = "/edit-students/{id}")
     public ModelAndView editStudentsForLesson(@PathVariable("id") int id) {
         ModelAndView modelAndView = new ModelAndView();
@@ -134,29 +147,38 @@ public class LessonController {
         List<Student> students = lessonService.getStudentsByLessonID(lesson.getId());
         modelAndView.addObject("lesson", lesson);
         modelAndView.addObject("list", students);
-        String btnAddStudents = "<tr><td></td><td></td><td></td><td></td><td></td><td><a href=\"/lessons/"+id+"/add-students\">Add</a></td></tr>";
-        List<Student> list = lessonService.getFreeStudentsByLessonID(id);
-        if (list.size()>0){
-            modelAndView.addObject("btnAddStudents", btnAddStudents);
-        }
+//        String btnAddStudents = "<tr><td></td><td></td><td></td><td></td><td></td><td><a href=\"/lessons/"+id+"/add-students\">Add</a></td></tr>";
+//        List<Student> list = lessonService.getFreeStudentsByLessonID(id);
+//        if (list.size()>0){
+//            modelAndView.addObject("msgError", btnAddStudents);
+//        }
+
 
         modelAndView.setViewName("editStudentsForLesson");
         return modelAndView;
     }
 
+    @Secured("ROLE_USER, ROLE_ADMIN")
     @RequestMapping(value = "/{id}/add-students")
     public ModelAndView addStudentsForLesson(@PathVariable("id") int id) {
         ModelAndView modelAndView = new ModelAndView();
         Lesson lesson = lessonService.getLessonById(id);
-        List<Student> students = lessonService.getFreeStudentsByLessonID(lesson.getId());
         modelAndView.addObject("lesson", lesson);
 
+        List<Student> students = lessonService.getFreeStudentsByLessonID(id);
 
-        modelAndView.addObject("list", students);
-
-        modelAndView.setViewName("addStudentsForLesson");
+        if (students.size()>0) {
+            modelAndView.addObject("list", students);
+            modelAndView.setViewName("addStudentsForLesson");
+        } else {
+            modelAndView.addObject("msgError", "Все студенты записаны на занятие");
+            students = lessonService.getStudentsByLessonID(id);
+            modelAndView.addObject("list", students);
+        }
         return modelAndView;
     }
+
+    @Secured("ROLE_USER, ROLE_ADMIN")
     @RequestMapping(value = "/{id}/add-student")
     public ModelAndView addStudentOnLesson(@PathVariable("id") int id, @RequestParam("student") int studentId) {
         //добавляем студента на урок
@@ -164,6 +186,7 @@ public class LessonController {
         return editStudentsForLesson(id);
     }
 
+    @Secured("ROLE_USER, ROLE_ADMIN")
     @RequestMapping(value = "/{id}/del/{studentId}")
     public ModelAndView deleteStudentFromLesson(@PathVariable("id") int id,@PathVariable("studentId") int studentId) {
         lessonService.deleteStudentFromLesson(id, studentId);

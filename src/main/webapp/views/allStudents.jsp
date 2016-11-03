@@ -13,10 +13,10 @@ All students
 <br/>
 <a href="${pageContext.request.contextPath}/"> Home </a>
 
-<form method="post" action="/students/filter">
+<form method="post" action="${pageContext.request.contextPath}/students/filter">
     <label>Фильтр:</label>
     <input type="text" name="filter">
-    <input type="submit" value="Filter"><a href="/students/all">Clear filter</a>
+    <input type="submit" value="Filter"><a href="${pageContext.request.contextPath}/students/all">Clear filter</a>
 </form>
 <br/>
 <table border="1">
@@ -30,7 +30,7 @@ All students
     <td>Controls</td>
     </thead>
     <tbody>
-    <a href="/students/add-student">Add</a>
+    <a href="${pageContext.request.contextPath}/students/add-student">Add</a>
     <c:forEach items="${list}" var="item">
         <tr>
             <td>${item.id}</td>
