@@ -12,7 +12,7 @@
     <br/>
     <a href="${pageContext.request.contextPath}/"> Home </a>
     <br/>
-    <form method="post" action="/lessons/${lesson.id}/add-student">
+    <form method="post" action="${pageContext.request.contextPath}/lessons/${lesson.id}/add-student">
     <select name="student">
         <c:forEach items="${list}" var="student">
             <option value="${student.id}">${student.firstname} ${student.lastname}</option>

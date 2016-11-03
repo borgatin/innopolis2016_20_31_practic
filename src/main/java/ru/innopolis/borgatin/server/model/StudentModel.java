@@ -2,6 +2,7 @@ package ru.innopolis.borgatin.server.model;
 
 import ru.innopolis.borgatin.server.model.api.IStudent;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -45,6 +46,11 @@ public class StudentModel implements IStudent {
     @Override
     public void setFirstname(String firstname) {
         this.firstname = firstname;
+    }
+
+    @Override
+    public void setBirthdate(String birthday) throws ParseException {
+        this.birthdate =new SimpleDateFormat("yyyy-MM-dd").parse(birthday);
     }
 
     @Override

@@ -10,7 +10,7 @@
 
 <body>
 Edit lesson
-<spring:form method="post"  modelAttribute="lesson" action="/lessons/update">
+<spring:form method="post"  modelAttribute="lesson" action="${pageContext.request.contextPath}/lessons/update">
 
     ID: <spring:input readonly="true" path="id"/>   <br/>
     Topic: <spring:input path="topic"/>   <br/>

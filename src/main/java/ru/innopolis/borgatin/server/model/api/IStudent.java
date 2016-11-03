@@ -1,5 +1,6 @@
 package ru.innopolis.borgatin.server.model.api;
 
+import java.text.ParseException;
 import java.util.Date;
 
 /**
@@ -27,4 +28,6 @@ public interface IStudent {
     String getFirstname();
 
     void setFirstname(String firstname);
+
+    void setBirthdate(String birthday) throws ParseException;
 }

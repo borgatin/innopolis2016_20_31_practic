@@ -10,7 +10,7 @@
 
 <body>
 Adding lesson
-<spring:form method="post"  modelAttribute="lesson" action="/lessons/add">
+<spring:form method="post"  modelAttribute="lesson" action="${pageContext.request.contextPath}/lessons/add">
     Topic: <spring:input  path="topic"/>   <br/>
     Description: <spring:input path="description"/>   <br/>
     Duration: <spring:input path="duration"/>   <br/>

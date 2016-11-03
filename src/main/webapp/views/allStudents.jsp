@@ -23,7 +23,7 @@ All students
     <thead>
     <td>ID</td>
     <td>firstname</td>
-    <td><a href="/students/sort/${sortType}">lastname</a></td>
+    <td><a href="${pageContext.request.contextPath}/students/sort/${sortType}">lastname</a></td>
     <td>gender</td>
     <td>birthdate</td>
     <td>lessons</td>

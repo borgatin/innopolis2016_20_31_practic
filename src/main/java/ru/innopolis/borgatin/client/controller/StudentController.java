@@ -16,6 +16,7 @@ import ru.innopolis.borgatin.server.editor.DateCustomEditor;
 import ru.innopolis.borgatin.server.model.Student;
 import ru.innopolis.borgatin.server.model.StudentModel;
 
+import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
 
@@ -43,7 +44,7 @@ public class StudentController {
         binder.registerCustomEditor(Date.class, new DateCustomEditor());
     }
 
-    @Secured({"ROLE_USER, ROLE_ADMIN"})
+    @Secured({"ROLE_USER", "ROLE_ADMIN"})
     @RequestMapping(value = "/all")
     public ModelAndView getAllStudents(Model model) {
         ModelAndView modelAndView = new ModelAndView();
@@ -55,7 +56,7 @@ public class StudentController {
     }
 
 
-    @Secured({"ROLE_USER, ROLE_ADMIN"})
+    @Secured({"ROLE_ADMIN", "ROLE_USER"})
     @RequestMapping(value = "/filter")
     public ModelAndView getAllStudents(@RequestParam("filter") String filter) {
         ModelAndView modelAndView = new ModelAndView();
@@ -68,16 +69,16 @@ public class StudentController {
     }
 
 
-    @Secured({"ROLE_USER, ROLE_ADMIN"})
+    @Secured({"ROLE_ADMIN", "ROLE_USER"})
     @RequestMapping(value = "/view/{id}")
     public ModelAndView viewStudent(@PathVariable("id") int id) {
-            ModelAndView modelAndView = new ModelAndView();
-            StudentModel studentModel = studentService.getStudentById(id);
-            modelAndView.addObject("student", studentModel);
+        ModelAndView modelAndView = new ModelAndView();
+        StudentModel studentModel = studentService.getStudentById(id);
+        modelAndView.addObject("student", studentModel);
 
-            modelAndView.setViewName("viewStudent");
-            return modelAndView;
-        }
+        modelAndView.setViewName("viewStudent");
+        return modelAndView;
+    }
 
     @Secured("ROLE_ADMIN")
     @RequestMapping(value = "/add-student")
@@ -100,12 +101,17 @@ public class StudentController {
 
     @Secured("ROLE_ADMIN")
     @RequestMapping(value = "/add")
-    public ModelAndView addStudent(StudentModel student) {
-        student = studentService.createStudent(student);
-        ModelAndView modelAndView = new ModelAndView();
-        modelAndView.addObject("student", student);
-        modelAndView.setViewName("viewStudent");
-        return modelAndView;
+    public ModelAndView addStudent(StudentModel student, @RequestParam("birthday") String birthday) {
+        try {
+            student.setBirthdate(birthday);
+            student = studentService.createStudent(student);
+            ModelAndView modelAndView = new ModelAndView();
+            modelAndView.addObject("student", student);
+            modelAndView.setViewName("viewStudent");
+            return modelAndView;
+        } catch (ParseException e) {
+            return addStudentView();
+        }
     }
 
     @Secured("ROLE_ADMIN")
@@ -128,13 +134,13 @@ public class StudentController {
         return modelAndView;
     }
 
-    @Secured({"ROLE_USER, ROLE_ADMIN"})
+    @Secured({"ROLE_ADMIN", "ROLE_USER"})
     @RequestMapping(value = "/sort/{sortType}")
     public ModelAndView sortAllByName(@PathVariable("sortType") String sortType) {
         ModelAndView modelAndView = new ModelAndView();
         List list = studentService.getAllStudents(sortType);
         modelAndView.addObject("list", list);
-        modelAndView.addObject("sortType", SORT_TYPE_ASC.equals(sortType)?SORT_TYPE_DESC: SORT_TYPE_ASC);
+        modelAndView.addObject("sortType", SORT_TYPE_ASC.equals(sortType) ? SORT_TYPE_DESC : SORT_TYPE_ASC);
 
         modelAndView.setViewName("allStudents");
         return modelAndView;

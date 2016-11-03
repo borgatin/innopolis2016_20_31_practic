@@ -6,8 +6,8 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
                            http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
                             http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
-                            http://www.springframework.org/schema/security
-                         http://www.springframework.org/schema/security/spring-security.xsd">
+        http://www.springframework.org/schema/security
+        http://www.springframework.org/schema/security/spring-security.xsd">
 
 
         <!--<import resource="SecurityContext.xml"/>-->
@@ -21,11 +21,6 @@
 
     <mvc:view-controller path="/" view-name="welcome"/>
 
-    <!--<bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">-->
-        <!--<property name="viewClass" value="org.springframework.web.servlet.view.JstlView"/>-->
-        <!--<property name="prefix" value="/views/"/>-->
-        <!--<property name="suffix" value=".jsp"/>-->
-    <!--</bean>-->
 
     <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
         <property name="prefix" value="/views/" />
@@ -39,7 +34,7 @@
         <property name="password" value="1Qwerty"/>
     </bean>
 
-    <security:global-method-security pre-post-annotations="enabled" secured-annotations="enabled"/>
 
+    <security:global-method-security secured-annotations="enabled" />
 
 </beans>

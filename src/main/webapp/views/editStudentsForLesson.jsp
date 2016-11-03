@@ -41,7 +41,8 @@ Student by lesson ${lesson.topic}
     <tr><td></td><td></td><td></td><td></td><td></td><td>
         <a href="${pageContext.request.contextPath}/lessons/${lesson.id}/add-students">Add</a>
     </td></tr>
-    ${msgError}
+    <tr><p style="color:red">${msgError}</p> </tr>
+
     </tbody>
 
 </table>

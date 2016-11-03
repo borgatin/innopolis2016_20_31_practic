@@ -17,7 +17,7 @@ View student<br/>
     First Name: ${student.firstname} <br/>
     Last Name: ${student.lastname}  <br/>
     Gender:  ${student.gender}  <br/>
-    Birthdate:  ${student.birthdateStr} <br/><br/>
+    Birthdate:  ${student.birthdate} <br/><br/>
     <a href="${pageContext.request.contextPath}/students/edit/${student.id}">Edit</a>
     <a href="${pageContext.request.contextPath}/students/del/${student.id}">Delete</a><br/>
     <a href="${pageContext.request.contextPath}/students/all"> All </a> <br/>

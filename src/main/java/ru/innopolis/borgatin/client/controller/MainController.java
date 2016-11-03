@@ -14,17 +14,20 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 public class MainController {
 
+
     @Secured("ROLE_ANONYMOUS")
     @RequestMapping(/*method = RequestMethod.GET,*/ value = "/login")
     public String login(Model model){
         return "login";
     }
 
-    @Secured({"ROLE_USER, ROLE_ADMIN"})
+    @Secured({"ROLE_USER", "ROLE_ADMIN"})
     @RequestMapping(/*method = RequestMethod.GET,*/ value = "/")
     public String start(Model model){
         return "welcome";
     }
+
+
 
 
 }

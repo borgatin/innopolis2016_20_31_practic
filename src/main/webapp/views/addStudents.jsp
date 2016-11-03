@@ -10,13 +10,13 @@
 
 <body>
 Adding student
-<spring:form method="post"  modelAttribute="student" action="/students/add">
+<spring:form method="post"  modelAttribute="student" action="${pageContext.request.contextPath}/students/add">
     First Name: <spring:input path="firstname"/>   <br/>
     Last Name: <spring:input path="lastname"/>   <br/>
-    Male: <spring:radiobutton path="gender"  value="male"/>   <br/>
+    Male: &nbsp;&nbsp;<spring:radiobutton path="gender"  value="male"/>   <br/>
     Female: <spring:radiobutton path="gender"  value="female"/>   <br/>
     <%--Birthdate: <spring:input path="birthdate"/>   <br/>--%>
-    Birthdate: <input type="date" value="${student.birthdate}">  <br/>
+    Birthdate: <input type="date" name="birthday">  <br/>
     <spring:button>Add</spring:button>
     <br/>
     <a href="${pageContext.request.contextPath}/students/all"> All </a><br/>

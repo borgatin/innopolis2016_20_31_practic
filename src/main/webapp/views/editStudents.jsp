@@ -10,12 +10,14 @@
 
 <body>
 Edit student
-<spring:form method="post"  modelAttribute="student" action="/students/update">
+<spring:form method="post"  modelAttribute="student" action="${pageContext.request.contextPath}/students/update">
 
     ID: <spring:input readonly="true" path="id"/>   <br/>
     First Name: <spring:input path="firstname"/>   <br/>
     Last Name: <spring:input path="lastname"/>   <br/>
-    Gender: <spring:input path="gender"/>   <br/>
+    <%--Gender: <spring:input path="gender"/>   <br/>--%>
+    Male:&nbsp;&nbsp; <spring:radiobutton path="gender"  value="male"/>   <br/>
+    Female: <spring:radiobutton path="gender"  value="female"/>   <br/>
     Birthdate: <spring:input path="birthdate"/>   <br/>
     <spring:button>Update</spring:button>
     <br/>

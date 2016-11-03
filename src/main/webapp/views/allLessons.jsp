@@ -20,7 +20,7 @@ All lessons
 <table>
     <thead>
     <td>ID</td>
-    <td><a href="/lessons/sort/${sortType}">topic</a></td>
+    <td><a href="${pageContext.request.contextPath}/lessons/sort/${sortType}">topic</a></td>
     <td>description</td>
     <td>duration</td>
     <td>date</td>
