@@ -1,4 +1,4 @@
-package ru.innopolis.borgatin.client.controller;
+package ru.innopolis.borgatin.web.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
@@ -11,6 +11,8 @@ import ru.innopolis.borgatin.common.service.ILessonService;
 import ru.innopolis.borgatin.server.editor.DateCustomEditor;
 import ru.innopolis.borgatin.server.model.Lesson;
 import ru.innopolis.borgatin.server.model.Student;
+import ru.innopolis.borgatin.server.model.enums.SortType;
+import static ru.innopolis.borgatin.server.model.enums.SortType.*;
 
 import java.util.Date;
 import java.util.List;
@@ -26,9 +28,6 @@ public class LessonController {
 
     private final ILessonService lessonService;
 
-    private final String SORT_TYPE_ASC = "asc";
-
-    private final String SORT_TYPE_DESC = "desc";
 
     @Autowired
     public LessonController(ILessonService lessonService) {
@@ -47,7 +46,7 @@ public class LessonController {
         ModelAndView modelAndView = new ModelAndView();
         List list = lessonService.getAllLessons();
         modelAndView.addObject("list", list);
-        modelAndView.addObject("sortType", SORT_TYPE_ASC);
+        modelAndView.addObject("sortType", DESC.name());
         modelAndView.setViewName("allLessons");
         return modelAndView;
     }
@@ -59,7 +58,7 @@ public class LessonController {
         ModelAndView modelAndView = new ModelAndView();
         List list = lessonService.getAllLessonsFiltered(filter);
         modelAndView.addObject("list", list);
-        modelAndView.addObject("sortType", SORT_TYPE_ASC);
+        modelAndView.addObject("sortType", ASC.name());
 
         modelAndView.setViewName("allLessons");
         return modelAndView;
@@ -130,10 +129,10 @@ public class LessonController {
     @RequestMapping(value = "/sort/{sortType}")
     public ModelAndView sortAllByName(@PathVariable("sortType") String sortType) {
         ModelAndView modelAndView = new ModelAndView();
-        List list = lessonService.getAllLessons(sortType);
+        SortType sortTypeEnum = SortType.valueOf(sortType);
+        List list = lessonService.getAllLessons( sortTypeEnum);
         modelAndView.addObject("list", list);
-        modelAndView.addObject("sortType", SORT_TYPE_ASC.equals(sortType)?SORT_TYPE_DESC: SORT_TYPE_ASC);
-
+        modelAndView.addObject("sortType", ASC == sortTypeEnum ? DESC.name(): ASC.name());
         modelAndView.setViewName("allLessons");
         return modelAndView;
     }
@@ -147,13 +146,6 @@ public class LessonController {
         List<Student> students = lessonService.getStudentsByLessonID(lesson.getId());
         modelAndView.addObject("lesson", lesson);
         modelAndView.addObject("list", students);
-//        String btnAddStudents = "<tr><td></td><td></td><td></td><td></td><td></td><td><a href=\"/lessons/"+id+"/add-students\">Add</a></td></tr>";
-//        List<Student> list = lessonService.getFreeStudentsByLessonID(id);
-//        if (list.size()>0){
-//            modelAndView.addObject("msgError", btnAddStudents);
-//        }
-
-
         modelAndView.setViewName("editStudentsForLesson");
         return modelAndView;
     }
@@ -164,9 +156,7 @@ public class LessonController {
         ModelAndView modelAndView = new ModelAndView();
         Lesson lesson = lessonService.getLessonById(id);
         modelAndView.addObject("lesson", lesson);
-
         List<Student> students = lessonService.getFreeStudentsByLessonID(id);
-
         if (students.size()>0) {
             modelAndView.addObject("list", students);
             modelAndView.setViewName("addStudentsForLesson");
@@ -191,7 +181,6 @@ public class LessonController {
     @RequestMapping(value = "/{id}/del/{studentId}")
     public ModelAndView deleteStudentFromLesson(@PathVariable("id") int id,@PathVariable("studentId") int studentId) {
         lessonService.deleteStudentFromLesson(id, studentId);
-
         return editStudentsForLesson(id);
     }
 }

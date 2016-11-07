@@ -1,6 +1,8 @@
 package ru.innopolis.borgatin.server.DAO;
 
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import ru.innopolis.borgatin.server.model.Lesson;
 import ru.innopolis.borgatin.server.model.Student;
 
@@ -16,51 +18,30 @@ import java.util.List;
  * описывает основную логику для работы с БД для конкретных сущностей.
  * От него необходимо наследоваться, чтобы реализовать работу с БД для сущности.
  */
-
-public abstract class LessonDAO {
-    private Connection connection;
-
-    protected LessonDAO() throws SQLException {
-        InitialContext initialContext = null;
-        try {
-            initialContext = new InitialContext();
-            DataSource ds = (DataSource) initialContext.lookup("java:comp/env/jdbc/app");
-            connection = ds.getConnection();
-        } catch (NamingException e) {
-            e.printStackTrace();
-        }
-    }
+@Component
+public interface LessonDAO{
 
 
-    public abstract List<Lesson> getAllLessons();
 
-    public abstract List<Lesson> getAllLessonsFilter(String filter);
+    List<Lesson> getAllLessons();
 
-    public abstract List<Lesson> getAllLessonsSortByNameAsc();
+    List<Lesson> getAllLessonsFilter(String filter);
 
-    public abstract List<Lesson> getAllLessonsSortByNameDesc();
+    List<Lesson> getAllLessonsSortByNameAsc();
 
-    public abstract Lesson getLessonById(int id);
+    List<Lesson> getAllLessonsSortByNameDesc();
 
-    public abstract Lesson updateLesson(Lesson lesson);
+    Lesson getLessonById(int id);
 
-    public abstract boolean deleteLesson(int id);
+    Lesson updateLesson(Lesson lesson);
 
-    public abstract Lesson createLesson(Lesson lesson);
+    boolean deleteLesson(int id);
 
-    public Connection getConnection() {
-        return connection;
-    }
+    Lesson createLesson(Lesson lesson);
 
-    // Возвращения экземпляра Connection в пул соединений
-    public void returnConnectionInPool() throws SQLException {
-        connection.close();
-    }
+    List<Integer> getStudentsIDByLessonID(int id);
 
+    void addStudentOnLesson(int id, int studentId);
 
-    public abstract List<Integer> getStudentsIDByLessonID(int id);
-
-    public abstract void addStudentOnLesson(int id, int studentId);
-
-    public abstract void deleteStudentFromLesson(int id, int studentId);
+    void deleteStudentFromLesson(int id, int studentId);
 }

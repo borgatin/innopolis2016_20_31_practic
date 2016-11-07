@@ -3,7 +3,7 @@ package ru.innopolis.borgatin.server.model;
 import java.util.Date;
 
 /**
- * Created by avborg on 01.11.2016.
+ * Класс содержит описание сущности Lesson
  */
 public class Lesson implements ru.innopolis.borgatin.server.model.api.ILesson {
     private int id;

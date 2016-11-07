@@ -16,46 +16,23 @@ import java.util.List;
  * От него необходимо наследоваться, чтобы реализовать работу с БД для сущности.
  */
 
-public abstract class StudentDAO {
-    private Connection connection;
+public interface StudentDAO {
 
-    protected StudentDAO() throws SQLException {
-        InitialContext initialContext = null;
-        try {
-            initialContext = new InitialContext();
-            DataSource ds = (DataSource) initialContext.lookup("java:comp/env/jdbc/app");
-            connection = ds.getConnection();
-        } catch (NamingException e) {
-            e.printStackTrace();
-        }
-    }
+     List<Student> getAllStudents();
 
+    List<Student> getAllStudentsFilter(String filter);
 
-    public abstract List<Student> getAllStudents();
+    List<Student> getAllStudentsSortByNameAsc();
 
-    public abstract List<Student> getAllStudentsFilter(String filter);
+    List<Student> getAllStudentsSortByNameDesc();
 
-    public abstract List<Student> getAllStudentsSortByNameAsc();
+    Student getStudentById(int id);
 
-    public abstract List<Student> getAllStudentsSortByNameDesc();
+    Student update(Student entity);
 
-    public abstract Student getStudentById(int id);
+    boolean delete(int id);
 
-    public abstract Student update(Student entity);
+    Student create(Student student);
 
-    public abstract boolean delete(int id);
-
-    public abstract Student create(Student student);
-
-    public Connection getConnection() {
-        return connection;
-    }
-
-    // Возвращения экземпляра Connection в пул соединений
-    public void returnConnectionInPool() throws SQLException {
-        connection.close();
-    }
-
-
-    public abstract int getLessonsCount(int id) ;
+    int getLessonsCount(int id) ;
 }

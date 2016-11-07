@@ -2,7 +2,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
-    <title>login</title>
+    <title>username</title>
     <form action="<c:url value='/j_spring_security_check'/>" method="POST">
         <p>Вход:</p>
         <div class="main">

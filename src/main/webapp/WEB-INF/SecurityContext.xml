@@ -10,16 +10,16 @@
 
 
 
-        <!--<http auto-config="true" pattern="/login" security="none"/>-->
-
+        <!--<http auto-config="true" pattern="/username" security="none"/>-->
+<!--
     <http use-expressions="true">
-        <form-login
-                login-page="/login"
+        <form-username
+                username-page="/username"
                 default-target-url="/"
-                authentication-failure-url="/login?error"
+                authentication-failure-url="/username?error"
                 username-parameter="j_username"
                 password-parameter="j_password" />
-        <logout logout-success-url="/login?logout"  />
+        <logout logout-success-url="/username?logout"  />
         <anonymous username="guest" granted-authority="ROLE_ANONYMOUS"/>
     </http>
     <authentication-manager>
@@ -30,7 +30,7 @@
                                authorities-by-username-query=
                                        "select username, user_role from user_roles where username =?  " />
         </authentication-provider>
-    </authentication-manager>
+    </authentication-manager>-->
 
 
 

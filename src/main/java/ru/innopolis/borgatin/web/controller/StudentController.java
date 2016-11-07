@@ -1,4 +1,4 @@
-package ru.innopolis.borgatin.client.controller;
+package ru.innopolis.borgatin.web.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
@@ -15,6 +15,8 @@ import ru.innopolis.borgatin.common.service.IStudentService;
 import ru.innopolis.borgatin.server.editor.DateCustomEditor;
 import ru.innopolis.borgatin.server.model.Student;
 import ru.innopolis.borgatin.server.model.StudentModel;
+import ru.innopolis.borgatin.server.model.enums.SortType;
+import static ru.innopolis.borgatin.server.model.enums.SortType.*;
 
 import java.text.ParseException;
 import java.util.Date;
@@ -30,9 +32,6 @@ public class StudentController {
 
     private final IStudentService studentService;
 
-    private final String SORT_TYPE_ASC = "asc";
-
-    private final String SORT_TYPE_DESC = "desc";
 
     @Autowired
     public StudentController(IStudentService studentService) {
@@ -50,7 +49,7 @@ public class StudentController {
         ModelAndView modelAndView = new ModelAndView();
         List list = studentService.getAllStudents();
         modelAndView.addObject("list", list);
-        modelAndView.addObject("sortType", SORT_TYPE_ASC);
+        modelAndView.addObject("sortType", ASC.name());
         modelAndView.setViewName("allStudents");
         return modelAndView;
     }
@@ -62,7 +61,7 @@ public class StudentController {
         ModelAndView modelAndView = new ModelAndView();
         List list = studentService.getAllStudentsFiltered(filter);
         modelAndView.addObject("list", list);
-        modelAndView.addObject("sortType", SORT_TYPE_ASC);
+        modelAndView.addObject("sortType", DESC.name());
 
         modelAndView.setViewName("allStudents");
         return modelAndView;
@@ -138,9 +137,10 @@ public class StudentController {
     @RequestMapping(value = "/sort/{sortType}")
     public ModelAndView sortAllByName(@PathVariable("sortType") String sortType) {
         ModelAndView modelAndView = new ModelAndView();
-        List list = studentService.getAllStudents(sortType);
+        SortType sortTypeEnum = SortType.valueOf(sortType);
+        List list = studentService.getAllStudents(sortTypeEnum);
         modelAndView.addObject("list", list);
-        modelAndView.addObject("sortType", SORT_TYPE_ASC.equals(sortType) ? SORT_TYPE_DESC : SORT_TYPE_ASC);
+        modelAndView.addObject("sortType", ASC == sortTypeEnum ? DESC.name() : ASC.name());
 
         modelAndView.setViewName("allStudents");
         return modelAndView;

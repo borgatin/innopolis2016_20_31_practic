@@ -7,7 +7,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
- * Created by avborg on 31.10.2016.
+ * Класс содержит описение сущность Студент
  */
 public class Student implements IStudent {
     private int id;

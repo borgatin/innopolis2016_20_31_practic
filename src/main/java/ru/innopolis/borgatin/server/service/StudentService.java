@@ -8,24 +8,31 @@ import ru.innopolis.borgatin.common.service.IStudentService;
 import ru.innopolis.borgatin.server.DAO.StudentDAO;
 import ru.innopolis.borgatin.server.model.Student;
 import ru.innopolis.borgatin.server.model.StudentModel;
+import ru.innopolis.borgatin.server.model.enums.SortType;
+
+import static ru.innopolis.borgatin.server.model.enums.SortType.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import static ru.innopolis.borgatin.common.MainConst.*;
+
 /**
- * Created by avborg on 31.10.2016.
+ * Класс реализует интерфейс IStudentService.
+ * Предназначен дл работы с сущностью Student.
  */
 
 @Component
 @Scope(proxyMode = ScopedProxyMode.TARGET_CLASS, value = "prototype")
 public class StudentService implements IStudentService {
 
+    private final StudentDAO studentDAO;
+
     @Autowired
-    StudentDAO studentDAO;
+    public StudentService(StudentDAO studentDAO) {
+        this.studentDAO = studentDAO;
+    }
 
-    private final String SORT_TYPE_ASC = "asc";
-
-    private final String SORT_TYPE_DESC = "desc";
 
     @Override
     public List<StudentModel> getAllStudents() {
@@ -82,8 +89,8 @@ public class StudentService implements IStudentService {
     }
 
     @Override
-    public List<StudentModel> getAllStudents(String sortType) {
-        if (SORT_TYPE_ASC.equals(sortType)) {
+    public List<StudentModel> getAllStudents(SortType sortType) {
+        if (ASC == sortType) {
             return transformStudentListToStudentModelList(studentDAO.getAllStudentsSortByNameAsc());
         } else {
             return transformStudentListToStudentModelList(studentDAO.getAllStudentsSortByNameDesc());

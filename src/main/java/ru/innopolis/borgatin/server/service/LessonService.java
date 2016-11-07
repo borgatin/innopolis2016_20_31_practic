@@ -9,9 +9,12 @@ import ru.innopolis.borgatin.server.DAO.LessonDAO;
 import ru.innopolis.borgatin.server.DAO.StudentDAO;
 import ru.innopolis.borgatin.server.model.Lesson;
 import ru.innopolis.borgatin.server.model.Student;
+import ru.innopolis.borgatin.server.model.enums.SortType;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static ru.innopolis.borgatin.server.model.enums.SortType.ASC;
 
 /**
  * Created by avborg on 31.10.2016.
@@ -22,14 +25,11 @@ import java.util.List;
 public class LessonService implements ILessonService {
 
     @Autowired
-    LessonDAO lessonDAO;
+    private LessonDAO lessonDAO;
 
     @Autowired
-    StudentDAO studentDAO;
+    private StudentDAO studentDAO;
 
-    private final String SORT_TYPE_ASC = "asc";
-
-    private final String SORT_TYPE_DESC = "desc";
 
     @Override
     public List<Lesson> getAllLessons() {
@@ -93,8 +93,8 @@ public class LessonService implements ILessonService {
     }
 
     @Override
-    public List<Lesson> getAllLessons(String sortType) {
-        if (SORT_TYPE_ASC.equals(sortType)) {
+    public List<Lesson> getAllLessons(SortType sortType) {
+        if (ASC == sortType ) {
             return lessonDAO.getAllLessonsSortByNameAsc();
         } else {
             return lessonDAO.getAllLessonsSortByNameDesc();
@@ -105,6 +105,4 @@ public class LessonService implements ILessonService {
     public List<Lesson> getAllLessonsFiltered(String filter) {
         return lessonDAO.getAllLessonsFilter(filter);
     }
-
-
 }

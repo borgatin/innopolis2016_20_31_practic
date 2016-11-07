@@ -1,34 +1,57 @@
 package ru.innopolis.borgatin.server.DAO;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Component;
 import ru.innopolis.borgatin.server.model.Student;
+
+import javax.sql.DataSource;
+
+import static ru.innopolis.borgatin.common.MainConst.*;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by avborg on 31.10.2016.
+ * Класс предназначен для получения и записи в БД
+ * данных о сущности студент
  */
 
 @Component
 @Scope(proxyMode = ScopedProxyMode.TARGET_CLASS, value = "prototype")
-public class StudentDAOImpl extends StudentDAO {
+public class StudentDAOImpl extends EntityDAO implements StudentDAO{
 
-    private final static String QUERY_SELECT_ALL_ORDER_ID = "SELECT * FROM students order by id";
+    private static final String QUERY_SELECT_ALL_ORDER_ID = "SELECT * FROM students order by id";
 
-    private final static String QUERY_SELECT_ALL_ORDER_NAME_DESC = "SELECT * FROM students order by lastname desc";
+    private static final String QUERY_SELECT_ALL_ORDER_NAME_DESC = "SELECT * FROM students order by lastname desc";
 
-    private final static String QUERY_SELECT_ALL_ORDER_NAME_ASC = "SELECT * FROM students order by lastname";
+    private static final String QUERY_SELECT_ALL_ORDER_NAME_ASC = "SELECT * FROM students order by lastname";
 
-    private final static String QUERY_SELECT_ALL_FILTER_MASK = "SELECT * FROM students where lastname like ";
+    private static final String QUERY_SELECT_ALL_FILTER_MASK = "SELECT * FROM students where lastname like ";
 
+    private static final String QUERY_SELECT_STUDENT_BY_ID = "SELECT * FROM students WHERE id=?";
+    
+    private static final String QUERY_UPDATE_STUDENT = "UPDATE students set lastname = ?, firstname = ?,birthdate = ?, gender = ? WHERE id = ?";
 
-    public StudentDAOImpl() throws SQLException {
-        super();
+    private static final String QUERY_DELETE_FROM_STUDENT = "DELETE FROM students WHERE id = ?";
+    
+    private static final String QUERY_DELETE_FROM_STUDENTLESSONS = "DELETE FROM StudentsLesson WHERE student_id = ?";
+
+    private static final String QUERY_INSERT_STUDENT = "Insert into students (lastname,firstname,birthdate, gender) values ( ?,?,?,? )";
+
+    private static final String QUERY_SELECT_STUDENT_ID_BY_LASTNAME = "SELECT id from students WHERE lastname = ?";
+
+    private static final String QUERY_SELECT_COUNT_STUDENT_LESSONS_BY_STUDENT_ID = "SELECT DISTINCT count(lesson_id) lessons_count FROM StudentsLesson WHERE student_id=?";
+
+    private static final String FIELD_CALC_LESSONS_COUNT = "lessons_count";
+
+    @Autowired
+    StudentDAOImpl(DataSource dataSource) {
+        super(dataSource);
     }
+
 
     @Override
     public List<Student> getAllStudents() {
@@ -54,14 +77,14 @@ public class StudentDAOImpl extends StudentDAO {
                      statement.executeQuery(query)
         ) {
             List<Student> list = new ArrayList<>();
-            int i = 0;
+            int i = CONST_ZERO;
             while (resultSet.next()) {
                 Student student = new Student();
-                student.setId(resultSet.getInt("id"));
-                student.setFirstname(resultSet.getString("firstname"));
-                student.setLastname(resultSet.getString("lastname"));
-                student.setGender(resultSet.getString("gender"));
-                student.setBirthdate(resultSet.getDate("birthdate"));
+                student.setId(resultSet.getInt(SQL_FIELD_ID));
+                student.setFirstname(resultSet.getString(SQL_FIELD_FIRSTNAME));
+                student.setLastname(resultSet.getString(SQL_FIELD_LASTNAME));
+                student.setGender(resultSet.getString(SQL_FIELD_GENDER));
+                student.setBirthdate(resultSet.getDate(SQL_FIELD_BIRTHDATE));
                 list.add(i++, student);
             }
             return list;
@@ -76,18 +99,18 @@ public class StudentDAOImpl extends StudentDAO {
     @Override
     public Student getStudentById(int id) {
         try (Connection connection = getConnection();
-             PreparedStatement statement = connection.prepareStatement("SELECT * FROM students WHERE id=?");
+             PreparedStatement statement = connection.prepareStatement(QUERY_SELECT_STUDENT_BY_ID);
         ) {
-            statement.setInt(1, id);
+            statement.setInt(CONST_ONE, id);
             try (ResultSet resultSet = statement.executeQuery()) {
 
                 if (resultSet.next()) {
                     Student student = new Student();
-                    student.setId(resultSet.getInt("id"));
-                    student.setFirstname(resultSet.getString("firstname"));
-                    student.setLastname(resultSet.getString("lastname"));
-                    student.setGender(resultSet.getString("gender"));
-                    student.setBirthdate(resultSet.getDate("birthdate"));
+                    student.setId(resultSet.getInt(SQL_FIELD_ID));
+                    student.setFirstname(resultSet.getString(SQL_FIELD_FIRSTNAME));
+                    student.setLastname(resultSet.getString(SQL_FIELD_LASTNAME));
+                    student.setGender(resultSet.getString(SQL_FIELD_GENDER));
+                    student.setBirthdate(resultSet.getDate(SQL_FIELD_BIRTHDATE));
                     return student;
                 }
             }
@@ -100,13 +123,13 @@ public class StudentDAOImpl extends StudentDAO {
     @Override
     public Student update(Student student) {
         try (Connection connection = getConnection();
-             PreparedStatement statement = connection.prepareStatement("UPDATE students set lastname = ?, firstname = ?,birthdate = ?, gender = ? WHERE id = ?");
+             PreparedStatement statement = connection.prepareStatement(QUERY_UPDATE_STUDENT);
         ) {
-            statement.setString(1, student.getLastname());
-            statement.setString(2, student.getFirstname());
-            statement.setDate(3, new Date(student.getBirthdate().getTime()));
-            statement.setString(4, student.getGender());
-            statement.setInt(5, student.getId());
+            statement.setString(CONST_ONE, student.getLastname());
+            statement.setString(CONST_TWO, student.getFirstname());
+            statement.setDate(CONST_THREE, new Date(student.getBirthdate().getTime()));
+            statement.setString(CONST_FOUR, student.getGender());
+            statement.setInt(CONST_FIVE, student.getId());
             statement.executeUpdate();
 
         } catch (SQLException e) {
@@ -118,49 +141,36 @@ public class StudentDAOImpl extends StudentDAO {
 
     @Override
     public boolean delete(int id) {
-        try (Connection connection = getConnection();
-             PreparedStatement statement = connection.prepareStatement("DELETE FROM students WHERE id = ?");
-             PreparedStatement statement2 = connection.prepareStatement("DELETE FROM StudentsLesson WHERE student_id = ?");
-        ) {
-            statement2.setInt(1, id);
-            statement2.executeUpdate();
-            statement.setInt(1, id);
-            int count = statement.executeUpdate();
-            if (count > 0) {
-                return true;
-            }
-
+        try (Connection connection = getConnection()){
+            return deleteEntity(connection, id, QUERY_DELETE_FROM_STUDENT,new String[]{QUERY_DELETE_FROM_STUDENTLESSONS} );
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
         return false;
     }
 
     @Override
     public Student create(Student student) {
         try (Connection connection = getConnection();
-             PreparedStatement statement = connection.prepareStatement("Insert into students (lastname,firstname,birthdate, gender) values ( ?,?,?,? )");
+             PreparedStatement statement = connection.prepareStatement(QUERY_INSERT_STUDENT);
         ) {
-            statement.setString(1, student.getLastname());
-            statement.setString(2, student.getFirstname());
+            statement.setString(CONST_ONE, student.getLastname());
+            statement.setString(CONST_TWO, student.getFirstname());
             if (student.getBirthdate()!= null) {
-                statement.setDate(3, new Date(student.getBirthdate().getTime()));
+                statement.setDate(CONST_THREE, new Date(student.getBirthdate().getTime()));
             }
-            statement.setString(4, student.getGender());
+            statement.setString(CONST_FOUR, student.getGender());
             statement.executeUpdate();
 
-            try (PreparedStatement statement1 = connection.prepareStatement("SELECT id from students WHERE lastname = ?")) {
-                statement1.setString(1, student.getLastname());
+            try (PreparedStatement statement1 = connection.prepareStatement(QUERY_SELECT_STUDENT_ID_BY_LASTNAME)) {
+                statement1.setString(CONST_ONE, student.getLastname());
                 try (ResultSet resultSet = statement1.executeQuery()) {
                     if (resultSet.next()) {
-                        int id = resultSet.getInt("id");
+                        int id = resultSet.getInt(SQL_FIELD_ID);
                         student.setId(id);
                     }
                 }
             }
-
-
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -171,19 +181,19 @@ public class StudentDAOImpl extends StudentDAO {
     @Override
     public int getLessonsCount(int id) {
         try (Connection connection = getConnection();
-             PreparedStatement statement = connection.prepareStatement("SELECT DISTINCT count(lesson_id) lessons_count FROM StudentsLesson WHERE student_id=?");
+             PreparedStatement statement = connection.prepareStatement(QUERY_SELECT_COUNT_STUDENT_LESSONS_BY_STUDENT_ID);
         ) {
-            statement.setInt(1, id);
+            statement.setInt(CONST_ONE, id);
             try (ResultSet resultSet = statement.executeQuery()) {
                 if (resultSet.next()) {
-                    return resultSet.getInt("lessons_count");
+                    return resultSet.getInt(FIELD_CALC_LESSONS_COUNT);
                 }
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
 
-        return 0;
+        return CONST_ZERO;
     }
 
 
