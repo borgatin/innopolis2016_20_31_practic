@@ -1,16 +1,10 @@
 package ru.innopolis.borgatin.server.DAO;
 
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import ru.innopolis.borgatin.server.model.Lesson;
-import ru.innopolis.borgatin.server.model.Student;
+import ru.innopolis.borgatin.server.model.LessonModel;
+import ru.innopolis.borgatin.server.model.modelDAO.Lesson;
 
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
-import javax.sql.DataSource;
-import java.sql.Connection;
-import java.sql.SQLException;
 import java.util.List;
 
 /**
@@ -23,21 +17,21 @@ public interface LessonDAO{
 
 
 
-    List<Lesson> getAllLessons();
+    List<LessonModel> getAllLessons();
 
-    List<Lesson> getAllLessonsFilter(String filter);
+    List<LessonModel> getAllLessonsFilter(String filter);
 
-    List<Lesson> getAllLessonsSortByNameAsc();
+    List<LessonModel> getAllLessonsSortByNameAsc();
 
-    List<Lesson> getAllLessonsSortByNameDesc();
+    List<LessonModel> getAllLessonsSortByNameDesc();
 
-    Lesson getLessonById(int id);
+    LessonModel getLessonById(int id);
 
-    Lesson updateLesson(Lesson lesson);
+    LessonModel updateLesson(LessonModel lesson);
 
     boolean deleteLesson(int id);
 
-    Lesson createLesson(Lesson lesson);
+    LessonModel createLesson(LessonModel lesson);
 
     List<Integer> getStudentsIDByLessonID(int id);
 

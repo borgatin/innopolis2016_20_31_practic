@@ -38,16 +38,7 @@ public class WebAppConfig extends WebMvcConfigurerAdapter {
         return internalResourceViewResolver;
     }
 
-    @Bean
-    DataSource setupDriverManagerDataSource() {
-        BasicDataSource basicDataSource = new BasicDataSource();
-        basicDataSource.setDriverClassName(DRIVER_NAME_SQL);
-        basicDataSource.setUrl(SQL_URL);
-        basicDataSource.setUsername(SQL_DB_USER);
-        basicDataSource.setPassword(SQL_DB_PASSWORD);
-        return basicDataSource;
 
-    }
 
 
 

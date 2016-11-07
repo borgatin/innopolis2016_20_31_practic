@@ -1,6 +1,5 @@
 package ru.innopolis.borgatin.common.service;
 
-import ru.innopolis.borgatin.server.model.Student;
 import ru.innopolis.borgatin.server.model.StudentModel;
 import ru.innopolis.borgatin.server.model.enums.SortType;
 

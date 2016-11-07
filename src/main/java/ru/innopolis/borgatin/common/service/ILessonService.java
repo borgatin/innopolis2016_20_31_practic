@@ -1,7 +1,9 @@
 package ru.innopolis.borgatin.common.service;
 
-import ru.innopolis.borgatin.server.model.Lesson;
-import ru.innopolis.borgatin.server.model.Student;
+import ru.innopolis.borgatin.server.model.LessonModel;
+import ru.innopolis.borgatin.server.model.StudentModel;
+import ru.innopolis.borgatin.server.model.modelDAO.Lesson;
+import ru.innopolis.borgatin.server.model.modelDAO.Student;
 import ru.innopolis.borgatin.server.model.enums.SortType;
 
 import java.util.List;
@@ -14,7 +16,7 @@ public interface ILessonService {
      * Метод возвращает список всех уроков
      * @return
      */
-    List<Lesson> getAllLessons();
+    List<LessonModel> getAllLessons();
 
     /**
      * Метод предназначен для сортировки всех уроков
@@ -23,7 +25,7 @@ public interface ILessonService {
      * @param sortType может принимать значения ASC, DESC
      * @return отсортированный список
      */
-    List<Lesson> getAllLessons(SortType sortType) ;
+    List<LessonModel> getAllLessons(SortType sortType) ;
 
     /**
      * Метод необходим для получения всех уроков в отфильтрованном виде.
@@ -31,14 +33,14 @@ public interface ILessonService {
      * @param filter строка, по которой фильтруется поле topic
      * @return отфильтрованный список уроков
      */
-    List<Lesson> getAllLessonsFiltered(String filter) ;
+    List<LessonModel> getAllLessonsFiltered(String filter) ;
 
     /**
      * Метод предназначен для создания урока
      * @param lesson урок, который необходимо создать
      * @return созданный урок с заполненным полем id
      */
-    Lesson createLesson(Lesson lesson);
+    LessonModel createLesson(LessonModel lesson);
 
     /**
      * Метод предназначен для получения урока
@@ -46,14 +48,14 @@ public interface ILessonService {
      * @param id идентификатор урока
      * @return урок, соответствуюший переданному идентификатору
      */
-    Lesson getLessonById(int id);
+    LessonModel getLessonById(int id);
 
     /**
      * Метод предназначен для обнвления урока
      * @param lesson урок, который нужно обновить
      * @return обновленный урок
      */
-    Lesson updateLesson(Lesson lesson);
+    LessonModel updateLesson(LessonModel lesson);
 
     /**
      * Метод предназначен для удаления урока по его идентификатору
@@ -68,7 +70,7 @@ public interface ILessonService {
      * @param id идентификатор урока
      * @return список студентов, записанных на урок
      */
-    List<Student> getStudentsByLessonID(int id);
+    List<StudentModel> getStudentsByLessonID(int id);
 
     /**
      * Метод предназначен для получения списка студентов,
@@ -76,7 +78,7 @@ public interface ILessonService {
      * @param id идентификатор урока
      * @return список студентов, не записавшихся на урок
      */
-    List<Student> getFreeStudentsByLessonID(int id);
+    List<StudentModel> getFreeStudentsByLessonID(int id);
 
     /**
      * Метод предназначен для записи студента на урок

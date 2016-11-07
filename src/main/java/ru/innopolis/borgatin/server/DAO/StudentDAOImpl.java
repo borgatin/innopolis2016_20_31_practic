@@ -4,8 +4,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Component;
-import ru.innopolis.borgatin.server.model.Student;
+import ru.innopolis.borgatin.server.model.StudentModel;
+import ru.innopolis.borgatin.server.model.modelDAO.Student;
 
+import javax.persistence.EntityManager;
 import javax.sql.DataSource;
 
 import static ru.innopolis.borgatin.common.MainConst.*;
@@ -47,39 +49,35 @@ public class StudentDAOImpl extends EntityDAO implements StudentDAO{
 
     private static final String FIELD_CALC_LESSONS_COUNT = "lessons_count";
 
-    @Autowired
-    StudentDAOImpl(DataSource dataSource) {
-        super(dataSource);
-    }
 
 
     @Override
-    public List<Student> getAllStudents() {
+    public List<StudentModel> getAllStudents() {
         return getAllStudents(QUERY_SELECT_ALL_ORDER_ID);
     }
 
     @Override
-    public List<Student> getAllStudentsFilter(String filter) {
+    public List<StudentModel> getAllStudentsFilter(String filter) {
         return getAllStudents(QUERY_SELECT_ALL_FILTER_MASK+"\'%"+filter+"%\'");
     }
 
-    public List<Student> getAllStudentsSortByNameAsc(){
+    public List<StudentModel> getAllStudentsSortByNameAsc(){
         return getAllStudents(QUERY_SELECT_ALL_ORDER_NAME_ASC);
     }
-    public List<Student> getAllStudentsSortByNameDesc(){
+    public List<StudentModel> getAllStudentsSortByNameDesc(){
         return getAllStudents(QUERY_SELECT_ALL_ORDER_NAME_DESC);
     }
 
-    private List<Student> getAllStudents(String query) {
+    private List<StudentModel> getAllStudents(String query) {
         try (Connection connection = getConnection();
              Statement statement = connection.createStatement();
              ResultSet resultSet =
                      statement.executeQuery(query)
         ) {
-            List<Student> list = new ArrayList<>();
+            List<StudentModel> list = new ArrayList<>();
             int i = CONST_ZERO;
             while (resultSet.next()) {
-                Student student = new Student();
+                StudentModel student = new StudentModel();
                 student.setId(resultSet.getInt(SQL_FIELD_ID));
                 student.setFirstname(resultSet.getString(SQL_FIELD_FIRSTNAME));
                 student.setLastname(resultSet.getString(SQL_FIELD_LASTNAME));
@@ -97,7 +95,7 @@ public class StudentDAOImpl extends EntityDAO implements StudentDAO{
 
 
     @Override
-    public Student getStudentById(int id) {
+    public StudentModel getStudentById(int id) {
         try (Connection connection = getConnection();
              PreparedStatement statement = connection.prepareStatement(QUERY_SELECT_STUDENT_BY_ID);
         ) {
@@ -105,7 +103,7 @@ public class StudentDAOImpl extends EntityDAO implements StudentDAO{
             try (ResultSet resultSet = statement.executeQuery()) {
 
                 if (resultSet.next()) {
-                    Student student = new Student();
+                    StudentModel student = new StudentModel();
                     student.setId(resultSet.getInt(SQL_FIELD_ID));
                     student.setFirstname(resultSet.getString(SQL_FIELD_FIRSTNAME));
                     student.setLastname(resultSet.getString(SQL_FIELD_LASTNAME));
@@ -121,7 +119,7 @@ public class StudentDAOImpl extends EntityDAO implements StudentDAO{
     }
 
     @Override
-    public Student update(Student student) {
+    public StudentModel update(StudentModel student) {
         try (Connection connection = getConnection();
              PreparedStatement statement = connection.prepareStatement(QUERY_UPDATE_STUDENT);
         ) {
@@ -150,7 +148,7 @@ public class StudentDAOImpl extends EntityDAO implements StudentDAO{
     }
 
     @Override
-    public Student create(Student student) {
+    public StudentModel create(StudentModel student) {
         try (Connection connection = getConnection();
              PreparedStatement statement = connection.prepareStatement(QUERY_INSERT_STUDENT);
         ) {

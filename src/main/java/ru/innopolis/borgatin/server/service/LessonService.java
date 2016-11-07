@@ -7,8 +7,10 @@ import org.springframework.stereotype.Component;
 import ru.innopolis.borgatin.common.service.ILessonService;
 import ru.innopolis.borgatin.server.DAO.LessonDAO;
 import ru.innopolis.borgatin.server.DAO.StudentDAO;
-import ru.innopolis.borgatin.server.model.Lesson;
-import ru.innopolis.borgatin.server.model.Student;
+import ru.innopolis.borgatin.server.model.LessonModel;
+import ru.innopolis.borgatin.server.model.StudentModel;
+import ru.innopolis.borgatin.server.model.modelDAO.Lesson;
+import ru.innopolis.borgatin.server.model.modelDAO.Student;
 import ru.innopolis.borgatin.server.model.enums.SortType;
 
 import java.util.ArrayList;
@@ -32,22 +34,23 @@ public class LessonService implements ILessonService {
 
 
     @Override
-    public List<Lesson> getAllLessons() {
+    public List<LessonModel> getAllLessons() {
+        //TODO: мапить с лессон на лессон модел
         return lessonDAO.getAllLessons();
     }
 
     @Override
-    public Lesson createLesson(Lesson lesson) {
+    public LessonModel createLesson(LessonModel lesson) {
         return lessonDAO.createLesson(lesson);
     }
 
     @Override
-    public Lesson getLessonById(int id) {
+    public LessonModel getLessonById(int id) {
         return lessonDAO.getLessonById(id);
     }
 
     @Override
-    public Lesson updateLesson(Lesson lesson) {
+    public LessonModel updateLesson(LessonModel lesson) {
         return lessonDAO.updateLesson(lesson);
     }
 
@@ -57,9 +60,9 @@ public class LessonService implements ILessonService {
     }
 
     @Override
-    public List<Student> getStudentsByLessonID(int id) {
+    public List<StudentModel> getStudentsByLessonID(int id) {
         List<Integer> studentsId = lessonDAO.getStudentsIDByLessonID(id);
-        List<Student> students = new ArrayList<>();
+        List<StudentModel> students = new ArrayList<>();
         int i = 0;
         for(int studentId: studentsId){
             students.add(i++, studentDAO.getStudentById(studentId));
@@ -68,12 +71,12 @@ public class LessonService implements ILessonService {
     }
 
     @Override
-    public List<Student> getFreeStudentsByLessonID(int id) {
-        List<Student> allStudents = studentDAO.getAllStudents();
+    public List<StudentModel> getFreeStudentsByLessonID(int id) {
+        List<StudentModel> allStudents = studentDAO.getAllStudents();
         List<Integer> studentsIdByLesson = lessonDAO.getStudentsIDByLessonID(id);
-        List<Student> freeStudents = new ArrayList<>();
+        List<StudentModel> freeStudents = new ArrayList<>();
         int i = 0;
-        for (Student student: allStudents){
+        for (StudentModel student: allStudents){
             if (!studentsIdByLesson.contains(student.getId())){
                 freeStudents.add(i++, student);
             }
@@ -93,7 +96,7 @@ public class LessonService implements ILessonService {
     }
 
     @Override
-    public List<Lesson> getAllLessons(SortType sortType) {
+    public List<LessonModel> getAllLessons(SortType sortType) {
         if (ASC == sortType ) {
             return lessonDAO.getAllLessonsSortByNameAsc();
         } else {
@@ -102,7 +105,7 @@ public class LessonService implements ILessonService {
     }
 
     @Override
-    public List<Lesson> getAllLessonsFiltered(String filter) {
+    public List<LessonModel> getAllLessonsFiltered(String filter) {
         return lessonDAO.getAllLessonsFilter(filter);
     }
 }

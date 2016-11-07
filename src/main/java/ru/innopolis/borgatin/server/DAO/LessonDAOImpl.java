@@ -1,11 +1,14 @@
 package ru.innopolis.borgatin.server.DAO;
 
+import ma.glasnost.orika.MapperFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Component;
-import ru.innopolis.borgatin.server.model.Lesson;
+import ru.innopolis.borgatin.server.model.LessonModel;
+import ru.innopolis.borgatin.server.model.modelDAO.Lesson;
 
+import javax.persistence.EntityManager;
 import javax.sql.DataSource;
 
 import static ru.innopolis.borgatin.common.MainConst.*;
@@ -48,26 +51,27 @@ public class LessonDAOImpl extends EntityDAO implements LessonDAO {
 
     private static final String QUERY_DELETE_FROM_STUDENTSLESSONS = "DELETE FROM StudentsLesson WHERE lesson_id = ? and student_id = ?";
 
-    @Autowired
-    LessonDAOImpl(DataSource dataSource) {
-        super(dataSource);
-    }
+//    public LessonDAOImpl(EntityManager entityManager) {
+//        super(entityManager);
+//    }
+
+
 
     @Override
-    public List<Lesson> getAllLessons() {
+    public List<LessonModel> getAllLessons() {
         return getAllLessons(QUERY_SELECT_ALL_ORDER_ID);
     }
 
-    private List<Lesson> getAllLessons(String query) {
-        try (Connection connection = getConnection();
+    private List<LessonModel> getAllLessons(String query) {
+       /* try (Connection connection = getConnection();
              Statement statement = connection.createStatement();
              ResultSet resultSet =
                      statement.executeQuery(query)
         ) {
-            List<Lesson> list = new ArrayList<>();
+            List<LessonModel> list = new ArrayList<>();
             int i = 0;
             while (resultSet.next()) {
-                Lesson lesson= new Lesson();
+                LessonModel lesson= new LessonModel();
                 lesson.setId(resultSet.getInt(SQL_FIELD_ID));
                 lesson.setTopic(resultSet.getString(SQL_FIELD_TOPIC));
                 lesson.setDescription(resultSet.getString(SQL_FIELD_DESCRIPTION));
@@ -79,51 +83,38 @@ public class LessonDAOImpl extends EntityDAO implements LessonDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+*/
+        Lesson lesson = getEntityManager().find(Lesson.class, 4);
 
         return null;
     }
 
         @Override
-    public List<Lesson> getAllLessonsFilter(String filter) {
+    public List<LessonModel> getAllLessonsFilter(String filter) {
             return getAllLessons(QUERY_SELECT_ALL_FILTER_MASK+"\'%"+filter+"%\'");
     }
 
     @Override
-    public List<Lesson> getAllLessonsSortByNameAsc() {
+    public List<LessonModel> getAllLessonsSortByNameAsc() {
         return getAllLessons(QUERY_SELECT_ALL_ORDER_NAME_ASC);
     }
 
     @Override
-    public List<Lesson> getAllLessonsSortByNameDesc() {
+    public List<LessonModel> getAllLessonsSortByNameDesc() {
         return getAllLessons(QUERY_SELECT_ALL_ORDER_NAME_DESC);
     }
 
     @Override
-    public Lesson getLessonById(int id) {
-        try (Connection connection = getConnection();
-             PreparedStatement statement = connection.prepareStatement(QUERY_SELECT_LESSON_BY_ID);
-        ) {
-            statement.setInt(CONST_ONE, id);
-            try (ResultSet resultSet = statement.executeQuery()) {
+    public LessonModel getLessonById(int id) {
+        Lesson lesson = getEntityManager().find(Lesson.class, id);
 
-                if (resultSet.next()) {
-                    Lesson lesson = new Lesson();
-                    lesson.setId(resultSet.getInt(SQL_FIELD_ID));
-                    lesson.setTopic(resultSet.getString(SQL_FIELD_TOPIC));
-                    lesson.setDescription(resultSet.getString(SQL_FIELD_DESCRIPTION));
-                    lesson.setDuration(resultSet.getInt(SQL_FIELD_DURATION));
-                    lesson.setDate(resultSet.getDate(SQL_FIELD_LESSON_DATE));
-                    return lesson;
-                }
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return null;
+        return null /*mapLessonToLessonModel(lesson)*/;
     }
 
+
+
     @Override
-    public Lesson updateLesson(Lesson lesson) {
+    public LessonModel updateLesson(LessonModel lesson) {
         try (Connection connection = getConnection();
              PreparedStatement statement =
                      connection.prepareStatement(QUERY_UPDATE_LESSON);
@@ -151,7 +142,7 @@ public class LessonDAOImpl extends EntityDAO implements LessonDAO {
     }
 
     @Override
-    public Lesson createLesson(Lesson lesson) {
+    public LessonModel createLesson(LessonModel lesson) {
         try (Connection connection = getConnection();
              PreparedStatement statement = connection.prepareStatement(QUERY_INSERT_INTO_LESSONS);
         ) {

@@ -1,8 +1,12 @@
 package ru.innopolis.borgatin.server.DAO;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.stereotype.Component;
 
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
 import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -18,7 +22,7 @@ public abstract class EntityDAO {
 
     private Connection connection;
 
-    final
+/*    final
     DataSource dataSource;
 
     @Autowired
@@ -29,6 +33,20 @@ public abstract class EntityDAO {
             e.printStackTrace();
         }
         this.dataSource = dataSource;
+    }*/
+    private EntityManager entityManager ;
+
+    @Autowired
+    public void setEntityManager(EntityManager entityManager) {
+        EntityManagerFactory factory =  Persistence.createEntityManagerFactory("myPersistenceUnit");
+        this.entityManager = factory.createEntityManager();
+
+    }
+
+
+
+    public EntityManager getEntityManager() {
+        return entityManager;
     }
 
     /**

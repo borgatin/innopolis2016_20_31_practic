@@ -5,7 +5,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Service;
 import ru.innopolis.borgatin.common.service.IUserService;
 import ru.innopolis.borgatin.server.DAO.UserDAO;
-import ru.innopolis.borgatin.server.model.User;
+import ru.innopolis.borgatin.server.model.modelDAO.User;
 
 import java.util.Set;
 

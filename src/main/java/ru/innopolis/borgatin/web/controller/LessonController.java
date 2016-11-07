@@ -9,8 +9,10 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import ru.innopolis.borgatin.common.service.ILessonService;
 import ru.innopolis.borgatin.server.editor.DateCustomEditor;
-import ru.innopolis.borgatin.server.model.Lesson;
-import ru.innopolis.borgatin.server.model.Student;
+import ru.innopolis.borgatin.server.model.LessonModel;
+import ru.innopolis.borgatin.server.model.StudentModel;
+import ru.innopolis.borgatin.server.model.modelDAO.Lesson;
+import ru.innopolis.borgatin.server.model.modelDAO.Student;
 import ru.innopolis.borgatin.server.model.enums.SortType;
 import static ru.innopolis.borgatin.server.model.enums.SortType.*;
 
@@ -69,18 +71,18 @@ public class LessonController {
     @RequestMapping(value = "/view/{id}")
     public ModelAndView viewLesson(@PathVariable("id") int id) {
         ModelAndView modelAndView = new ModelAndView();
-        Lesson lesson = lessonService.getLessonById(id);
+        LessonModel lesson = lessonService.getLessonById(id);
         modelAndView.addObject("lesson", lesson);
 
         modelAndView.setViewName("viewLesson");
         return modelAndView;
     }
 
-    @Secured("ROLE_ADMIN")
+    @Secured({"ROLE_ADMIN", "ROLE_USER"})
     @RequestMapping(value = "/add-lesson")
     public ModelAndView addLessonView() {
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.addObject("lesson", new Lesson());
+        modelAndView.addObject("lesson", new LessonModel());
         modelAndView.setViewName("addLessons");
         return modelAndView;
     }
@@ -88,16 +90,16 @@ public class LessonController {
     @Secured("ROLE_ADMIN")
     @RequestMapping(value = "/edit/{id}")
     public ModelAndView editLessonView(@PathVariable("id") int id) {
-        Lesson lesson = lessonService.getLessonById(id);
+        LessonModel lesson = lessonService.getLessonById(id);
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.addObject("lesson", lesson);
         modelAndView.setViewName("editLessons");
         return modelAndView;
     }
 
-    @Secured("ROLE_ADMIN")
+    @Secured({"ROLE_ADMIN", "ROLE_USER"})
     @RequestMapping(value = "/add")
-    public ModelAndView addLesson(Lesson lesson) {
+    public ModelAndView addLesson(LessonModel lesson) {
         lesson = lessonService.createLesson(lesson);
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.addObject("lesson", lesson);
@@ -107,7 +109,7 @@ public class LessonController {
 
     @Secured("ROLE_ADMIN")
     @RequestMapping(value = "/update")
-    public ModelAndView updateLesson(Lesson lesson) {
+    public ModelAndView updateLesson(LessonModel lesson) {
         lesson = lessonService.updateLesson(lesson);
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.addObject("lesson", lesson);
@@ -142,8 +144,8 @@ public class LessonController {
     @RequestMapping(value = "/edit-students/{id}")
     public ModelAndView editStudentsForLesson(@PathVariable("id") int id) {
         ModelAndView modelAndView = new ModelAndView();
-        Lesson lesson = lessonService.getLessonById(id);
-        List<Student> students = lessonService.getStudentsByLessonID(lesson.getId());
+        LessonModel lesson = lessonService.getLessonById(id);
+        List<StudentModel> students = lessonService.getStudentsByLessonID(lesson.getId());
         modelAndView.addObject("lesson", lesson);
         modelAndView.addObject("list", students);
         modelAndView.setViewName("editStudentsForLesson");
@@ -154,9 +156,9 @@ public class LessonController {
     @RequestMapping(value = "/{id}/add-students")
     public ModelAndView addStudentsForLesson(@PathVariable("id") int id) {
         ModelAndView modelAndView = new ModelAndView();
-        Lesson lesson = lessonService.getLessonById(id);
+        LessonModel lesson = lessonService.getLessonById(id);
         modelAndView.addObject("lesson", lesson);
-        List<Student> students = lessonService.getFreeStudentsByLessonID(id);
+        List<StudentModel> students = lessonService.getFreeStudentsByLessonID(id);
         if (students.size()>0) {
             modelAndView.addObject("list", students);
             modelAndView.setViewName("addStudentsForLesson");

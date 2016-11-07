@@ -6,7 +6,7 @@ import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Component;
 import ru.innopolis.borgatin.common.service.IStudentService;
 import ru.innopolis.borgatin.server.DAO.StudentDAO;
-import ru.innopolis.borgatin.server.model.Student;
+import ru.innopolis.borgatin.server.model.modelDAO.Student;
 import ru.innopolis.borgatin.server.model.StudentModel;
 import ru.innopolis.borgatin.server.model.enums.SortType;
 
@@ -14,8 +14,6 @@ import static ru.innopolis.borgatin.server.model.enums.SortType.*;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static ru.innopolis.borgatin.common.MainConst.*;
 
 /**
  * Класс реализует интерфейс IStudentService.
@@ -36,7 +34,7 @@ public class StudentService implements IStudentService {
 
     @Override
     public List<StudentModel> getAllStudents() {
-        return transformStudentListToStudentModelList(studentDAO.getAllStudents());
+        return studentDAO.getAllStudents();
     }
 
     private List<StudentModel> transformStudentListToStudentModelList(List<Student> students) {
@@ -70,17 +68,17 @@ public class StudentService implements IStudentService {
 
     @Override
     public StudentModel createStudent(StudentModel student) {
-        return  transformStudentToStudentModel(studentDAO.create(transformStudentToStudentModel(student)));
+        return  (studentDAO.create(student));
     }
 
     @Override
     public StudentModel getStudentById(int id) {
-        return  transformStudentToStudentModel(studentDAO.getStudentById(id));
+        return  (studentDAO.getStudentById(id));
     }
 
     @Override
     public StudentModel updateStudent(StudentModel student) {
-        return  transformStudentToStudentModel(studentDAO.update(transformStudentToStudentModel(student)));
+        return  (studentDAO.update((student)));
     }
 
     @Override
@@ -91,15 +89,15 @@ public class StudentService implements IStudentService {
     @Override
     public List<StudentModel> getAllStudents(SortType sortType) {
         if (ASC == sortType) {
-            return transformStudentListToStudentModelList(studentDAO.getAllStudentsSortByNameAsc());
+            return (studentDAO.getAllStudentsSortByNameAsc());
         } else {
-            return transformStudentListToStudentModelList(studentDAO.getAllStudentsSortByNameDesc());
+            return (studentDAO.getAllStudentsSortByNameDesc());
         }
     }
 
     @Override
     public List<StudentModel> getAllStudentsFiltered(String filter) {
-        return transformStudentListToStudentModelList(studentDAO.getAllStudentsFilter(filter));
+        return (studentDAO.getAllStudentsFilter(filter));
     }
 
 

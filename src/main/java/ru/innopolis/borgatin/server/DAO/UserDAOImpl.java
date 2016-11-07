@@ -1,14 +1,12 @@
 package ru.innopolis.borgatin.server.DAO;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
-import ru.innopolis.borgatin.server.model.User;
+import ru.innopolis.borgatin.server.model.modelDAO.User;
 
-import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -31,10 +29,8 @@ public class UserDAOImpl extends EntityDAO implements UserDAO{
     private static final String QUERY_SELECT_USER = "SELECT * FROM users WHERE username =?";
     private static final String QUERY_SELECT_USER_ROLES = "select DISTINCT username, user_role from user_roles where username = ?";
 
-    @Autowired
-    UserDAOImpl(DataSource dataSource) {
-        super(dataSource);
-    }
+
+
 
     @Override
     public User getUser(String username) {

@@ -1,11 +1,14 @@
 package ru.innopolis.borgatin.server.model;
 
+import ru.innopolis.borgatin.server.model.api.ILesson;
+
+import javax.persistence.Column;
 import java.util.Date;
 
 /**
- * Класс содержит описание сущности Lesson
+ * Created by avborg on 07.11.2016.
  */
-public class Lesson implements ru.innopolis.borgatin.server.model.api.ILesson {
+public class LessonModel implements ILesson {
     private int id;
     private String topic;
     private String description;

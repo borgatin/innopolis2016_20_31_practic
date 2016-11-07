@@ -1,7 +1,7 @@
 package ru.innopolis.borgatin.common.service;
 
 import org.springframework.security.core.GrantedAuthority;
-import ru.innopolis.borgatin.server.model.User;
+import ru.innopolis.borgatin.server.model.modelDAO.User;
 
 import java.util.Set;
 

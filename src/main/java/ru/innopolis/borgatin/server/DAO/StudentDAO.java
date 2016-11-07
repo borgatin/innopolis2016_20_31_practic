@@ -1,13 +1,10 @@
 package ru.innopolis.borgatin.server.DAO;
 
 
-import ru.innopolis.borgatin.server.model.Student;
+import org.springframework.stereotype.Component;
+import ru.innopolis.borgatin.server.model.StudentModel;
+import ru.innopolis.borgatin.server.model.modelDAO.Student;
 
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
-import javax.sql.DataSource;
-import java.sql.Connection;
-import java.sql.SQLException;
 import java.util.List;
 
 /**
@@ -15,24 +12,24 @@ import java.util.List;
  * описывает основную логику для работы с БД для конкретных сущностей.
  * От него необходимо наследоваться, чтобы реализовать работу с БД для сущности.
  */
-
+@Component
 public interface StudentDAO {
 
-     List<Student> getAllStudents();
+     List<StudentModel> getAllStudents();
 
-    List<Student> getAllStudentsFilter(String filter);
+    List<StudentModel> getAllStudentsFilter(String filter);
 
-    List<Student> getAllStudentsSortByNameAsc();
+    List<StudentModel> getAllStudentsSortByNameAsc();
 
-    List<Student> getAllStudentsSortByNameDesc();
+    List<StudentModel> getAllStudentsSortByNameDesc();
 
-    Student getStudentById(int id);
+    StudentModel getStudentById(int id);
 
-    Student update(Student entity);
+    StudentModel update(StudentModel student);
 
     boolean delete(int id);
 
-    Student create(Student student);
+    StudentModel create(StudentModel student);
 
     int getLessonsCount(int id) ;
 }

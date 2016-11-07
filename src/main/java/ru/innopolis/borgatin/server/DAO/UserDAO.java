@@ -1,13 +1,8 @@
 package ru.innopolis.borgatin.server.DAO;
 
 import org.springframework.security.core.GrantedAuthority;
-import ru.innopolis.borgatin.server.model.User;
+import ru.innopolis.borgatin.server.model.modelDAO.User;
 
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
-import javax.sql.DataSource;
-import java.sql.Connection;
-import java.sql.SQLException;
 import java.util.Set;
 
 /**

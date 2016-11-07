@@ -1,7 +1,8 @@
-package ru.innopolis.borgatin.server.model;
+package ru.innopolis.borgatin.server.model.modelDAO;
 
 import ru.innopolis.borgatin.server.model.api.IStudent;
 
+import javax.persistence.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -9,7 +10,12 @@ import java.util.Date;
 /**
  * Класс содержит описение сущность Студент
  */
+@Entity
+@Table(name = "students")
 public class Student implements IStudent {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column
     private int id;
 
     @Override
@@ -22,9 +28,13 @@ public class Student implements IStudent {
         this.id = id;
     }
 
+    @Column
     private String lastname;
+    @Column
     private String firstname;
+    @Column
     private String gender;
+    @Column
     private Date birthdate;
 
     @Override

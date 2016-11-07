@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import ru.innopolis.borgatin.common.service.IStudentService;
 import ru.innopolis.borgatin.server.editor.DateCustomEditor;
-import ru.innopolis.borgatin.server.model.Student;
+import ru.innopolis.borgatin.server.model.modelDAO.Student;
 import ru.innopolis.borgatin.server.model.StudentModel;
 import ru.innopolis.borgatin.server.model.enums.SortType;
 import static ru.innopolis.borgatin.server.model.enums.SortType.*;
@@ -83,7 +83,7 @@ public class StudentController {
     @RequestMapping(value = "/add-student")
     public ModelAndView addStudentView() {
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.addObject("student", new Student());
+        modelAndView.addObject("student", new StudentModel());
         modelAndView.setViewName("addStudents");
         return modelAndView;
     }
