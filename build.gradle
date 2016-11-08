@@ -16,11 +16,29 @@ dependencies {
     compile "jstl:jstl:1.1.2"
     compile "org.slf4j:slf4j-api:1.7.21"
     compile "org.slf4j:slf4j-log4j12:1.7.21"
-    compile "javax.servlet:servlet-api:2.5"
+    compile "javax.servlet:javax.servlet-api:3.0.1"
     compile "org.apache.taglibs:taglibs-standard-jstlel:1.2.5"
-
     compile group: 'org.postgresql', name: 'postgresql', version: '9.3-1102-jdbc41'
-    compile group: 'org.springframework', name: 'spring-webmvc', version: '4.3.3.RELEASE'
-    compile group: 'org.springframework', name: 'spring-context', version: '4.3.3.RELEASE'
+
+    compile group: 'commons-dbcp', name: 'commons-dbcp', version: '1.2.2'
+    compile "org.springframework:spring-context:4.3.3.RELEASE"
+    compile "org.springframework:spring-webmvc:4.3.3.RELEASE"
+    compile "org.springframework.security:spring-security-config:3.2.5.RELEASE"
+    compile "org.springframework.security:spring-security-core:3.2.5.RELEASE"
+    compile "org.springframework.security:spring-security-web:3.2.5.RELEASE"
+    compile "org.springframework.security:spring-security-taglibs:3.2.5.RELEASE"
+    compile "org.springframework:spring-orm:4.3.2.RELEASE";
+
+
+    compile "org.hibernate:hibernate-entitymanager:4.2.1.Final";
+    compile "org.hibernate.javax.persistence:hibernate-jpa-2.0-api:1.0.1.Final";
+
+    compile "javax.transaction:transaction-api:1.1";
+    compile "javax.transaction:jta:1.1";
+    compile group: 'ma.glasnost.orika', name: 'orika-core', version: '1.4.6'
+
+
+
+
 
 }

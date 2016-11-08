@@ -1,60 +1,63 @@
 package ru.innopolis.borgatin.server.DAO;
 
 
-import ru.innopolis.borgatin.server.model.Student;
+import org.springframework.stereotype.Component;
+import ru.innopolis.borgatin.server.model.StudentModel;
+import ru.innopolis.borgatin.server.model.modelDAO.Student;
 
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
-import javax.sql.DataSource;
-import java.sql.Connection;
-import java.sql.SQLException;
 import java.util.List;
 
 /**
- * Класс предназначен для получения объектов Connection из пула,
- * описывает основную логику для работы с БД для конкретных сущностей.
- * От него необходимо наследоваться, чтобы реализовать работу с БД для сущности.
+ * Интерфейс описывает методы для получения сущности StudentModel из базы данных
  */
+@Component
+public interface StudentDAO {
 
-public abstract class StudentDAO {
-    private Connection connection;
+    /**
+     * Получить все объекты StudentModel
+     * @return List объектов StudentModel
+     */
+    List<StudentModel> getAllStudents();
+    /**
+     * Получить все объекты StudentModel, отфильтрованные по полю
+     * lastname
+     * @param filter фильтр для поля lastname
+     * @return List объектов StudentModel, удовлетворяющие фильтру
+     */
+    List<StudentModel> getAllStudentsFilter(String filter);
 
-    protected StudentDAO() throws SQLException {
-        InitialContext initialContext = null;
-        try {
-            initialContext = new InitialContext();
-            DataSource ds = (DataSource) initialContext.lookup("java:comp/env/jdbc/app");
-            connection = ds.getConnection();
-        } catch (NamingException e) {
-            e.printStackTrace();
-        }
-    }
+    /**
+     * Получить все объекты StudentModel, отсортированные по возрастанию по полю
+     * lastname
+     * @return List отсортированных по возрастанию объектов StudentModel по полю lastname
+     */
+    List<StudentModel> getAllStudentsSortByNameAsc();
 
+    /**
+     * Получить все объекты StudentModel, отсортированные по убыванию по полю
+     * lastname
+     * @return List отсортированных по убыванию объектов StudentModel по полю lastname
+     */
+    List<StudentModel> getAllStudentsSortByNameDesc();
 
-    public abstract List<Student> getAllStudents();
+    /**
+     * Получить объект StudentModel по его идентификатору
+     * @param id идентификтор студента
+     * @return объект StudentModel
+     */
+    StudentModel getStudentById(int id);
 
-    public abstract List<Student> getAllStudentsFilter(String filter);
+    /**
+     * Обновить или создать стедента
+     * @param studentModel студент, которого нужно обновить или создать
+     * @return при создании объекта возвращает этот объект с заполненным идентификатором,
+     * при изменении этот же объект.
+     */
+    StudentModel update(StudentModel studentModel);
 
-    public abstract List<Student> getAllStudentsSortByNameAsc();
-
-    public abstract List<Student> getAllStudentsSortByNameDesc();
-
-    public abstract Student getStudentById(int id);
-
-    public abstract Student update(Student entity);
-
-    public abstract boolean delete(int id);
-
-    public abstract Student create(Student student);
-
-    public Connection getConnection() {
-        return connection;
-    }
-
-    // Возвращения экземпляра Connection в пул соединений
-    public void returnConnectionInPool() throws SQLException {
-        connection.close();
-    }
-
-
+    /**
+     * Удалить студента по его идентификатору
+     * @param id идентификатор удаляемого студента
+     */
+    void deleteStudent(int id);
 }

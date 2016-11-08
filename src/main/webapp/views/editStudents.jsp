@@ -5,20 +5,24 @@
 <html>
 
 <head>
-    <title>Index Page</title>
+    <title>Edit student</title>
 </head>
 
 <body>
-Добавление студента
-<spring:form method="post"  modelAttribute="student" action="/update">
+Edit student
+<spring:form method="post"  modelAttribute="student" action="${pageContext.request.contextPath}/students/update">
 
     ID: <spring:input readonly="true" path="id"/>   <br/>
     First Name: <spring:input path="firstname"/>   <br/>
     Last Name: <spring:input path="lastname"/>   <br/>
-    Gender: <spring:input path="gender"/>   <br/>
+    <%--Gender: <spring:input path="gender"/>   <br/>--%>
+    Male:&nbsp;&nbsp; <spring:radiobutton path="gender"  value="male"/>   <br/>
+    Female: <spring:radiobutton path="gender"  value="female"/>   <br/>
     Birthdate: <spring:input path="birthdate"/>   <br/>
     <spring:button>Update</spring:button>
-    <a href="${pageContext.request.contextPath}/"> All </a>
+    <br/>
+    <a href="${pageContext.request.contextPath}/students/all"> All </a><br/>
+    <a href="${pageContext.request.contextPath}/"> Home </a>
 
 </spring:form>
 

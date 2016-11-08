@@ -1,167 +1,118 @@
 package ru.innopolis.borgatin.server.DAO;
 
+import ma.glasnost.orika.MapperFacade;
+import ma.glasnost.orika.MapperFactory;
+import ma.glasnost.orika.impl.DefaultMapperFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Component;
-import ru.innopolis.borgatin.server.model.Student;
+import ru.innopolis.borgatin.server.DAO.mapping.StudentsMapping;
+import ru.innopolis.borgatin.server.model.LessonModel;
+import ru.innopolis.borgatin.server.model.StudentModel;
+import ru.innopolis.borgatin.server.model.modelDAO.Lesson;
+import ru.innopolis.borgatin.server.model.modelDAO.Student;
+
+import javax.persistence.EntityManager;
+import javax.persistence.TypedQuery;
+import javax.sql.DataSource;
+
+import static ru.innopolis.borgatin.common.MainConst.*;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by avborg on 31.10.2016.
- */
 
+/**
+ * Класс реализует абстрактный класс EntityDAO и интерфейс StudentDAO
+ * Необходим для получения информации о сущности Student из базы данных.
+ * Использует объект EntityManager, создающийся в родителе EntityDAO.
+ * Все методы интерфейса UserDAO возвращают объект StudentModel.
+ * Для маппинга используется экземпляр класса StudentsMapping, использующий библиотеку Orica.
+ */
 @Component
 @Scope(proxyMode = ScopedProxyMode.TARGET_CLASS, value = "prototype")
-public class StudentDAOImpl extends StudentDAO {
+public class StudentDAOImpl extends EntityDAO implements StudentDAO{
 
-    private final static String QUERY_SELECT_ALL_ORDER_ID = "SELECT * FROM students order by id";
+    private static final String QUERY_SELECT_ALL_ORDER_ID = "SELECT s FROM Student s order by s.id";
 
-    private final static String QUERY_SELECT_ALL_ORDER_NAME_DESC = "SELECT * FROM students order by lastname desc";
+    private static final String QUERY_SELECT_ALL_ORDER_NAME_DESC = "SELECT s FROM Student s order by s.lastname desc";
 
-    private final static String QUERY_SELECT_ALL_ORDER_NAME_ASC = "SELECT * FROM students order by lastname";
+    private static final String QUERY_SELECT_ALL_ORDER_NAME_ASC = "SELECT s FROM Student s order by s.lastname";
 
-    private final static String QUERY_SELECT_ALL_FILTER_MASK = "SELECT * FROM students where lastname like ";
+    private static final String QUERY_SELECT_ALL_FILTER_MASK = "SELECT s FROM Student s where s.lastname like :filter";
 
+    private final StudentsMapping studentsMapping;
 
-    public StudentDAOImpl() throws SQLException {
-        super();
+    @Autowired
+    public StudentDAOImpl(StudentsMapping studentsMapping) {
+        this.studentsMapping = studentsMapping;
     }
 
+
+    /**
+     * Основной метод по получению списка студентов. Выводит студентов по переданному SQL-запросу
+     * @param query строка String с SQL-запросом для получения списка студентов
+     * @return List StudentModel
+     */
+    private List<StudentModel> getAllStudents(String query) {
+        TypedQuery<Student> lessonTypedQuery  = getEntityManager().createQuery(query, Student.class);
+        List<Student> students = lessonTypedQuery.getResultList();
+        return studentsMapping.makeMapping(students);
+    }
+
+
     @Override
-    public List<Student> getAllStudents() {
+    public List<StudentModel> getAllStudents() {
         return getAllStudents(QUERY_SELECT_ALL_ORDER_ID);
     }
 
     @Override
-    public List<Student> getAllStudentsFilter(String filter) {
-        return getAllStudents(QUERY_SELECT_ALL_FILTER_MASK+"\'%"+filter+"%\'");
+    public List<StudentModel> getAllStudentsFilter(String filter) {
+        TypedQuery<Student>  lessonTypedQuery  = getEntityManager().createQuery(QUERY_SELECT_ALL_FILTER_MASK , Student.class);
+        lessonTypedQuery.setParameter("filter",
+                new StringBuilder("%")
+                        .append(filter)
+                        .append("%").toString());
+        List<Student> students = lessonTypedQuery.getResultList();
+        return studentsMapping.makeMapping(students);
     }
 
-    public List<Student> getAllStudentsSortByNameAsc(){
+    public List<StudentModel> getAllStudentsSortByNameAsc(){
         return getAllStudents(QUERY_SELECT_ALL_ORDER_NAME_ASC);
     }
-    public List<Student> getAllStudentsSortByNameDesc(){
+    public List<StudentModel> getAllStudentsSortByNameDesc(){
         return getAllStudents(QUERY_SELECT_ALL_ORDER_NAME_DESC);
     }
 
-    private List<Student> getAllStudents(String query) {
-        try (Connection connection = getConnection();
-             Statement statement = connection.createStatement();
-             ResultSet resultSet =
-                     statement.executeQuery(query)
-        ) {
-            List<Student> list = new ArrayList<>();
-            int i = 0;
-            while (resultSet.next()) {
-                Student student = new Student();
-                student.setId(resultSet.getInt("id"));
-                student.setFirstname(resultSet.getString("firstname"));
-                student.setLastname(resultSet.getString("lastname"));
-                student.setGender(resultSet.getString("gender"));
-                student.setBirthdate(resultSet.getDate("birthdate"));
-                list.add(i++, student);
-            }
-            return list;
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
 
-        return null;
-    }
 
 
     @Override
-    public Student getStudentById(int id) {
-        try (Connection connection = getConnection();
-             PreparedStatement statement = connection.prepareStatement("SELECT * FROM students WHERE id=?");
-        ) {
-            statement.setInt(1, id);
-            try (ResultSet resultSet = statement.executeQuery()) {
-
-                if (resultSet.next()) {
-                    Student student = new Student();
-                    student.setId(resultSet.getInt("id"));
-                    student.setFirstname(resultSet.getString("firstname"));
-                    student.setLastname(resultSet.getString("lastname"));
-                    student.setGender(resultSet.getString("gender"));
-                    student.setBirthdate(resultSet.getDate("birthdate"));
-                    return student;
-                }
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return null;
+    public StudentModel getStudentById(int id) {
+        Student student = getEntityManager().find(Student.class, id);
+        return studentsMapping.makeMapping(student);
     }
 
     @Override
-    public Student update(Student student) {
-        try (Connection connection = getConnection();
-             PreparedStatement statement = connection.prepareStatement("UPDATE students set lastname = ?, firstname = ?,birthdate = ?, gender = ? WHERE id = ?");
-        ) {
-            statement.setString(1, student.getLastname());
-            statement.setString(2, student.getFirstname());
-            statement.setDate(3, new Date(student.getBirthdate().getTime()));
-            statement.setString(4, student.getGender());
-            statement.setInt(5, student.getId());
-            statement.executeUpdate();
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        return student;
+    public StudentModel update(StudentModel studentModel) {
+        EntityManager em = getEntityManager();
+        Student student = studentsMapping.makeMapping(studentModel );
+        em.getTransaction().begin();
+        student= em.merge(student);
+        em.getTransaction().commit();
+        studentModel = studentsMapping.makeMapping(student );
+        return studentModel;
     }
 
     @Override
-    public boolean delete(int id) {
-        try (Connection connection = getConnection();
-             PreparedStatement statement = connection.prepareStatement("DELETE FROM students WHERE id = ?");
-        ) {
-            statement.setInt(1, id);
-            int count = statement.executeUpdate();
-            if (count > 0) {
-                return true;
-            }
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        return false;
+    public void deleteStudent(int id) {
+        EntityManager em = getEntityManager();
+        Student student = em.find(Student.class, id);
+        em.getTransaction().begin();
+        em.remove(student);
+        em.getTransaction().commit();
     }
-
-    @Override
-    public Student create(Student student) {
-        try (Connection connection = getConnection();
-             PreparedStatement statement = connection.prepareStatement("Insert into students (lastname,firstname,birthdate, gender) values ( ?,?,?,? )");
-        ) {
-            statement.setString(1, student.getLastname());
-            statement.setString(2, student.getFirstname());
-            statement.setDate(3, new Date(student.getBirthdate().getTime()));
-            statement.setString(4, student.getGender());
-            statement.executeUpdate();
-
-            try (PreparedStatement statement1 = connection.prepareStatement("SELECT id from students WHERE lastname = ?")) {
-                statement1.setString(1, student.getLastname());
-                try (ResultSet resultSet = statement1.executeQuery()) {
-                    if (resultSet.next()) {
-                        int id = resultSet.getInt("id");
-                        student.setId(id);
-                    }
-                }
-            }
-
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        return student;
-    }
-
 
 }

@@ -4,64 +4,69 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Component;
-import ru.innopolis.borgatin.common.IStudentService;
+import ru.innopolis.borgatin.common.service.IStudentService;
 import ru.innopolis.borgatin.server.DAO.StudentDAO;
-import ru.innopolis.borgatin.server.model.Student;
+import ru.innopolis.borgatin.server.model.StudentModel;
+import ru.innopolis.borgatin.server.model.enums.SortType;
+
+import static ru.innopolis.borgatin.server.model.enums.SortType.*;
 
 import java.util.List;
 
 /**
- * Created by avborg on 31.10.2016.
+ * Класс реализует интерфейс IStudentService.
+ * Предназначен дл работы с сущностью StudentModel.
  */
-
 @Component
 @Scope(proxyMode = ScopedProxyMode.TARGET_CLASS, value = "prototype")
 public class StudentService implements IStudentService {
 
+    private final StudentDAO studentDAO;
+
     @Autowired
-    StudentDAO studentDAO;
+    public StudentService(StudentDAO studentDAO) {
+        this.studentDAO = studentDAO;
+    }
 
-    private final String SORT_TYPE_ASC = "asc";
-
-    private final String SORT_TYPE_DESC = "desc";
 
     @Override
-    public List<Student> getAllStudents() {
+    public List<StudentModel> getAllStudents() {
         return studentDAO.getAllStudents();
     }
 
+
     @Override
-    public Student createStudent(Student student) {
-        return studentDAO.create(student);
+    public StudentModel createStudent(StudentModel student) {
+        return  (studentDAO.update(student));
     }
 
     @Override
-    public Student getStudentById(int id) {
-        return studentDAO.getStudentById(id);
+    public StudentModel getStudentById(int id) {
+        return  (studentDAO.getStudentById(id));
     }
 
     @Override
-    public Student updateStudent(Student student) {
-        return studentDAO.update(student);
+    public StudentModel updateStudent(StudentModel student) {
+        return  (studentDAO.update((student)));
     }
 
     @Override
-    public boolean deleteStudentById(int id) {
-        return studentDAO.delete(id);
+    public void deleteStudentById(int id) {
+        studentDAO.deleteStudent(id);
     }
 
     @Override
-    public List<Student> getAllStudents(String sortType) {
-        if (SORT_TYPE_ASC.equals(sortType)) {
-            return studentDAO.getAllStudentsSortByNameAsc();
+    public List<StudentModel> getAllStudents(SortType sortType) {
+        if (ASC == sortType) {
+            return (studentDAO.getAllStudentsSortByNameAsc());
         } else {
-            return studentDAO.getAllStudentsSortByNameDesc();
+            return (studentDAO.getAllStudentsSortByNameDesc());
         }
     }
 
     @Override
-    public List<Student> getAllStudentsFiltered(String filter) {
-        return studentDAO.getAllStudentsFilter(filter);
+    public List<StudentModel> getAllStudentsFiltered(String filter) {
+        return (studentDAO.getAllStudentsFilter(filter));
     }
 
 
