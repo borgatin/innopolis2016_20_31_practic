@@ -2,6 +2,7 @@
 \.idea
 \build
 \out
+\config
 TestWebApplication.iml
 TestWebApplication.ipr
 TestWebApplication.iws
