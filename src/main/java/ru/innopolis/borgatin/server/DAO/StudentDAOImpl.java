@@ -1,13 +1,20 @@
 package ru.innopolis.borgatin.server.DAO;
 
+import ma.glasnost.orika.MapperFacade;
+import ma.glasnost.orika.MapperFactory;
+import ma.glasnost.orika.impl.DefaultMapperFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Component;
+import ru.innopolis.borgatin.server.DAO.mapping.StudentsMapping;
+import ru.innopolis.borgatin.server.model.LessonModel;
 import ru.innopolis.borgatin.server.model.StudentModel;
+import ru.innopolis.borgatin.server.model.modelDAO.Lesson;
 import ru.innopolis.borgatin.server.model.modelDAO.Student;
 
 import javax.persistence.EntityManager;
+import javax.persistence.TypedQuery;
 import javax.sql.DataSource;
 
 import static ru.innopolis.borgatin.common.MainConst.*;
@@ -25,30 +32,32 @@ import java.util.List;
 @Scope(proxyMode = ScopedProxyMode.TARGET_CLASS, value = "prototype")
 public class StudentDAOImpl extends EntityDAO implements StudentDAO{
 
-    private static final String QUERY_SELECT_ALL_ORDER_ID = "SELECT * FROM students order by id";
+    private static final String QUERY_SELECT_ALL_ORDER_ID = "SELECT s FROM Student s order by s.id";
 
-    private static final String QUERY_SELECT_ALL_ORDER_NAME_DESC = "SELECT * FROM students order by lastname desc";
+    private static final String QUERY_SELECT_ALL_ORDER_NAME_DESC = "SELECT s FROM Student s order by s.lastname desc";
 
-    private static final String QUERY_SELECT_ALL_ORDER_NAME_ASC = "SELECT * FROM students order by lastname";
+    private static final String QUERY_SELECT_ALL_ORDER_NAME_ASC = "SELECT s FROM Student s order by s.lastname";
 
-    private static final String QUERY_SELECT_ALL_FILTER_MASK = "SELECT * FROM students where lastname like ";
+    private static final String QUERY_SELECT_ALL_FILTER_MASK = "SELECT s FROM Student s where s.lastname like :filter";
 
-    private static final String QUERY_SELECT_STUDENT_BY_ID = "SELECT * FROM students WHERE id=?";
-    
-    private static final String QUERY_UPDATE_STUDENT = "UPDATE students set lastname = ?, firstname = ?,birthdate = ?, gender = ? WHERE id = ?";
+    private final StudentsMapping studentsMapping;
 
-    private static final String QUERY_DELETE_FROM_STUDENT = "DELETE FROM students WHERE id = ?";
-    
-    private static final String QUERY_DELETE_FROM_STUDENTLESSONS = "DELETE FROM StudentsLesson WHERE student_id = ?";
+    @Autowired
+    public StudentDAOImpl(StudentsMapping studentsMapping) {
+        this.studentsMapping = studentsMapping;
+    }
 
-    private static final String QUERY_INSERT_STUDENT = "Insert into students (lastname,firstname,birthdate, gender) values ( ?,?,?,? )";
 
-    private static final String QUERY_SELECT_STUDENT_ID_BY_LASTNAME = "SELECT id from students WHERE lastname = ?";
-
-    private static final String QUERY_SELECT_COUNT_STUDENT_LESSONS_BY_STUDENT_ID = "SELECT DISTINCT count(lesson_id) lessons_count FROM StudentsLesson WHERE student_id=?";
-
-    private static final String FIELD_CALC_LESSONS_COUNT = "lessons_count";
-
+    /**
+     * Основной метод по получению списка студентов. Выводит студентов по переданному SQL-запросу
+     * @param query строка String с SQL-запросом для получения списка студентов
+     * @return
+     */
+    private List<StudentModel> getAllStudents(String query) {
+        TypedQuery<Student> lessonTypedQuery  = getEntityManager().createQuery(query, Student.class);
+        List<Student> students = lessonTypedQuery.getResultList();
+        return studentsMapping.makeMapping(students);
+    }
 
 
     @Override
@@ -58,7 +67,13 @@ public class StudentDAOImpl extends EntityDAO implements StudentDAO{
 
     @Override
     public List<StudentModel> getAllStudentsFilter(String filter) {
-        return getAllStudents(QUERY_SELECT_ALL_FILTER_MASK+"\'%"+filter+"%\'");
+        TypedQuery<Student>  lessonTypedQuery  = getEntityManager().createQuery(QUERY_SELECT_ALL_FILTER_MASK , Student.class);
+        lessonTypedQuery.setParameter("filter",
+                new StringBuilder("%")
+                        .append(filter)
+                        .append("%").toString());
+        List<Student> students = lessonTypedQuery.getResultList();
+        return studentsMapping.makeMapping(students);
     }
 
     public List<StudentModel> getAllStudentsSortByNameAsc(){
@@ -68,128 +83,38 @@ public class StudentDAOImpl extends EntityDAO implements StudentDAO{
         return getAllStudents(QUERY_SELECT_ALL_ORDER_NAME_DESC);
     }
 
-    private List<StudentModel> getAllStudents(String query) {
-        try (Connection connection = getConnection();
-             Statement statement = connection.createStatement();
-             ResultSet resultSet =
-                     statement.executeQuery(query)
-        ) {
-            List<StudentModel> list = new ArrayList<>();
-            int i = CONST_ZERO;
-            while (resultSet.next()) {
-                StudentModel student = new StudentModel();
-                student.setId(resultSet.getInt(SQL_FIELD_ID));
-                student.setFirstname(resultSet.getString(SQL_FIELD_FIRSTNAME));
-                student.setLastname(resultSet.getString(SQL_FIELD_LASTNAME));
-                student.setGender(resultSet.getString(SQL_FIELD_GENDER));
-                student.setBirthdate(resultSet.getDate(SQL_FIELD_BIRTHDATE));
-                list.add(i++, student);
-            }
-            return list;
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
 
-        return null;
-    }
 
 
     @Override
     public StudentModel getStudentById(int id) {
-        try (Connection connection = getConnection();
-             PreparedStatement statement = connection.prepareStatement(QUERY_SELECT_STUDENT_BY_ID);
-        ) {
-            statement.setInt(CONST_ONE, id);
-            try (ResultSet resultSet = statement.executeQuery()) {
-
-                if (resultSet.next()) {
-                    StudentModel student = new StudentModel();
-                    student.setId(resultSet.getInt(SQL_FIELD_ID));
-                    student.setFirstname(resultSet.getString(SQL_FIELD_FIRSTNAME));
-                    student.setLastname(resultSet.getString(SQL_FIELD_LASTNAME));
-                    student.setGender(resultSet.getString(SQL_FIELD_GENDER));
-                    student.setBirthdate(resultSet.getDate(SQL_FIELD_BIRTHDATE));
-                    return student;
-                }
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return null;
+        Student student = getEntityManager().find(Student.class, id);
+        return studentsMapping.makeMapping(student);
     }
 
     @Override
-    public StudentModel update(StudentModel student) {
-        try (Connection connection = getConnection();
-             PreparedStatement statement = connection.prepareStatement(QUERY_UPDATE_STUDENT);
-        ) {
-            statement.setString(CONST_ONE, student.getLastname());
-            statement.setString(CONST_TWO, student.getFirstname());
-            statement.setDate(CONST_THREE, new Date(student.getBirthdate().getTime()));
-            statement.setString(CONST_FOUR, student.getGender());
-            statement.setInt(CONST_FIVE, student.getId());
-            statement.executeUpdate();
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        return student;
+    public StudentModel update(StudentModel studentModel) {
+        EntityManager em = getEntityManager();
+        Student student = studentsMapping.makeMapping(studentModel );
+        em.getTransaction().begin();
+        student= em.merge(student);
+        em.getTransaction().commit();
+        studentModel = studentsMapping.makeMapping(student );
+        return studentModel;
     }
 
     @Override
-    public boolean delete(int id) {
-        try (Connection connection = getConnection()){
-            return deleteEntity(connection, id, QUERY_DELETE_FROM_STUDENT,new String[]{QUERY_DELETE_FROM_STUDENTLESSONS} );
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return false;
+    public void delete(int id) {
+        EntityManager em = getEntityManager();
+        Student student = em.find(Student.class, id);
+        em.getTransaction().begin();
+        em.remove(student);
+        em.getTransaction().commit();
     }
 
-    @Override
-    public StudentModel create(StudentModel student) {
-        try (Connection connection = getConnection();
-             PreparedStatement statement = connection.prepareStatement(QUERY_INSERT_STUDENT);
-        ) {
-            statement.setString(CONST_ONE, student.getLastname());
-            statement.setString(CONST_TWO, student.getFirstname());
-            if (student.getBirthdate()!= null) {
-                statement.setDate(CONST_THREE, new Date(student.getBirthdate().getTime()));
-            }
-            statement.setString(CONST_FOUR, student.getGender());
-            statement.executeUpdate();
-
-            try (PreparedStatement statement1 = connection.prepareStatement(QUERY_SELECT_STUDENT_ID_BY_LASTNAME)) {
-                statement1.setString(CONST_ONE, student.getLastname());
-                try (ResultSet resultSet = statement1.executeQuery()) {
-                    if (resultSet.next()) {
-                        int id = resultSet.getInt(SQL_FIELD_ID);
-                        student.setId(id);
-                    }
-                }
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        return student;
-    }
 
     @Override
     public int getLessonsCount(int id) {
-        try (Connection connection = getConnection();
-             PreparedStatement statement = connection.prepareStatement(QUERY_SELECT_COUNT_STUDENT_LESSONS_BY_STUDENT_ID);
-        ) {
-            statement.setInt(CONST_ONE, id);
-            try (ResultSet resultSet = statement.executeQuery()) {
-                if (resultSet.next()) {
-                    return resultSet.getInt(FIELD_CALC_LESSONS_COUNT);
-                }
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
 
         return CONST_ZERO;
     }

@@ -8,6 +8,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import ru.innopolis.borgatin.common.service.IUserService;
+import ru.innopolis.borgatin.server.model.UserModel;
 import ru.innopolis.borgatin.server.model.modelDAO.User;
 
 import java.util.HashSet;
@@ -26,13 +27,10 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-//        User user = userService.getUser(username);
-//        Set<GrantedAuthority> roles = userService.getUserRoles(user.getUsername());
-        Set<GrantedAuthority> roles = new HashSet<>();
-        roles.add(new SimpleGrantedAuthority("ROLE_USER"));
+        UserModel user = userService.getUser(username);
+        Set<GrantedAuthority> roles = user.getRoles();
         UserDetails userDetails =
-//                new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), roles);
-                new org.springframework.security.core.userdetails.User("alex", "7c4a8d09ca3762af61e59520943dc26494f8941b", roles);
+                new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), roles);
 
         return userDetails;
     }

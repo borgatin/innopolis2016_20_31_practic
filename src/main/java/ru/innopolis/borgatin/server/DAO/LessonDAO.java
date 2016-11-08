@@ -3,9 +3,11 @@ package ru.innopolis.borgatin.server.DAO;
 
 import org.springframework.stereotype.Component;
 import ru.innopolis.borgatin.server.model.LessonModel;
+import ru.innopolis.borgatin.server.model.StudentModel;
 import ru.innopolis.borgatin.server.model.modelDAO.Lesson;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * Класс предназначен для получения объектов Connection из пула,
@@ -29,13 +31,11 @@ public interface LessonDAO{
 
     LessonModel updateLesson(LessonModel lesson);
 
-    boolean deleteLesson(int id);
+    void deleteLesson(int id);
 
-    LessonModel createLesson(LessonModel lesson);
+    Set<StudentModel> getStudentsIDByLessonID(int id);
 
-    List<Integer> getStudentsIDByLessonID(int id);
+    void addStudentOnLesson(int id, StudentModel studentModel);
 
-    void addStudentOnLesson(int id, int studentId);
-
-    void deleteStudentFromLesson(int id, int studentId);
+    void deleteStudentFromLesson(int id, StudentModel studentModel);
 }

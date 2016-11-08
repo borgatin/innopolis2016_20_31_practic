@@ -14,7 +14,9 @@ import ru.innopolis.borgatin.server.model.modelDAO.Student;
 import ru.innopolis.borgatin.server.model.enums.SortType;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import static ru.innopolis.borgatin.server.model.enums.SortType.ASC;
 
@@ -35,13 +37,12 @@ public class LessonService implements ILessonService {
 
     @Override
     public List<LessonModel> getAllLessons() {
-        //TODO: мапить с лессон на лессон модел
         return lessonDAO.getAllLessons();
     }
 
     @Override
     public LessonModel createLesson(LessonModel lesson) {
-        return lessonDAO.createLesson(lesson);
+        return lessonDAO.updateLesson(lesson);
     }
 
     @Override
@@ -55,44 +56,42 @@ public class LessonService implements ILessonService {
     }
 
     @Override
-    public boolean deleteLessonById(int id) {
-        return lessonDAO.deleteLesson(id);
+    public void deleteLessonById(int id) {
+         lessonDAO.deleteLesson(id);
+        return;
     }
 
     @Override
-    public List<StudentModel> getStudentsByLessonID(int id) {
-        List<Integer> studentsId = lessonDAO.getStudentsIDByLessonID(id);
-        List<StudentModel> students = new ArrayList<>();
-        int i = 0;
-        for(int studentId: studentsId){
-            students.add(i++, studentDAO.getStudentById(studentId));
-        }
+    public Set<StudentModel> getStudentsByLessonID(int id) {
+        Set<StudentModel> students = lessonDAO.getStudentsIDByLessonID(id);
         return students;
     }
 
     @Override
-    public List<StudentModel> getFreeStudentsByLessonID(int id) {
+    public Set<StudentModel> getFreeStudentsByLessonID(int id) {
         List<StudentModel> allStudents = studentDAO.getAllStudents();
-        List<Integer> studentsIdByLesson = lessonDAO.getStudentsIDByLessonID(id);
-        List<StudentModel> freeStudents = new ArrayList<>();
-        int i = 0;
+        Set<StudentModel> studentsIdByLesson = lessonDAO.getStudentsIDByLessonID(id);
+        Set<StudentModel> freeStudents = new HashSet<>();
         for (StudentModel student: allStudents){
-            if (!studentsIdByLesson.contains(student.getId())){
-                freeStudents.add(i++, student);
+            if (!studentsIdByLesson.contains(student)){
+                freeStudents.add(student);
             }
         }
-
         return freeStudents;
     }
 
     @Override
     public void addStudentOnLesson(int id, int studentId) {
-        lessonDAO.addStudentOnLesson(id, studentId);
+        StudentModel studentModel = studentDAO.getStudentById(studentId);
+
+        lessonDAO.addStudentOnLesson(id,studentModel);
     }
 
     @Override
     public void deleteStudentFromLesson(int id, int studentId) {
-        lessonDAO.deleteStudentFromLesson(id,studentId);
+        StudentModel studentModel = studentDAO.getStudentById(studentId);
+
+        lessonDAO.deleteStudentFromLesson(id,studentModel);
     }
 
     @Override

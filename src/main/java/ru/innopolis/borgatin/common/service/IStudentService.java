@@ -59,7 +59,7 @@ public interface IStudentService {
      * @param id идентификатор студента, который нужно удалить
      * @return true если удалось удалить студента, иначе false
      */
-    boolean deleteStudentById(int id);
+    void deleteStudentById(int id);
 
 
 

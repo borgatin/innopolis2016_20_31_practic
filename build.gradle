@@ -30,12 +30,13 @@ dependencies {
     compile "org.springframework:spring-orm:4.3.2.RELEASE";
 
 
-    compile group: 'org.hibernate', name: 'hibernate-gradle-plugin', version: '5.2.4.Final'
-    compile "org.hibernate.javax.persistence:hibernate-jpa-2.1-api:1.0.0.Final";
-    compile "org.hibernate:hibernate-entitymanager:5.2.3.Final";
+    compile "org.hibernate:hibernate-entitymanager:4.2.1.Final";
+    compile "org.hibernate.javax.persistence:hibernate-jpa-2.0-api:1.0.1.Final";
+
     compile "javax.transaction:transaction-api:1.1";
     compile "javax.transaction:jta:1.1";
     compile group: 'ma.glasnost.orika', name: 'orika-core', version: '1.4.6'
+
 
 
 

@@ -35,16 +35,27 @@ public abstract class EntityDAO {
         this.dataSource = dataSource;
     }*/
     private EntityManager entityManager ;
+    private EntityManagerFactory factory;
+
 
     @Autowired
-    public void setEntityManager(EntityManager entityManager) {
-        EntityManagerFactory factory =  Persistence.createEntityManagerFactory("myPersistenceUnit");
-        this.entityManager = factory.createEntityManager();
+    public void setEntityManager(EntityManagerFactory entityManagerFactory) {
+//        EntityManagerFactory factory =  Persistence.createEntityManagerFactory("myPersistenceUnit");
+        EntityManagerFactory factory =  entityManagerFactory;
+//        this.entityManager = entityManagerFactory.createEntityManager();
 
     }
 
 
+    public EntityDAO() {
+        try{
+            this.entityManager = factory.createEntityManager();
+//            this.entityManager = Persistence.createEntityManagerFactory("TEST").createEntityManager();
+        } catch (Throwable t){
+            t.printStackTrace();
+        }
 
+    }
     public EntityManager getEntityManager() {
         return entityManager;
     }
@@ -60,10 +71,10 @@ public abstract class EntityDAO {
     /**
      * Метод возвращает экземпляр Connection в пул соединений
      * @throws SQLException
-     */
-    public void returnConnectionInPool() throws SQLException {
-        connection.close();
-    }
+//     */
+//    public void returnConnectionInPool() throws SQLException {
+//        connection.close();
+//    }
 
 
 

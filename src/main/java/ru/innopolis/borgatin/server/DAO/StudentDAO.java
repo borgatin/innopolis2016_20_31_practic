@@ -27,9 +27,8 @@ public interface StudentDAO {
 
     StudentModel update(StudentModel student);
 
-    boolean delete(int id);
+    void delete(int id);
 
-    StudentModel create(StudentModel student);
 
     int getLessonsCount(int id) ;
 }

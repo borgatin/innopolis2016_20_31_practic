@@ -14,18 +14,21 @@ import ru.innopolis.borgatin.server.model.StudentModel;
 import ru.innopolis.borgatin.server.model.modelDAO.Lesson;
 import ru.innopolis.borgatin.server.model.modelDAO.Student;
 import ru.innopolis.borgatin.server.model.enums.SortType;
+
+import static ru.innopolis.borgatin.common.MainConst.*;
 import static ru.innopolis.borgatin.server.model.enums.SortType.*;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 /**
- * Created by avborg on 01.11.2016.
+ * Контролер для работы с уроками
  */
 
 @Controller
 @Component
-@RequestMapping(value = "/lessons")
+@RequestMapping(value = CONST_URL_LESSONS)
 public class LessonController {
 
     private final ILessonService lessonService;
@@ -42,146 +45,149 @@ public class LessonController {
     }
 
 
-    @Secured({"ROLE_ADMIN", "ROLE_USER"})
-    @RequestMapping(value = "/all")
+    @Secured({ROLE_ADMIN, ROLE_USER})
+    @RequestMapping(value = CONST_URL_ALL)
     public ModelAndView getAllLessons() {
         ModelAndView modelAndView = new ModelAndView();
         List list = lessonService.getAllLessons();
-        modelAndView.addObject("list", list);
-        modelAndView.addObject("sortType", DESC.name());
-        modelAndView.setViewName("allLessons");
+        modelAndView.addObject(VIEW_VARIABLE_LIST, list);
+        modelAndView.addObject(VIEW_VARIABLE_SORT_TYPE, DESC.name());
+        modelAndView.setViewName(CONST_VIEW_ALL_LESSONS);
         return modelAndView;
     }
 
 
-    @Secured({"ROLE_ADMIN", "ROLE_USER"})
-    @RequestMapping(value = "/filter")
-    public ModelAndView getAllLessons(@RequestParam("filter") String filter) {
+    @Secured({ROLE_ADMIN, ROLE_USER})
+    @RequestMapping(value = CONST_URL_FILTER)
+    public ModelAndView getAllLessons(@RequestParam(VIEW_VARIABLE_FILTER) String filter) {
         ModelAndView modelAndView = new ModelAndView();
         List list = lessonService.getAllLessonsFiltered(filter);
-        modelAndView.addObject("list", list);
-        modelAndView.addObject("sortType", ASC.name());
+        modelAndView.addObject(VIEW_VARIABLE_LIST, list);
+        modelAndView.addObject(VIEW_VARIABLE_SORT_TYPE, ASC.name());
 
-        modelAndView.setViewName("allLessons");
+        modelAndView.setViewName(CONST_VIEW_ALL_LESSONS);
         return modelAndView;
     }
 
 
-    @Secured({"ROLE_ADMIN", "ROLE_USER"})
-    @RequestMapping(value = "/view/{id}")
-    public ModelAndView viewLesson(@PathVariable("id") int id) {
+    @Secured({ROLE_ADMIN, ROLE_USER})
+    @RequestMapping(value = CONST_URL_VIEW_BY_ID)
+    public ModelAndView viewLesson(@PathVariable(CONST_ID) int id) {
         ModelAndView modelAndView = new ModelAndView();
         LessonModel lesson = lessonService.getLessonById(id);
-        modelAndView.addObject("lesson", lesson);
+        modelAndView.addObject(CONST_LESSON, lesson);
 
-        modelAndView.setViewName("viewLesson");
+        modelAndView.setViewName(CONST_VIEW_LESSON);
         return modelAndView;
     }
 
-    @Secured({"ROLE_ADMIN", "ROLE_USER"})
-    @RequestMapping(value = "/add-lesson")
+
+
+
+    @Secured(ROLE_ADMIN)
+    @RequestMapping(value = CONST_URL_EDIT_BY_ID)
+    public ModelAndView editLessonView(@PathVariable(CONST_ID) int id) {
+        LessonModel lesson = lessonService.getLessonById(id);
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.addObject(CONST_LESSON, lesson);
+        modelAndView.setViewName(CONST_VIEW_EDIT_LESSONS);
+        return modelAndView;
+    }
+    @Secured({ROLE_ADMIN})
+    @RequestMapping(value = CONST_URL_ADD_LESSON)
     public ModelAndView addLessonView() {
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.addObject("lesson", new LessonModel());
-        modelAndView.setViewName("addLessons");
+        modelAndView.addObject(CONST_LESSON, new LessonModel());
+        modelAndView.setViewName(CONST_VIEW_ADD_LESSONS);
         return modelAndView;
     }
 
-    @Secured("ROLE_ADMIN")
-    @RequestMapping(value = "/edit/{id}")
-    public ModelAndView editLessonView(@PathVariable("id") int id) {
-        LessonModel lesson = lessonService.getLessonById(id);
-        ModelAndView modelAndView = new ModelAndView();
-        modelAndView.addObject("lesson", lesson);
-        modelAndView.setViewName("editLessons");
-        return modelAndView;
-    }
 
-    @Secured({"ROLE_ADMIN", "ROLE_USER"})
-    @RequestMapping(value = "/add")
+    @Secured({ROLE_ADMIN})
+    @RequestMapping(value = CONST_URL_ADD)
     public ModelAndView addLesson(LessonModel lesson) {
         lesson = lessonService.createLesson(lesson);
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.addObject("lesson", lesson);
-        modelAndView.setViewName("viewLesson");
+        modelAndView.addObject(CONST_LESSON, lesson);
+        modelAndView.setViewName(CONST_VIEW_LESSON);
         return modelAndView;
     }
 
-    @Secured("ROLE_ADMIN")
-    @RequestMapping(value = "/update")
+    @Secured(ROLE_ADMIN)
+    @RequestMapping(value = CONST_URL_UPDATE)
     public ModelAndView updateLesson(LessonModel lesson) {
         lesson = lessonService.updateLesson(lesson);
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.addObject("lesson", lesson);
-        modelAndView.setViewName("viewLesson");
+        modelAndView.addObject(CONST_LESSON, lesson);
+        modelAndView.setViewName(CONST_VIEW_LESSON);
         return modelAndView;
     }
 
-    @Secured("ROLE_ADMIN")
-    @RequestMapping(value = "/del/{id}")
-    public ModelAndView deleteLesson(@PathVariable("id") int id) {
+    @Secured(ROLE_ADMIN)
+    @RequestMapping(value = CONST_URL_DEL_BY_ID)
+    public ModelAndView deleteLesson(@PathVariable(CONST_ID) int id) {
         lessonService.deleteLessonById(id);
 
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("redirect:../all");
+        modelAndView.setViewName(CONST_URL_REDIRECT_ALL);
         return modelAndView;
     }
 
-    @Secured({"ROLE_ADMIN", "ROLE_USER"})
-    @RequestMapping(value = "/sort/{sortType}")
-    public ModelAndView sortAllByName(@PathVariable("sortType") String sortType) {
+    @Secured({ROLE_ADMIN, ROLE_USER})
+    @RequestMapping(value = CONST_URL_SORT_BY_SORT_TYPE)
+    public ModelAndView sortAllByName(@PathVariable(VIEW_VARIABLE_SORT_TYPE) String sortType) {
         ModelAndView modelAndView = new ModelAndView();
         SortType sortTypeEnum = SortType.valueOf(sortType);
         List list = lessonService.getAllLessons( sortTypeEnum);
-        modelAndView.addObject("list", list);
-        modelAndView.addObject("sortType", ASC == sortTypeEnum ? DESC.name(): ASC.name());
-        modelAndView.setViewName("allLessons");
+        modelAndView.addObject(VIEW_VARIABLE_LIST, list);
+        modelAndView.addObject(VIEW_VARIABLE_SORT_TYPE, ASC == sortTypeEnum ? DESC.name(): ASC.name());
+        modelAndView.setViewName(CONST_VIEW_ALL_LESSONS);
         return modelAndView;
     }
 
 
-    @Secured({"ROLE_ADMIN", "ROLE_USER"})
-    @RequestMapping(value = "/edit-students/{id}")
-    public ModelAndView editStudentsForLesson(@PathVariable("id") int id) {
+    @Secured({ROLE_ADMIN, ROLE_USER})
+    @RequestMapping(value = CONST_URL_EDIT_STUDENTS_BY_LESSON_ID)
+    public ModelAndView editStudentsForLesson(@PathVariable(CONST_ID) int id) {
         ModelAndView modelAndView = new ModelAndView();
         LessonModel lesson = lessonService.getLessonById(id);
-        List<StudentModel> students = lessonService.getStudentsByLessonID(lesson.getId());
-        modelAndView.addObject("lesson", lesson);
-        modelAndView.addObject("list", students);
-        modelAndView.setViewName("editStudentsForLesson");
+        Set<StudentModel> students = lessonService.getStudentsByLessonID(lesson.getId());
+        modelAndView.addObject(CONST_LESSON, lesson);
+        modelAndView.addObject(VIEW_VARIABLE_LIST, students);
+        modelAndView.setViewName(CONST_VIEW_EDIT_STUDENTS_FOR_LESSON);
         return modelAndView;
     }
 
-    @Secured({"ROLE_ADMIN", "ROLE_USER"})
-    @RequestMapping(value = "/{id}/add-students")
-    public ModelAndView addStudentsForLesson(@PathVariable("id") int id) {
+    @Secured({ROLE_ADMIN, ROLE_USER})
+    @RequestMapping(value = CONST_URL_EDIT_ADD_STUDENTS_BY_LESSONS)
+    public ModelAndView addStudentsForLesson(@PathVariable(CONST_ID) int id) {
         ModelAndView modelAndView = new ModelAndView();
         LessonModel lesson = lessonService.getLessonById(id);
-        modelAndView.addObject("lesson", lesson);
-        List<StudentModel> students = lessonService.getFreeStudentsByLessonID(id);
+        modelAndView.addObject(CONST_LESSON, lesson);
+        Set<StudentModel> students = lessonService.getFreeStudentsByLessonID(id);
         if (students.size()>0) {
-            modelAndView.addObject("list", students);
+            modelAndView.addObject(VIEW_VARIABLE_LIST, students);
             modelAndView.setViewName("addStudentsForLesson");
         } else {
             modelAndView.addObject("msgError", "Все студенты записаны на занятие");
             students = lessonService.getStudentsByLessonID(id);
-            modelAndView.addObject("list", students);
+            modelAndView.addObject(VIEW_VARIABLE_LIST, students);
             modelAndView.setViewName("editStudentsForLesson");
         }
         return modelAndView;
     }
 
-    @Secured({"ROLE_ADMIN", "ROLE_USER"})
+    @Secured({ROLE_ADMIN, ROLE_USER})
     @RequestMapping(value = "/{id}/add-student")
-    public ModelAndView addStudentOnLesson(@PathVariable("id") int id, @RequestParam("student") int studentId) {
+    public ModelAndView addStudentOnLesson(@PathVariable(CONST_ID) int id, @RequestParam("student") int studentId) {
         //добавляем студента на урок
         lessonService.addStudentOnLesson(id, studentId);
         return editStudentsForLesson(id);
     }
 
-    @Secured({"ROLE_ADMIN", "ROLE_USER"})
+    @Secured({ROLE_ADMIN, ROLE_USER})
     @RequestMapping(value = "/{id}/del/{studentId}")
-    public ModelAndView deleteStudentFromLesson(@PathVariable("id") int id,@PathVariable("studentId") int studentId) {
+    public ModelAndView deleteStudentFromLesson(@PathVariable(CONST_ID) int id,@PathVariable("studentId") int studentId) {
         lessonService.deleteStudentFromLesson(id, studentId);
         return editStudentsForLesson(id);
     }

@@ -19,7 +19,7 @@ import ru.innopolis.borgatin.server.service.UserDetailsServiceImpl;
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(securedEnabled = true)
-@ComponentScan("ru.innopolis.borgatin.server.service")
+@ComponentScan("ru.innopolis.borgatin")
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired

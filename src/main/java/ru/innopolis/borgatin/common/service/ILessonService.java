@@ -7,6 +7,7 @@ import ru.innopolis.borgatin.server.model.modelDAO.Student;
 import ru.innopolis.borgatin.server.model.enums.SortType;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * Интерфейс преназначен для работы с сущность урок
@@ -62,7 +63,7 @@ public interface ILessonService {
      * @param id идентификатор урока, который нужно удалить
      * @return true если удалось удалить урок, иначе false
      */
-    boolean deleteLessonById(int id);
+    void deleteLessonById(int id);
 
     /**
      * Метод предназначен для получения списка студентов,
@@ -70,7 +71,7 @@ public interface ILessonService {
      * @param id идентификатор урока
      * @return список студентов, записанных на урок
      */
-    List<StudentModel> getStudentsByLessonID(int id);
+    Set<StudentModel> getStudentsByLessonID(int id);
 
     /**
      * Метод предназначен для получения списка студентов,
@@ -78,7 +79,7 @@ public interface ILessonService {
      * @param id идентификатор урока
      * @return список студентов, не записавшихся на урок
      */
-    List<StudentModel> getFreeStudentsByLessonID(int id);
+    Set<StudentModel> getFreeStudentsByLessonID(int id);
 
     /**
      * Метод предназначен для записи студента на урок

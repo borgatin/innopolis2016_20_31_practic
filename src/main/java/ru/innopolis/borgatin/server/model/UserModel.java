@@ -1,8 +1,10 @@
 package ru.innopolis.borgatin.server.model;
 
+import org.springframework.security.core.GrantedAuthority;
 import ru.innopolis.borgatin.server.model.api.IUser;
 
 import javax.persistence.Column;
+import java.util.Set;
 
 /**
  * Created by avborg on 07.11.2016.
@@ -12,6 +14,8 @@ public class UserModel implements IUser {
     private String username;
 
     private String password;
+
+    private Set<GrantedAuthority> roles;
 
     @Override
     public String getUsername() {
@@ -31,5 +35,13 @@ public class UserModel implements IUser {
     @Override
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public Set<GrantedAuthority> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<GrantedAuthority> roles) {
+        this.roles = roles;
     }
 }

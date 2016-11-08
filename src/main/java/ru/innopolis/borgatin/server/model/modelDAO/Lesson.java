@@ -2,12 +2,17 @@ package ru.innopolis.borgatin.server.model.modelDAO;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.Set;
+
+import static ru.innopolis.borgatin.common.MainConst.*;
 
 /**
  * Класс содержит описание сущности Lesson
  */
 @Entity
-@Table(name = "lesson")
+@Table(name = SQL_TABLE_LESSON)
+//@NamedQuery(name = "LessonAll", query = "SELECT l from Lesson l")
+
 public class Lesson implements ru.innopolis.borgatin.server.model.api.ILesson {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -19,8 +24,23 @@ public class Lesson implements ru.innopolis.borgatin.server.model.api.ILesson {
     private String description;
     @Column
     private int duration;
-    @Column
+    @Column(name = SQL_FIELD_LESSON_DATE)
     private Date date;
+
+    public Set<Student> getStudents() {
+        return students;
+    }
+
+    public void setStudents(Set<Student> students) {
+        this.students = students;
+    }
+
+    @ManyToMany(targetEntity = Student.class, fetch = FetchType.LAZY)
+    @JoinTable(name="student_lesson",
+            joinColumns={@JoinColumn(name= CONST_ID)},
+            inverseJoinColumns={@JoinColumn(name=SQL_FIELD_STUDENT_ID)})
+    private Set<Student> students;
+
 
     @Override
     public int getId() {
@@ -70,5 +90,21 @@ public class Lesson implements ru.innopolis.borgatin.server.model.api.ILesson {
     @Override
     public void setDate(Date date) {
         this.date = date;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Lesson lesson = (Lesson) o;
+
+        return id == lesson.id;
+
+    }
+
+    @Override
+    public int hashCode() {
+        return id;
     }
 }

@@ -1,22 +1,26 @@
 package ru.innopolis.borgatin.server.DAO;
 
+import ma.glasnost.orika.MapperFacade;
 import ma.glasnost.orika.MapperFactory;
+import ma.glasnost.orika.impl.DefaultMapperFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Component;
+import ru.innopolis.borgatin.server.DAO.mapping.LessonsMapping;
+import ru.innopolis.borgatin.server.DAO.mapping.StudentsMapping;
 import ru.innopolis.borgatin.server.model.LessonModel;
+import ru.innopolis.borgatin.server.model.StudentModel;
 import ru.innopolis.borgatin.server.model.modelDAO.Lesson;
+import ru.innopolis.borgatin.server.model.modelDAO.Student;
 
 import javax.persistence.EntityManager;
-import javax.sql.DataSource;
+import javax.persistence.TypedQuery;
 
 import static ru.innopolis.borgatin.common.MainConst.*;
 
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by avborg on 01.11.2016.
@@ -25,37 +29,27 @@ import java.util.List;
 @Scope(proxyMode = ScopedProxyMode.TARGET_CLASS, value = "prototype")
 public class LessonDAOImpl extends EntityDAO implements LessonDAO {
 
-    private static final String QUERY_SELECT_ALL_ORDER_ID = "SELECT * FROM lesson order by id";
+    private static final String QUERY_SELECT_ALL_ORDER_ID = "SELECT l from Lesson l ORDER BY l.id";
 
-    private static final String QUERY_SELECT_ALL_ORDER_NAME_DESC = "SELECT * FROM lesson order by topic desc";
+    private static final String QUERY_SELECT_ALL_ORDER_NAME_DESC = "SELECT l from Lesson l ORDER BY l.topic DESC";
 
-    private static final String QUERY_SELECT_ALL_ORDER_NAME_ASC = "SELECT * FROM lesson order by topic";
+    private static final String QUERY_SELECT_ALL_ORDER_NAME_ASC = "SELECT l from Lesson l ORDER BY l.topic";
 
-    private static final String QUERY_SELECT_ALL_FILTER_MASK = "SELECT * FROM lesson where topic like ";
-
-    private static final String QUERY_SELECT_LESSON_BY_ID = "SELECT * FROM lesson WHERE id=?";
-
-    private static final String QUERY_UPDATE_LESSON = "UPDATE lesson set topic = ?, description = ?,lesson_date = ?, duration = ? WHERE id = ?";
-
-    private static final String QUERY_DELETE_FROM_LESSON = "DELETE FROM lesson WHERE id = ?";
-
-    private static final String QUERY_DELETE_FROM_STUDENTSLESSONS_BY_LESSON_ID = "DELETE FROM StudentsLesson WHERE lesson_id = ?";
-
-    private static final String QUERY_INSERT_INTO_LESSONS = "Insert into lesson (topic,description,lesson_date, duration) values ( ?,?,?,? )";
-
-    private static final String QUERY_SELECT_LESSON_BY_TOPIC = "SELECT id from lesson WHERE topic = ?";
-
-    private static final String QUERY_SELECT_FROM_STUDENTSLESSONS_BY_LESSON_ID = "SELECT * FROM StudentsLesson WHERE lesson_id=?";
-
-    private static final String QUERY_INSERT_STUDENTSLESSONS = "Insert into StudentsLesson (lesson_id, student_id) values ( ?,?)";
-
-    private static final String QUERY_DELETE_FROM_STUDENTSLESSONS = "DELETE FROM StudentsLesson WHERE lesson_id = ? and student_id = ?";
-
-//    public LessonDAOImpl(EntityManager entityManager) {
-//        super(entityManager);
-//    }
+    private static final String QUERY_SELECT_ALL_FILTER_MASK = "SELECT l from Lesson l WHERE l.topic like :filter ORDER BY l.topic";
 
 
+
+    private final LessonsMapping lessonsMapping;
+
+    private final StudentsMapping studentsMapping;
+
+
+
+    @Autowired
+    public LessonDAOImpl(LessonsMapping lessonsMapping, StudentsMapping studentsMapping) {
+        this.lessonsMapping = lessonsMapping;
+        this.studentsMapping = studentsMapping;
+    }
 
     @Override
     public List<LessonModel> getAllLessons() {
@@ -63,35 +57,23 @@ public class LessonDAOImpl extends EntityDAO implements LessonDAO {
     }
 
     private List<LessonModel> getAllLessons(String query) {
-       /* try (Connection connection = getConnection();
-             Statement statement = connection.createStatement();
-             ResultSet resultSet =
-                     statement.executeQuery(query)
-        ) {
-            List<LessonModel> list = new ArrayList<>();
-            int i = 0;
-            while (resultSet.next()) {
-                LessonModel lesson= new LessonModel();
-                lesson.setId(resultSet.getInt(SQL_FIELD_ID));
-                lesson.setTopic(resultSet.getString(SQL_FIELD_TOPIC));
-                lesson.setDescription(resultSet.getString(SQL_FIELD_DESCRIPTION));
-                lesson.setDuration(resultSet.getInt(SQL_FIELD_DURATION));
-                lesson.setDate(resultSet.getDate(SQL_FIELD_LESSON_DATE));
-                list.add(i++, lesson);
-            }
-            return list;
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-*/
-        Lesson lesson = getEntityManager().find(Lesson.class, 4);
-
-        return null;
+        TypedQuery<Lesson>  lessonTypedQuery  = getEntityManager().createQuery(query, Lesson.class);
+        List<Lesson> lessons = lessonTypedQuery.getResultList();
+        return lessonsMapping.makeMapping(lessons);
     }
 
         @Override
     public List<LessonModel> getAllLessonsFilter(String filter) {
-            return getAllLessons(QUERY_SELECT_ALL_FILTER_MASK+"\'%"+filter+"%\'");
+
+
+            TypedQuery<Lesson>  lessonTypedQuery  = getEntityManager().createQuery(QUERY_SELECT_ALL_FILTER_MASK , Lesson.class);
+            lessonTypedQuery.setParameter("filter",
+                    new StringBuilder("%")
+                    .append(filter)
+                    .append("%").toString());
+            List<Lesson> lessons = lessonTypedQuery.getResultList();
+            return lessonsMapping.makeMapping(lessons);
+
     }
 
     @Override
@@ -107,111 +89,78 @@ public class LessonDAOImpl extends EntityDAO implements LessonDAO {
     @Override
     public LessonModel getLessonById(int id) {
         Lesson lesson = getEntityManager().find(Lesson.class, id);
-
-        return null /*mapLessonToLessonModel(lesson)*/;
+        return lessonsMapping.makeMapping(lesson);
     }
 
 
 
     @Override
-    public LessonModel updateLesson(LessonModel lesson) {
-        try (Connection connection = getConnection();
-             PreparedStatement statement =
-                     connection.prepareStatement(QUERY_UPDATE_LESSON);
-        ) {
-            statement.setString(CONST_ONE, lesson.getTopic());
-            statement.setString(CONST_TWO, lesson.getDescription());
-            statement.setDate(CONST_THREE, new Date(lesson.getDate().getTime()));
-            statement.setInt(CONST_FOUR, lesson.getDuration());
-            statement.setInt(CONST_FIVE, lesson.getId());
-            statement.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
+    public LessonModel updateLesson(LessonModel lessonModel) {
+
+        EntityManager em = getEntityManager();
+        Lesson lesson = lessonsMapping.makeMapping(lessonModel );
+        em.getTransaction().begin();
+        lesson = em.merge(lesson);
+        em.getTransaction().commit();
+        lessonModel = lessonsMapping.makeMapping(lesson );
+
+
+        return lessonModel;
+    }
+
+    @Override
+    public void deleteLesson(int id) {
+        EntityManager em = getEntityManager();
+        Lesson lesson = em.find(Lesson.class, id);
+        em.getTransaction().begin();
+        em.remove(lesson);
+        em.getTransaction().commit();
+    }
+
+
+
+
+
+
+    @Override
+    public Set<StudentModel> getStudentsIDByLessonID(int id) {
+        Lesson lesson = getEntityManager().find(Lesson.class, id);
+        Set<Student> students = lesson.getStudents();
+        Set<StudentModel> studentModels = new HashSet<>();
+        for (Student student : students){
+            studentModels.add(studentsMapping.makeMapping(student));
         }
-        return lesson;
+        return studentModels;
     }
 
     @Override
-    public boolean deleteLesson(int id) {
-        try (Connection connection = getConnection()){
-            return deleteEntity(connection, id, QUERY_DELETE_FROM_LESSON,new String[]{QUERY_DELETE_FROM_STUDENTSLESSONS_BY_LESSON_ID} );
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return false;
+    public void addStudentOnLesson(int id, StudentModel studentModel) {
+        Lesson lesson = getEntityManager().find(Lesson.class, id);
+        lesson.getStudents().add(studentsMapping.makeMapping(studentModel));
+
+        EntityManager em = getEntityManager();
+        em.getTransaction().begin();
+        em.merge(lesson);
+        em.getTransaction().commit();
     }
 
     @Override
-    public LessonModel createLesson(LessonModel lesson) {
-        try (Connection connection = getConnection();
-             PreparedStatement statement = connection.prepareStatement(QUERY_INSERT_INTO_LESSONS);
-        ) {
-            statement.setString(CONST_ONE, lesson.getTopic());
-            statement.setString(CONST_TWO, lesson.getDescription());
-            statement.setDate(CONST_THREE, new Date(lesson.getDate().getTime()));
-            statement.setInt(CONST_FOUR, lesson.getDuration());
-            statement.executeUpdate();
+    public void deleteStudentFromLesson(int id, StudentModel studentModel) {
+        Lesson lesson = getEntityManager().find(Lesson.class, id);
+        Student student = studentsMapping.makeMapping(studentModel);
 
-            try (PreparedStatement statement1 = connection.prepareStatement(QUERY_SELECT_LESSON_BY_TOPIC)) {
-                statement1.setString(CONST_ONE, lesson.getTopic());
-                try (ResultSet resultSet = statement1.executeQuery()) {
-                    if (resultSet.next()) {
-                        int id = resultSet.getInt(SQL_FIELD_ID);
-                        lesson.setId(id);
-                    }
-                }
-            }
+        Set<Student> students = lesson.getStudents();
+        students.remove(student);
+        lesson.setStudents(students);
+        EntityManager em = getEntityManager();
+        em.getTransaction().begin();
+        em.merge(lesson);
+        em.getTransaction().commit();
 
 
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        return lesson;
-    }
-
-    @Override
-    public List<Integer> getStudentsIDByLessonID(int id) {
-        try (Connection connection = getConnection();
-             PreparedStatement statement = connection.prepareStatement(QUERY_SELECT_FROM_STUDENTSLESSONS_BY_LESSON_ID);
-        ) {
-            statement.setInt(CONST_ONE, id);
-            try (ResultSet resultSet = statement.executeQuery()) {
-                LinkedList<Integer> integerList = new LinkedList<>();
-                while (resultSet.next()) {
-                    integerList.addLast(resultSet.getInt(SQL_FIELD_STUDENT_ID));
-                }
-                return integerList;
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    @Override
-    public void addStudentOnLesson(int id, int studentId) {
-        executeQueryWithTwoIntPar(id, studentId, QUERY_INSERT_STUDENTSLESSONS);
-    }
-
-    @Override
-    public void deleteStudentFromLesson(int id, int studentId) {
-        executeQueryWithTwoIntPar(id, studentId, QUERY_DELETE_FROM_STUDENTSLESSONS);
 
     }
 
-    private void executeQueryWithTwoIntPar(int id, int secondId, String query){
-        try (Connection connection = getConnection();
-             PreparedStatement statement =
-                     connection.prepareStatement(query);
-        ) {
-            statement.setInt(CONST_ONE, id);
-            statement.setInt(CONST_TWO, secondId);
-            statement.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
 
 
 }

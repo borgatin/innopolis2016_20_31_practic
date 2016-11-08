@@ -1,6 +1,7 @@
 package ru.innopolis.borgatin.common.service;
 
 import org.springframework.security.core.GrantedAuthority;
+import ru.innopolis.borgatin.server.model.UserModel;
 import ru.innopolis.borgatin.server.model.modelDAO.User;
 
 import java.util.Set;
@@ -15,13 +16,6 @@ public interface IUserService {
      * @param username
      * @return
      */
-    User getUser(String username);
+    UserModel getUser(String username);
 
-    /**
-     * Получение множества GrantedAuthority (ролей) пользователя
-     * по его имени
-     * @param username имя пользователя
-     * @return множество GrantedAuthority
-     */
-    Set<GrantedAuthority> getUserRoles(String username);
 }

@@ -86,5 +86,19 @@ public class StudentModel implements IStudent {
         this.lessonsCount = lessonsCount;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
 
+        StudentModel that = (StudentModel) o;
+
+        return id == that.id;
+
+    }
+
+    @Override
+    public int hashCode() {
+        return id;
+    }
 }

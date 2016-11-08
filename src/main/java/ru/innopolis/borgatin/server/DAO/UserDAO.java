@@ -1,6 +1,7 @@
 package ru.innopolis.borgatin.server.DAO;
 
 import org.springframework.security.core.GrantedAuthority;
+import ru.innopolis.borgatin.server.model.UserModel;
 import ru.innopolis.borgatin.server.model.modelDAO.User;
 
 import java.util.Set;
@@ -14,16 +15,10 @@ public interface UserDAO {
     /**
      * Метод необходим для получения сущности пользователь
      * по имени пользователя
+     *
      * @param username имя пользователя типа данных String
      * @return объект User, соответствующий имени пользователя username
      */
-    User getUser(String username) ;
+    UserModel getUser(String username);
 
-    /**
-     * Метод необходим для получения ролей (GrantedAuthority) пользователя
-     * по его имени
-     * @param username - имя пользователя
-     * @return множество GrantedAuthority пользователя
-     */
-    Set<GrantedAuthority> getUserRoles(String username) ;
 }

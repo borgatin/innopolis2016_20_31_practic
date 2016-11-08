@@ -12,6 +12,8 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import ru.innopolis.borgatin.server.service.UserDetailsServiceImpl;
 
+import javax.persistence.Persistence;
+import javax.persistence.spi.PersistenceProvider;
 import javax.sql.DataSource;
 
 import static ru.innopolis.borgatin.common.MainConst.*;
@@ -39,7 +41,21 @@ public class WebAppConfig extends WebMvcConfigurerAdapter {
     }
 
 
+/*    @Bean(name = "basicDataSource")
+    DataSource setupDriverManagerDataSource() {
+        BasicDataSource basicDataSource = new BasicDataSource();
+        basicDataSource.setDriverClassName(DRIVER_NAME_SQL);
+        basicDataSource.setUrl(SQL_URL);
+        basicDataSource.setUsername(SQL_DB_USER);
+        basicDataSource.setPassword(SQL_DB_PASSWORD);
+        return basicDataSource;
 
+    }*/
+
+    Persistence getPersistence(){
+        Persistence persistence = new Persistence();
+        return persistence;
+    }
 
 
 

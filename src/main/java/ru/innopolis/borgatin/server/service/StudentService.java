@@ -37,38 +37,10 @@ public class StudentService implements IStudentService {
         return studentDAO.getAllStudents();
     }
 
-    private List<StudentModel> transformStudentListToStudentModelList(List<Student> students) {
-        List<StudentModel> studentModels = new ArrayList<>();
-        for (Student student: students){
-            StudentModel studentModel =  transformStudentToStudentModel(student);
-            studentModels.add(studentModel);
-        }
-        return studentModels;
-    }
-
-    private StudentModel transformStudentToStudentModel(Student student) {
-        StudentModel studentModel = new StudentModel();
-        studentModel.setId(student.getId());
-        studentModel.setFirstname(student.getFirstname());
-        studentModel.setLastname(student.getLastname());
-        studentModel.setBirthdate(student.getBirthdate());
-        studentModel.setGender(student.getGender());
-        studentModel.setLessonsCount(studentDAO.getLessonsCount(student.getId()));
-        return studentModel;
-    }
-    private Student transformStudentToStudentModel(StudentModel studentModel) {
-        Student student = new Student();
-        student.setId(studentModel.getId());
-        student.setFirstname(studentModel.getFirstname());
-        student.setLastname(studentModel.getLastname());
-        student.setBirthdate(studentModel.getBirthdate());
-        student.setGender(studentModel.getGender());
-        return student;
-    }
 
     @Override
     public StudentModel createStudent(StudentModel student) {
-        return  (studentDAO.create(student));
+        return  (studentDAO.update(student));
     }
 
     @Override
@@ -82,8 +54,8 @@ public class StudentService implements IStudentService {
     }
 
     @Override
-    public boolean deleteStudentById(int id) {
-        return studentDAO.delete(id);
+    public void deleteStudentById(int id) {
+        studentDAO.delete(id);
     }
 
     @Override
