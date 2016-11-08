@@ -14,8 +14,8 @@ import java.util.Set;
  */
 public interface ILessonService {
     /**
-     * Метод возвращает список всех уроков
-     * @return
+     * Метод предназначен для получения спсика уроков
+     * @return возвращает список всех уроков
      */
     List<LessonModel> getAllLessons();
 
@@ -61,7 +61,6 @@ public interface ILessonService {
     /**
      * Метод предназначен для удаления урока по его идентификатору
      * @param id идентификатор урока, который нужно удалить
-     * @return true если удалось удалить урок, иначе false
      */
     void deleteLessonById(int id);
 

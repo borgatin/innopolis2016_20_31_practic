@@ -28,9 +28,11 @@ import java.util.Set;
 import static ru.innopolis.borgatin.common.MainConst.*;
 
 /**
- * Класс реализует абстрактный класс UserDAO.
+ * Класс реализует абстрактный класс EntityDAO и интерфейс UserDAO
  * Необходим для получения информации о сущности User из базы данных.
- * Connection получаем через метод getConnection
+ * Использует объект EntityManager, создающийся в родителе EntityDAO.
+ * Единственный метод интерфейса UserDAO возвращает объект UserModel.
+ * Для маппинга используется библиотека Orica.
  */
 @Component
 @Scope(proxyMode = ScopedProxyMode.TARGET_CLASS, value = "prototype")

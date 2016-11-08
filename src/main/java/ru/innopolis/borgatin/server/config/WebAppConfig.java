@@ -19,7 +19,7 @@ import javax.sql.DataSource;
 import static ru.innopolis.borgatin.common.MainConst.*;
 
 /**
- * Created by avborg on 03.11.2016.
+ * Класс конфигурации приложения
  */
 @Configuration
 @EnableWebMvc
@@ -28,7 +28,8 @@ public class WebAppConfig extends WebMvcConfigurerAdapter {
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("/views/**").addResourceLocations("/views/");
+        registry.addResourceHandler("/views/")
+                .addResourceLocations("/views/");
     }
 
 
@@ -38,23 +39,6 @@ public class WebAppConfig extends WebMvcConfigurerAdapter {
         internalResourceViewResolver.setPrefix("/views/");
         internalResourceViewResolver.setSuffix(".jsp");
         return internalResourceViewResolver;
-    }
-
-
-/*    @Bean(name = "basicDataSource")
-    DataSource setupDriverManagerDataSource() {
-        BasicDataSource basicDataSource = new BasicDataSource();
-        basicDataSource.setDriverClassName(DRIVER_NAME_SQL);
-        basicDataSource.setUrl(SQL_URL);
-        basicDataSource.setUsername(SQL_DB_USER);
-        basicDataSource.setPassword(SQL_DB_PASSWORD);
-        return basicDataSource;
-
-    }*/
-
-    Persistence getPersistence(){
-        Persistence persistence = new Persistence();
-        return persistence;
     }
 
 

@@ -57,7 +57,6 @@ public interface IStudentService {
     /**
      * Метод предназначен для удаления студента по его идентификатору
      * @param id идентификатор студента, который нужно удалить
-     * @return true если удалось удалить студента, иначе false
      */
     void deleteStudentById(int id);
 

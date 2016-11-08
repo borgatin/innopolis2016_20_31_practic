@@ -21,9 +21,9 @@ import java.util.Set;
 import static ru.innopolis.borgatin.server.model.enums.SortType.ASC;
 
 /**
- * Created by avborg on 31.10.2016.
+ * Класс реализует интерфейс ILessonService.
+ * Предназначен дл работы с сущностью LessonModel.
  */
-
 @Component
 @Scope(proxyMode = ScopedProxyMode.TARGET_CLASS, value = "prototype")
 public class LessonService implements ILessonService {

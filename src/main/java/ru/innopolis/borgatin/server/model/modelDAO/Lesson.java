@@ -7,12 +7,12 @@ import java.util.Set;
 import static ru.innopolis.borgatin.common.MainConst.*;
 
 /**
- * Класс содержит описание сущности Lesson
+ * Класс содержит описание сущности Lesson. Используется в DAO.
+ * Переопределены методы hashCode и equals класса Object для коректной работы
+ * в HashMap
  */
 @Entity
 @Table(name = SQL_TABLE_LESSON)
-//@NamedQuery(name = "LessonAll", query = "SELECT l from Lesson l")
-
 public class Lesson implements ru.innopolis.borgatin.server.model.api.ILesson {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

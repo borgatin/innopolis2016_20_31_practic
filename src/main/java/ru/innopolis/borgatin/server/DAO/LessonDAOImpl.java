@@ -23,7 +23,12 @@ import java.sql.*;
 import java.util.*;
 
 /**
- * Created by avborg on 01.11.2016.
+ * Класс реализует абстрактный класс EntityDAO и интерфейс LessonDAO
+ * Необходим для получения информации о сущности Lesson из базы данных,
+ * а также связанных с ней объектов Student.
+ * Использует объект EntityManager, создающийся в родителе EntityDAO.
+ * Все методы интерфейса UserDAO возвращают объект (или список объектов) LessonModel, или StudentModel.
+ * Для маппинга используется экземпляры классов StudentsMapping и LessonsMapping, использующие библиотеку Orica.
  */
 @Component
 @Scope(proxyMode = ScopedProxyMode.TARGET_CLASS, value = "prototype")

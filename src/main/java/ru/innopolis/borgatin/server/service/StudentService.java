@@ -6,20 +6,17 @@ import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Component;
 import ru.innopolis.borgatin.common.service.IStudentService;
 import ru.innopolis.borgatin.server.DAO.StudentDAO;
-import ru.innopolis.borgatin.server.model.modelDAO.Student;
 import ru.innopolis.borgatin.server.model.StudentModel;
 import ru.innopolis.borgatin.server.model.enums.SortType;
 
 import static ru.innopolis.borgatin.server.model.enums.SortType.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Класс реализует интерфейс IStudentService.
- * Предназначен дл работы с сущностью Student.
+ * Предназначен дл работы с сущностью StudentModel.
  */
-
 @Component
 @Scope(proxyMode = ScopedProxyMode.TARGET_CLASS, value = "prototype")
 public class StudentService implements IStudentService {
@@ -55,7 +52,7 @@ public class StudentService implements IStudentService {
 
     @Override
     public void deleteStudentById(int id) {
-        studentDAO.delete(id);
+        studentDAO.deleteStudent(id);
     }
 
     @Override

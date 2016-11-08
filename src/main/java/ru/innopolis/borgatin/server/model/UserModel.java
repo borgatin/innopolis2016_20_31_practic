@@ -7,7 +7,7 @@ import javax.persistence.Column;
 import java.util.Set;
 
 /**
- * Created by avborg on 07.11.2016.
+ * Модель пользователя. Используется в сервисных классах.
  */
 public class UserModel implements IUser {
 

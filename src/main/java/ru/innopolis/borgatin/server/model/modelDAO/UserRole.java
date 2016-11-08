@@ -2,8 +2,10 @@ package ru.innopolis.borgatin.server.model.modelDAO;
 
 import javax.persistence.*;
 
+
 /**
- * Класс для хранения ролей пользователя в БД
+ * Класс содержит описение сущности Роль пользователь. Используется в DAO и
+ * модели для определения прав пользователя на осуществление действия.
  */
 @Entity
 @Table(name = "user_roles")

@@ -6,7 +6,9 @@ import javax.persistence.Column;
 import java.util.Date;
 
 /**
- * Created by avborg on 07.11.2016.
+ * Модель сущности урок. Используется в сервисных классах и во view.
+ * Переопределены методы hashCode и equals класса Object для коректной работы
+ * в HashMap
  */
 public class LessonModel implements ILesson {
     private int id;

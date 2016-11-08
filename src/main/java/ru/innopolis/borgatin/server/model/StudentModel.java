@@ -6,8 +6,13 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import static ru.innopolis.borgatin.common.MainConst.CONST_DATE_FORMAT;
+import static ru.innopolis.borgatin.common.MainConst.CONST_DATE_SQL_FORMAT;
+
 /**
- * Created by avborg on 01.11.2016.
+ * Модель сущности студент. Используется в сервисных классах и во view
+ * Переопределены методы hashCode и equals класса Object для коректной работы
+ * в HashMap
  */
 public class StudentModel implements IStudent {
 
@@ -50,7 +55,7 @@ public class StudentModel implements IStudent {
 
     @Override
     public void setBirthdate(String birthday) throws ParseException {
-        this.birthdate =new SimpleDateFormat("yyyy-MM-dd").parse(birthday);
+        this.birthdate =new SimpleDateFormat(CONST_DATE_SQL_FORMAT).parse(birthday);
     }
 
     @Override
@@ -70,7 +75,7 @@ public class StudentModel implements IStudent {
 
     @Override
     public String getBirthdateStr() {
-        return new SimpleDateFormat("dd.MM.yyyy").format(birthdate);
+        return new SimpleDateFormat(CONST_DATE_FORMAT).format(birthdate);
     }
 
     @Override

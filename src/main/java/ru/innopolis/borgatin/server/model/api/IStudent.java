@@ -4,7 +4,7 @@ import java.text.ParseException;
 import java.util.Date;
 
 /**
- * Created by avborg on 01.11.2016.
+ * Интерфейс описывает сущность студент
  */
 public interface IStudent {
     int getId();

@@ -13,8 +13,8 @@ public interface IUserService {
 
     /**
      * Метод предназначен для получения пользователя по его имени
-     * @param username
-     * @return
+     * @param username имя пользователя
+     * @return сущность UserModel, соответствующая имени пользователя
      */
     UserModel getUser(String username);
 

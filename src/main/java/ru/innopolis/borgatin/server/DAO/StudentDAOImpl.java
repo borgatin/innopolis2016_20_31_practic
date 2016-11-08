@@ -23,11 +23,14 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Класс предназначен для получения и записи в БД
- * данных о сущности студент
- */
 
+/**
+ * Класс реализует абстрактный класс EntityDAO и интерфейс StudentDAO
+ * Необходим для получения информации о сущности Student из базы данных.
+ * Использует объект EntityManager, создающийся в родителе EntityDAO.
+ * Все методы интерфейса UserDAO возвращают объект StudentModel.
+ * Для маппинга используется экземпляр класса StudentsMapping, использующий библиотеку Orica.
+ */
 @Component
 @Scope(proxyMode = ScopedProxyMode.TARGET_CLASS, value = "prototype")
 public class StudentDAOImpl extends EntityDAO implements StudentDAO{
@@ -51,7 +54,7 @@ public class StudentDAOImpl extends EntityDAO implements StudentDAO{
     /**
      * Основной метод по получению списка студентов. Выводит студентов по переданному SQL-запросу
      * @param query строка String с SQL-запросом для получения списка студентов
-     * @return
+     * @return List StudentModel
      */
     private List<StudentModel> getAllStudents(String query) {
         TypedQuery<Student> lessonTypedQuery  = getEntityManager().createQuery(query, Student.class);
@@ -104,20 +107,12 @@ public class StudentDAOImpl extends EntityDAO implements StudentDAO{
     }
 
     @Override
-    public void delete(int id) {
+    public void deleteStudent(int id) {
         EntityManager em = getEntityManager();
         Student student = em.find(Student.class, id);
         em.getTransaction().begin();
         em.remove(student);
         em.getTransaction().commit();
     }
-
-
-    @Override
-    public int getLessonsCount(int id) {
-
-        return CONST_ZERO;
-    }
-
 
 }

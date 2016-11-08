@@ -1,7 +1,7 @@
 package ru.innopolis.borgatin.server.model.api;
 
 /**
- * Created by avborg on 07.11.2016.
+ * Интерфейс описывает сущность пользователь
  */
 public interface IUser {
     String getUsername();

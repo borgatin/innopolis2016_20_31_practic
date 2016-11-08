@@ -3,7 +3,7 @@ package ru.innopolis.borgatin.server.model.api;
 import java.util.Date;
 
 /**
- * Created by avborg on 01.11.2016.
+ * Интерфейс описывает сущность урок
  */
 public interface ILesson {
     int getId();

@@ -14,6 +14,11 @@ import ru.innopolis.borgatin.server.model.modelDAO.User;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * Класс отвечает за авторизацию пользователя.
+ * Переопределяет метод loadUserByUsername(String username) для
+ * аутентификации из БД
+ */
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
 

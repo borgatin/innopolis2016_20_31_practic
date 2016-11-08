@@ -8,27 +8,56 @@ import ru.innopolis.borgatin.server.model.modelDAO.Student;
 import java.util.List;
 
 /**
- * Класс предназначен для получения объектов Connection из пула,
- * описывает основную логику для работы с БД для конкретных сущностей.
- * От него необходимо наследоваться, чтобы реализовать работу с БД для сущности.
+ * Интерфейс описывает методы для получения сущности StudentModel из базы данных
  */
 @Component
 public interface StudentDAO {
 
-     List<StudentModel> getAllStudents();
-
+    /**
+     * Получить все объекты StudentModel
+     * @return List объектов StudentModel
+     */
+    List<StudentModel> getAllStudents();
+    /**
+     * Получить все объекты StudentModel, отфильтрованные по полю
+     * lastname
+     * @param filter фильтр для поля lastname
+     * @return List объектов StudentModel, удовлетворяющие фильтру
+     */
     List<StudentModel> getAllStudentsFilter(String filter);
 
+    /**
+     * Получить все объекты StudentModel, отсортированные по возрастанию по полю
+     * lastname
+     * @return List отсортированных по возрастанию объектов StudentModel по полю lastname
+     */
     List<StudentModel> getAllStudentsSortByNameAsc();
 
+    /**
+     * Получить все объекты StudentModel, отсортированные по убыванию по полю
+     * lastname
+     * @return List отсортированных по убыванию объектов StudentModel по полю lastname
+     */
     List<StudentModel> getAllStudentsSortByNameDesc();
 
+    /**
+     * Получить объект StudentModel по его идентификатору
+     * @param id идентификтор студента
+     * @return объект StudentModel
+     */
     StudentModel getStudentById(int id);
 
-    StudentModel update(StudentModel student);
+    /**
+     * Обновить или создать стедента
+     * @param studentModel студент, которого нужно обновить или создать
+     * @return при создании объекта возвращает этот объект с заполненным идентификатором,
+     * при изменении этот же объект.
+     */
+    StudentModel update(StudentModel studentModel);
 
-    void delete(int id);
-
-
-    int getLessonsCount(int id) ;
+    /**
+     * Удалить студента по его идентификатору
+     * @param id идентификатор удаляемого студента
+     */
+    void deleteStudent(int id);
 }

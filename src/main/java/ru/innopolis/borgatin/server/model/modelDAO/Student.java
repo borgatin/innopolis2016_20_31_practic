@@ -11,7 +11,9 @@ import java.util.Set;
 import static ru.innopolis.borgatin.common.MainConst.*;
 
 /**
- * Класс содержит описение сущность Студент
+ * Класс содержит описение сущность Студент. Используется в DAO.
+ * Переопределены методы hashCode и equals класса Object для коректной работы
+ * в HashMap
  */
 @Entity
 @Table(name = SQL_TABLE_STUDENT)
@@ -72,7 +74,7 @@ public class Student implements IStudent {
     }
     @Override
     public String getBirthdateStr() {
-        return new SimpleDateFormat("dd.MM.yyyy").format(birthdate);
+        return new SimpleDateFormat(CONST_DATE_FORMAT).format(birthdate);
     }
 
     @Override
@@ -102,7 +104,7 @@ public class Student implements IStudent {
 
     @Override
     public void setBirthdate(String birthday) throws ParseException {
-        this.birthdate =new SimpleDateFormat("dd.MM.yyyy").parse(birthday);
+        this.birthdate =new SimpleDateFormat(CONST_DATE_FORMAT).parse(birthday);
     }
 
     @Override

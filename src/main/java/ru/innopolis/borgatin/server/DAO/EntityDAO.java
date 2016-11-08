@@ -15,66 +15,34 @@ import java.sql.SQLException;
 import static ru.innopolis.borgatin.common.MainConst.*;
 
 /**
- * Created by avborg on 05.11.2016.
+ * Абстрактный класс для получения Entity.
+ * От него наследуются все DAO-классы
  */
 @Component
 public abstract class EntityDAO {
 
-    private Connection connection;
-
-/*    final
-    DataSource dataSource;
-
-    @Autowired
-    EntityDAO(DataSource dataSource){
-        try{
-            connection = dataSource.getConnection();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        this.dataSource = dataSource;
-    }*/
     private EntityManager entityManager ;
-    private EntityManagerFactory factory;
 
-
-    @Autowired
-    public void setEntityManager(EntityManagerFactory entityManagerFactory) {
-//        EntityManagerFactory factory =  Persistence.createEntityManagerFactory("myPersistenceUnit");
-        EntityManagerFactory factory =  entityManagerFactory;
-//        this.entityManager = entityManagerFactory.createEntityManager();
-
-    }
-
-
+    /**
+     * В конструкторе создается объект EntityManager, затем используется в наследниках.
+     */
     public EntityDAO() {
         try{
-            this.entityManager = factory.createEntityManager();
-//            this.entityManager = Persistence.createEntityManagerFactory("TEST").createEntityManager();
+            this.entityManager = Persistence.createEntityManagerFactory("TEST").createEntityManager();
         } catch (Throwable t){
             t.printStackTrace();
         }
 
     }
+
+
     public EntityManager getEntityManager() {
         return entityManager;
     }
 
-    /**
-     * Метод необходим для получения connection из пула БД
-     * @return connection к БД
-     */
-    Connection getConnection() {
-        return connection;
-    }
 
-    /**
-     * Метод возвращает экземпляр Connection в пул соединений
-     * @throws SQLException
-//     */
-//    public void returnConnectionInPool() throws SQLException {
-//        connection.close();
-//    }
+
+
 
 
 

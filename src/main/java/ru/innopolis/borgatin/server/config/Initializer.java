@@ -20,7 +20,6 @@ import static ru.innopolis.borgatin.common.MainConst.*;
 public class Initializer implements WebApplicationInitializer {
 
 
-
     @Override
     public void onStartup(ServletContext servletContext) throws ServletException {
         AnnotationConfigWebApplicationContext ctx = new AnnotationConfigWebApplicationContext();

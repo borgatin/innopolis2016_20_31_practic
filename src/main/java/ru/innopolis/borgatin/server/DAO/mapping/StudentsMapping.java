@@ -15,7 +15,8 @@ import java.util.List;
 import static ru.innopolis.borgatin.common.MainConst.*;
 
 /**
- * Created by avborg on 07.11.2016.
+ * Класс предназначен для маппинга из типа Student(не должен уходить дальше DAO)
+ * в тип StudentModel(используется во view)
  */
 @Component
 public class StudentsMapping {
@@ -43,17 +44,32 @@ public class StudentsMapping {
         this.mapperFactory = mapperFactory ;
     }
 
+    /**
+     * Переобразует объект Student в объект StudentModel
+     * @param student объект Student, который нужно преобразовать
+     * @return результат преобразования - объект StudentModel
+     */
     public StudentModel makeMapping(Student student) {
         MapperFacade mapper = mapperFactory.getMapperFacade();
 
         return mapper.map(student, StudentModel.class);
     }
+    /**
+     * Переобразует объект StudentModel в объект Student
+     * @param studentModel объект StudentModel, который нужно преобразовать
+     * @return результат преобразования - объект Student
+     */
     public Student  makeMapping(StudentModel studentModel) {
         MapperFacade mapper = mapperFactory.getMapperFacade();
 
         return mapper.map(studentModel, Student.class);
     }
 
+    /**
+     * Переобразует список объектов Student в список объектов StudentModel
+     * @param students список объектов Student, который нужно преобразовать
+     * @return результат преобразования - список объектов StudentModel
+     */
     public List<StudentModel> makeMapping(List<Student> students) {
         List<StudentModel> lessonModels = new ArrayList<>();
         for (Student student: students){

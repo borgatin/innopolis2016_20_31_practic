@@ -14,7 +14,8 @@ import static ru.innopolis.borgatin.common.MainConst.*;
 import static ru.innopolis.borgatin.common.MainConst.SQL_FIELD_DURATION;
 
 /**
- * Created by avborg on 07.11.2016.
+ * Класс предназначен для маппинга из типа Lesson(не должен уходить дальше DAO)
+ * в тип LessonModel(используется во view)
  */
 @Component
 public class LessonsMapping {
@@ -28,23 +29,38 @@ public class LessonsMapping {
                 .field(SQL_FIELD_TOPIC,SQL_FIELD_TOPIC)
                 .field(SQL_FIELD_DESCRIPTION,SQL_FIELD_DESCRIPTION)
                 .field(SQL_FIELD_DURATION,SQL_FIELD_DURATION)
-                .field("date","date")
+                .field(CONST_DATE_FIELD,CONST_DATE_FIELD)
                 .byDefault()
                 .register();
         this.mapperFactory = mapperFactory ;
     }
 
+    /**
+     * Переобразует объект Lesson в объект LessonModel
+     * @param lesson объект Lesson, который нужно преобразовать
+     * @return результат преобразования - объект LessonModel
+     */
     public LessonModel makeMapping(Lesson lesson) {
         MapperFacade mapper = mapperFactory.getMapperFacade();
 
         return mapper.map(lesson, LessonModel.class);
     }
+    /**
+     * Переобразует объект LessonModel в объект Lesson
+     * @param lessonModel объект LessonModel, который нужно преобразовать
+     * @return результат преобразования - объект Lesson
+     */
     public Lesson  makeMapping(LessonModel lessonModel) {
         MapperFacade mapper = mapperFactory.getMapperFacade();
 
         return mapper.map(lessonModel, Lesson.class);
     }
 
+    /**
+     * Переобразует список объектов Lesson в список объектов LessonModel
+     * @param lessons список объектов Lesson, который нужно преобразовать
+     * @return результат преобразования - список объектов LessonModel
+     */
     public List<LessonModel> makeMapping(List<Lesson> lessons) {
         List<LessonModel> lessonModels = new ArrayList<>();
         for (Lesson lesson: lessons){
