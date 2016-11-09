@@ -1,26 +1,16 @@
 package ru.innopolis.borgatin.server.DAO;
 
-import ma.glasnost.orika.MapperFacade;
-import ma.glasnost.orika.MapperFactory;
-import ma.glasnost.orika.impl.DefaultMapperFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Component;
-import ru.innopolis.borgatin.server.DAO.mapping.StudentsMapping;
-import ru.innopolis.borgatin.server.model.LessonModel;
+import ru.innopolis.borgatin.server.mapping.StudentsMapping;
 import ru.innopolis.borgatin.server.model.StudentModel;
-import ru.innopolis.borgatin.server.model.modelDAO.Lesson;
 import ru.innopolis.borgatin.server.model.modelDAO.Student;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
-import javax.sql.DataSource;
 
-import static ru.innopolis.borgatin.common.MainConst.*;
-
-import java.sql.*;
-import java.util.ArrayList;
 import java.util.List;
 
 

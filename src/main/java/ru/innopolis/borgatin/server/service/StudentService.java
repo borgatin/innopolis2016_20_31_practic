@@ -5,9 +5,11 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Component;
 import ru.innopolis.borgatin.common.service.IStudentService;
-import ru.innopolis.borgatin.server.DAO.StudentDAO;
+import ru.innopolis.borgatin.repositories.StudentRepository;
+import ru.innopolis.borgatin.server.mapping.StudentsMapping;
 import ru.innopolis.borgatin.server.model.StudentModel;
 import ru.innopolis.borgatin.server.model.enums.SortType;
+import ru.innopolis.borgatin.server.model.modelDAO.Student;
 
 import static ru.innopolis.borgatin.server.model.enums.SortType.*;
 
@@ -21,53 +23,69 @@ import java.util.List;
 @Scope(proxyMode = ScopedProxyMode.TARGET_CLASS, value = "prototype")
 public class StudentService implements IStudentService {
 
-    private final StudentDAO studentDAO;
+/*
+    private final StudentDAO studentRepository;
 
     @Autowired
-    public StudentService(StudentDAO studentDAO) {
-        this.studentDAO = studentDAO;
+    public StudentService(StudentDAO studentRepository) {
+        this.studentRepository = studentRepository;
+    }
+*/
+
+    private final StudentRepository studentRepository;
+    private final StudentsMapping studentsMapping;
+
+    @Autowired
+    public StudentService(StudentRepository studentRepository, StudentsMapping studentsMapping) {
+        this.studentRepository = studentRepository;
+        this.studentsMapping = studentsMapping;
     }
 
 
     @Override
     public List<StudentModel> getAllStudents() {
-        return studentDAO.getAllStudents();
+        return studentsMapping.makeMapping(studentRepository.findAll());
     }
 
 
     @Override
-    public StudentModel createStudent(StudentModel student) {
-        return  (studentDAO.update(student));
+    public StudentModel createStudent(StudentModel studentModel) {
+        Student student = studentsMapping.makeMapping(studentModel);
+        student = studentRepository.save(student);
+        return  studentsMapping.makeMapping(student);
     }
 
     @Override
     public StudentModel getStudentById(int id) {
-        return  (studentDAO.getStudentById(id));
+        return  studentsMapping.makeMapping(studentRepository.findOne(id));
     }
 
     @Override
-    public StudentModel updateStudent(StudentModel student) {
-        return  (studentDAO.update((student)));
+    public StudentModel updateStudent(StudentModel studentModel) {
+        Student student = studentRepository.save(studentsMapping.makeMapping(studentModel));
+        return  studentsMapping.makeMapping(student);
     }
 
     @Override
     public void deleteStudentById(int id) {
-        studentDAO.deleteStudent(id);
+        studentRepository.delete(id);
     }
 
     @Override
     public List<StudentModel> getAllStudents(SortType sortType) {
-        if (ASC == sortType) {
-            return (studentDAO.getAllStudentsSortByNameAsc());
+/*        if (ASC == sortType) {
+            return studentsMapping.makeMapping(studentRepository.findAllOrderByLastnameAsc());
         } else {
-            return (studentDAO.getAllStudentsSortByNameDesc());
-        }
+            return studentsMapping.makeMapping(studentRepository.findAllOrderByLastnameDesc());
+        }*/
+return null;
     }
 
     @Override
     public List<StudentModel> getAllStudentsFiltered(String filter) {
-        return (studentDAO.getAllStudentsFilter(filter));
-    }
+//        return (studentsMapping.makeMapping(studentRepository.findAllByLastnameContaining(filter)));
+
+    return null;}
 
 
 }

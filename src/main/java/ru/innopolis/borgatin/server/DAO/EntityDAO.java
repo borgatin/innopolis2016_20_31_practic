@@ -41,11 +41,6 @@ public abstract class EntityDAO {
     }
 
 
-
-
-
-
-
     boolean deleteEntity(Connection connection, int id, String QueryDeleteEntity, String[] addQueries) throws SQLException {
         try (PreparedStatement statement = connection.prepareStatement(QueryDeleteEntity);
         ) {

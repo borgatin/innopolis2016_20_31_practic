@@ -1,4 +1,4 @@
-package ru.innopolis.borgatin.server.DAO.mapping;
+package ru.innopolis.borgatin.server.mapping;
 
 import ma.glasnost.orika.MapperFacade;
 import ma.glasnost.orika.MapperFactory;
@@ -61,7 +61,7 @@ public class LessonsMapping {
      * @param lessons список объектов Lesson, который нужно преобразовать
      * @return результат преобразования - список объектов LessonModel
      */
-    public List<LessonModel> makeMapping(List<Lesson> lessons) {
+    public List<LessonModel> makeMapping(Iterable<Lesson> lessons) {
         List<LessonModel> lessonModels = new ArrayList<>();
         for (Lesson lesson: lessons){
             lessonModels.add(makeMapping(lesson));

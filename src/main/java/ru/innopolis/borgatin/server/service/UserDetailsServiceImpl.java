@@ -14,6 +14,9 @@ import ru.innopolis.borgatin.server.model.modelDAO.User;
 import java.util.HashSet;
 import java.util.Set;
 
+import static ru.innopolis.borgatin.common.MainConst.ROLE_ADMIN;
+import static ru.innopolis.borgatin.common.MainConst.ROLE_USER;
+
 /**
  * Класс отвечает за авторизацию пользователя.
  * Переопределяет метод loadUserByUsername(String username) для
@@ -33,7 +36,9 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         UserModel user = userService.getUser(username);
-        Set<GrantedAuthority> roles = user.getRoles();
+//        Set<GrantedAuthority> roles = user.getRoles();
+        Set<GrantedAuthority> roles = new HashSet<>();
+        roles.add(new SimpleGrantedAuthority(ROLE_ADMIN));
         UserDetails userDetails =
                 new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), roles);
 

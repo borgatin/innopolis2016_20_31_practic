@@ -1,4 +1,4 @@
-package ru.innopolis.borgatin.server.DAO.mapping;
+package ru.innopolis.borgatin.server.mapping;
 
 import ma.glasnost.orika.CustomMapper;
 import ma.glasnost.orika.MapperFacade;
@@ -70,11 +70,12 @@ public class StudentsMapping {
      * @param students список объектов Student, который нужно преобразовать
      * @return результат преобразования - список объектов StudentModel
      */
-    public List<StudentModel> makeMapping(List<Student> students) {
-        List<StudentModel> lessonModels = new ArrayList<>();
+    public List<StudentModel> makeMapping(Iterable<Student> students) {
+        List<StudentModel> studentModels = new ArrayList<>();
         for (Student student: students){
-            lessonModels.add(makeMapping(student));
+            studentModels.add(makeMapping(student));
         }
-        return lessonModels;
+
+        return studentModels;
     }
 }
