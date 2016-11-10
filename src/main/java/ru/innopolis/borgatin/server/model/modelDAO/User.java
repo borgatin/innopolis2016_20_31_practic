@@ -28,7 +28,7 @@ public class User implements IUser, Serializable {
     public void setUserRole(Set<UserRole> userRole) {
         this.userRoles = userRole;
     }
-    @ManyToMany(targetEntity = UserRole.class, fetch = FetchType.LAZY)
+    @ManyToMany(targetEntity = UserRole.class, fetch = FetchType.EAGER)
     @JoinTable(name="users_userRoles",
             joinColumns={@JoinColumn(name="username")},
             inverseJoinColumns={@JoinColumn(name="id_role")})

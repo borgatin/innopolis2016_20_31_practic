@@ -27,7 +27,7 @@ public class MainConst {
     public static final String VIEW_VARIABLE_BIRTHDAY = "birthday";
     public static final String VIEW_VARIABLE_MSG_ERROR = "msgError";
     public static final String VIEW_MSG_ALL_STUDENTS_RECORDED = "Все студенты записаны на занятие";
-    public static final String VIEW_VARIABLE_STUDENT_ID = "studentid";
+    public static final String VIEW_VARIABLE_STUDENT_ID = "studentId";
     public static final String CONST_DATE_FORMAT = "dd.MM.yyyy";
     public static final String CONST_DATE_SQL_FORMAT = "yyyy-MM-dd";
 

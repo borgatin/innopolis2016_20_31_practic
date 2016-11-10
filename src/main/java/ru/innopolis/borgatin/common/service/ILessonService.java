@@ -70,7 +70,7 @@ public interface ILessonService {
      * @param id идентификатор урока
      * @return список студентов, записанных на урок
      */
-    Set<StudentModel> getStudentsByLessonID(int id);
+    List<StudentModel> getStudentsByLessonID(int id);
 
     /**
      * Метод предназначен для получения списка студентов,
@@ -78,7 +78,7 @@ public interface ILessonService {
      * @param id идентификатор урока
      * @return список студентов, не записавшихся на урок
      */
-    Set<StudentModel> getFreeStudentsByLessonID(int id);
+    List<StudentModel> getFreeStudentsByLessonID(int id);
 
     /**
      * Метод предназначен для записи студента на урок

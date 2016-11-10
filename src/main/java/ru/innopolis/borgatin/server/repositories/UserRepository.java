@@ -1,4 +1,4 @@
-package ru.innopolis.borgatin.repositories;
+package ru.innopolis.borgatin.server.repositories;
 
 import org.springframework.data.repository.CrudRepository;
 import ru.innopolis.borgatin.server.model.modelDAO.User;

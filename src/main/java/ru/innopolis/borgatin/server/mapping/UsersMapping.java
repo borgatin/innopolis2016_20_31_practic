@@ -33,7 +33,7 @@ public class UsersMapping {
         mapperFactory.classMap(User.class, UserModel.class)
                 .field("username","username")
                 .field("password","password")
-                /*.customize(new CustomMapper<User, UserModel>() {
+                .customize(new CustomMapper<User, UserModel>() {
                     @Override
                     public void mapAtoB(User user, UserModel userModel, MappingContext context) {
                         Set<UserRole> userRoles = user.getUserRole();
@@ -43,7 +43,7 @@ public class UsersMapping {
                         }
                         userModel.setRoles(ga);
                     }
-                })*/
+                })
 
                 .byDefault()
                 .register();

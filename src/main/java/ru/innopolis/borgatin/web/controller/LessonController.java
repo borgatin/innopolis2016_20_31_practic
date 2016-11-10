@@ -208,7 +208,7 @@ public class LessonController {
     public ModelAndView editStudentsForLesson(@PathVariable(CONST_ID) int id) {
         ModelAndView modelAndView = new ModelAndView();
         LessonModel lesson = lessonService.getLessonById(id);
-        Set<StudentModel> students = lessonService.getStudentsByLessonID(lesson.getId());
+        List<StudentModel> students = lessonService.getStudentsByLessonID(lesson.getId());
         modelAndView.addObject(CONST_LESSON, lesson);
         modelAndView.addObject(VIEW_VARIABLE_LIST, students);
         modelAndView.setViewName(CONST_VIEW_EDIT_STUDENTS_FOR_LESSON);
@@ -227,7 +227,7 @@ public class LessonController {
         ModelAndView modelAndView = new ModelAndView();
         LessonModel lesson = lessonService.getLessonById(id);
         modelAndView.addObject(CONST_LESSON, lesson);
-        Set<StudentModel> students = lessonService.getFreeStudentsByLessonID(id);
+        List<StudentModel> students = lessonService.getFreeStudentsByLessonID(id);
         if (students.size()>0) {
             modelAndView.addObject(VIEW_VARIABLE_LIST, students);
             modelAndView.setViewName(CONST_VIEW_ADD_STUDENTS_FOR_LESSON);

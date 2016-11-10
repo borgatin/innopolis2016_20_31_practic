@@ -3,7 +3,7 @@ package ru.innopolis.borgatin.server.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.innopolis.borgatin.common.service.IUserService;
-import ru.innopolis.borgatin.repositories.UserRepository;
+import ru.innopolis.borgatin.server.repositories.UserRepository;
 import ru.innopolis.borgatin.server.mapping.UsersMapping;
 import ru.innopolis.borgatin.server.model.UserModel;
 

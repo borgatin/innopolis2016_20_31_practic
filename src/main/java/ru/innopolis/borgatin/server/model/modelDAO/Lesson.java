@@ -35,7 +35,7 @@ public class Lesson implements ru.innopolis.borgatin.server.model.api.ILesson {
         this.students = students;
     }
 
-    @ManyToMany(targetEntity = Student.class, fetch = FetchType.LAZY)
+    @ManyToMany(targetEntity = Student.class, fetch = FetchType.EAGER)
     @JoinTable(name="student_lesson",
             joinColumns={@JoinColumn(name= CONST_ID)},
             inverseJoinColumns={@JoinColumn(name=SQL_FIELD_STUDENT_ID)})

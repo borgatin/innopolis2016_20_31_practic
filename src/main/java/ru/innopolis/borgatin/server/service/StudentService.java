@@ -5,15 +5,15 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Component;
 import ru.innopolis.borgatin.common.service.IStudentService;
-import ru.innopolis.borgatin.repositories.StudentRepository;
+import ru.innopolis.borgatin.server.repositories.StudentRepository;
 import ru.innopolis.borgatin.server.mapping.StudentsMapping;
 import ru.innopolis.borgatin.server.model.StudentModel;
 import ru.innopolis.borgatin.server.model.enums.SortType;
 import ru.innopolis.borgatin.server.model.modelDAO.Student;
 
-import static ru.innopolis.borgatin.server.model.enums.SortType.*;
-
 import java.util.List;
+
+import static ru.innopolis.borgatin.server.model.enums.SortType.ASC;
 
 /**
  * Класс реализует интерфейс IStudentService.
@@ -73,19 +73,17 @@ public class StudentService implements IStudentService {
 
     @Override
     public List<StudentModel> getAllStudents(SortType sortType) {
-/*        if (ASC == sortType) {
-            return studentsMapping.makeMapping(studentRepository.findAllOrderByLastnameAsc());
+        if (ASC == sortType) {
+            return studentsMapping.makeMapping(studentRepository.findAllByOrderByLastnameAsc());
         } else {
-            return studentsMapping.makeMapping(studentRepository.findAllOrderByLastnameDesc());
-        }*/
-return null;
+            return studentsMapping.makeMapping(studentRepository.findAllByOrderByLastnameDesc());
+        }
     }
 
     @Override
     public List<StudentModel> getAllStudentsFiltered(String filter) {
-//        return (studentsMapping.makeMapping(studentRepository.findAllByLastnameContaining(filter)));
-
-    return null;}
+        return (studentsMapping.makeMapping(studentRepository.findAllByLastnameContaining(filter)));
+}
 
 
 }

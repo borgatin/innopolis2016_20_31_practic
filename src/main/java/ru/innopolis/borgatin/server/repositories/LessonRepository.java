@@ -1,8 +1,7 @@
-package ru.innopolis.borgatin.repositories;
+package ru.innopolis.borgatin.server.repositories;
 
 import org.springframework.data.repository.CrudRepository;
 import ru.innopolis.borgatin.server.model.modelDAO.Lesson;
-import ru.innopolis.borgatin.server.model.modelDAO.Student;
 
 import java.util.List;
 
@@ -12,10 +11,11 @@ import java.util.List;
 
 public interface LessonRepository extends CrudRepository<Lesson, Integer> {
 
-/*
-    List<Lesson> findAllOrderByTopicAsc();
-    List<Lesson> findAllOrderByTopicDesc();
-    List<Lesson> findAllByTopicContaining(String filter);*/
+
+    List<Lesson> findAllByOrderByTopicAsc();
+    List<Lesson> findAllByOrderByTopicDesc();
+    List<Lesson> findAllByTopicContaining(String filter);
+
 
 
 

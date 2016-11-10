@@ -52,7 +52,7 @@ public class Student implements IStudent {
     }
 
 
-    @ManyToMany(targetEntity = Lesson.class, fetch = FetchType.LAZY)
+    @ManyToMany(targetEntity = Lesson.class, fetch = FetchType.EAGER)
     @JoinTable(name="student_lesson",
             joinColumns={@JoinColumn(name=SQL_FIELD_STUDENT_ID)},
             inverseJoinColumns={@JoinColumn(name= CONST_ID)})
