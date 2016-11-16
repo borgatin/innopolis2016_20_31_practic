@@ -1,2 +1,2 @@
-rootProject.name = 'TestWebApplication'
-
+rootProject.name = 'Students'
+include 'server','web', 'common'
