@@ -1,8 +1,11 @@
 package ru.innopolis.borgatin.server.entity;
 
-import ru.innopolis.borgatin.common.apistudent.ILesson;
+//import ru.innopolis.borgatin.common.apistudent.ILesson;
 
 import javax.persistence.*;
+import ru.innopolis.borgatin.common.apistudent.ILesson;
+
+//import javax.persistence.*;
 import java.util.Date;
 import java.util.Set;
 
@@ -13,6 +16,9 @@ import static ru.innopolis.borgatin.common.MainConst.*;
  * Переопределены методы hashCode и equals класса Object для коректной работы
  * в HashMap
  */
+//public class Lesson extends AbstractEntityVersion  {
+
+
 @Entity
 @Table(name = SQL_TABLE_LESSON)
 public class Lesson extends AbstractEntityVersion implements ILesson {
@@ -20,6 +26,17 @@ public class Lesson extends AbstractEntityVersion implements ILesson {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column
     private int id;
+
+    @Override
+    public int getId() {
+        return id;
+    }
+
+    @Override
+    public void setId(int id) {
+        this.id = id;
+    }
+
     @Column
     private String topic;
     @Column
@@ -44,15 +61,6 @@ public class Lesson extends AbstractEntityVersion implements ILesson {
     private Set<Student> students;
 
 
-    @Override
-    public int getId() {
-        return id;
-    }
-
-    @Override
-    public void setId(int id) {
-        this.id = id;
-    }
 
     @Override
     public String getTopic() {
@@ -94,19 +102,5 @@ public class Lesson extends AbstractEntityVersion implements ILesson {
         this.date = date;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
 
-        Lesson lesson = (Lesson) o;
-
-        return id == lesson.id;
-
-    }
-
-    @Override
-    public int hashCode() {
-        return id;
-    }
 }

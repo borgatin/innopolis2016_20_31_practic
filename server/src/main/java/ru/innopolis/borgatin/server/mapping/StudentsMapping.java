@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 import ru.innopolis.borgatin.common.model.StudentModel;
 import ru.innopolis.borgatin.server.entity.Student;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,7 +20,7 @@ import static ru.innopolis.borgatin.common.MainConst.*;
  * в тип StudentModel(используется во view)
  */
 @Component
-public class StudentsMapping {
+public class StudentsMapping implements Serializable {
 
     private MapperFactory mapperFactory;
 
@@ -31,6 +32,7 @@ public class StudentsMapping {
                 .field(SQL_FIELD_LASTNAME,SQL_FIELD_LASTNAME)
                 .field(SQL_FIELD_BIRTHDATE,SQL_FIELD_BIRTHDATE)
                 .field(SQL_FIELD_GENDER,SQL_FIELD_GENDER)
+                .field(CONST_VERSION_FIELD,CONST_VERSION_FIELD)
                 .customize(new CustomMapper<Student, StudentModel>() {
             @Override
             public void mapAtoB(Student student, StudentModel studentModel, MappingContext context) {
@@ -41,6 +43,8 @@ public class StudentsMapping {
         })
                 .byDefault()
                 .register();
+
+
         this.mapperFactory = mapperFactory ;
     }
 

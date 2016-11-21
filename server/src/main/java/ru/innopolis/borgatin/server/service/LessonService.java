@@ -4,17 +4,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Component;
+import ru.innopolis.borgatin.common.enums.SortType;
+import ru.innopolis.borgatin.common.model.LessonModel;
+import ru.innopolis.borgatin.common.model.StudentModel;
 import ru.innopolis.borgatin.common.service.ILessonService;
 import ru.innopolis.borgatin.server.mapping.StudentsMapping;
 import ru.innopolis.borgatin.server.entity.Lesson;
 import ru.innopolis.borgatin.server.entity.Student;
 import ru.innopolis.borgatin.server.repositories.LessonRepository;
-import ru.innopolis.borgatin.server.mapping.LessonsMapping;
-import ru.innopolis.borgatin.common.model.LessonModel;
-import ru.innopolis.borgatin.common.model.StudentModel;
-import ru.innopolis.borgatin.common.enums.SortType;
-import ru.innopolis.borgatin.server.repositories.StudentRepository;
+import ru.innopolis.borgatin.server.mapping.LessonsMapping;import ru.innopolis.borgatin.server.repositories.StudentRepository;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,7 +26,9 @@ import static ru.innopolis.borgatin.common.enums.SortType.ASC;
  */
 @Component
 @Scope(proxyMode = ScopedProxyMode.TARGET_CLASS, value = "prototype")
-public class LessonService implements ILessonService {
+public class LessonService implements ILessonService, Serializable {
+
+
 
 /*    @Autowired
     private LessonDAO lessonRepository;
@@ -34,11 +36,32 @@ public class LessonService implements ILessonService {
     @Autowired
     private StudentDAO studentDAO;*/
 
-    private final LessonRepository lessonRepository;
-    private final StudentRepository studentRepository;
-    private final LessonsMapping lessonsMapping;
-    private final StudentsMapping studentsMapping;
+    private LessonRepository lessonRepository;
+    private StudentRepository studentRepository;
+    private LessonsMapping lessonsMapping;
+    private StudentsMapping studentsMapping;
 
+
+    @Autowired
+    public void setLessonRepository(LessonRepository lessonRepository) {
+        this.lessonRepository = lessonRepository;
+    }
+
+    @Autowired
+    public void setStudentRepository(StudentRepository studentRepository) {
+        this.studentRepository = studentRepository;
+    }
+
+    @Autowired
+    public void setLessonsMapping(LessonsMapping lessonsMapping) {
+        this.lessonsMapping = lessonsMapping;
+    }
+
+    @Autowired
+    public void setStudentsMapping(StudentsMapping studentsMapping) {
+        this.studentsMapping = studentsMapping;
+    }
+/*
     @Autowired
     public LessonService(LessonRepository lessonRepository, StudentRepository studentRepository, LessonsMapping lessonsMapping, StudentsMapping studentsMapping) {
         this.lessonRepository = lessonRepository;
@@ -46,10 +69,12 @@ public class LessonService implements ILessonService {
         this.lessonsMapping = lessonsMapping;
         this.studentsMapping = studentsMapping;
     }
+*/
 
 
     @Override
     public List<LessonModel> getAllLessons() {
+
         return lessonsMapping.makeMapping(lessonRepository.findAll());
     }
 
@@ -70,7 +95,7 @@ public class LessonService implements ILessonService {
 
     @Override
     public void deleteLessonById(int id) {
-         lessonRepository.delete(id);
+         //lessonRepository.delete(id);
     }
 
 
@@ -124,5 +149,4 @@ public class LessonService implements ILessonService {
         lesson.getStudents().remove(student);
         lessonRepository.save(lesson);
     }
-
 }

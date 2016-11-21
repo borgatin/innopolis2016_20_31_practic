@@ -4,13 +4,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Component;
-import ru.innopolis.borgatin.common.service.IStudentService;
-import ru.innopolis.borgatin.server.repositories.StudentRepository;
-import ru.innopolis.borgatin.server.mapping.StudentsMapping;
-import ru.innopolis.borgatin.common.model.StudentModel;
+//import ru.innopolis.borgatin.common.service.IStudentService;
 import ru.innopolis.borgatin.common.enums.SortType;
+import ru.innopolis.borgatin.common.model.StudentModel;
+import ru.innopolis.borgatin.common.service.IStudentService;
 import ru.innopolis.borgatin.server.entity.Student;
+import ru.innopolis.borgatin.server.mapping.StudentsMapping;
+import ru.innopolis.borgatin.server.repositories.StudentRepository;
 
+import java.io.Serializable;
 import java.util.List;
 
 import static ru.innopolis.borgatin.common.enums.SortType.ASC;
@@ -21,26 +23,21 @@ import static ru.innopolis.borgatin.common.enums.SortType.ASC;
  */
 @Component
 @Scope(proxyMode = ScopedProxyMode.TARGET_CLASS, value = "prototype")
-public class StudentService implements IStudentService {
+public class StudentService implements IStudentService, Serializable {
 
-/*
-    private final StudentDAO studentRepository;
+
+    private StudentRepository studentRepository;
+    private  StudentsMapping studentsMapping;
 
     @Autowired
-    public StudentService(StudentDAO studentRepository) {
+    public void setStudentRepository(StudentRepository studentRepository) {
         this.studentRepository = studentRepository;
     }
-*/
-
-    private final StudentRepository studentRepository;
-    private final StudentsMapping studentsMapping;
 
     @Autowired
-    public StudentService(StudentRepository studentRepository, StudentsMapping studentsMapping) {
-        this.studentRepository = studentRepository;
+    public void setStudentsMapping(StudentsMapping studentsMapping) {
         this.studentsMapping = studentsMapping;
     }
-
 
     @Override
     public List<StudentModel> getAllStudents() {
@@ -52,18 +49,18 @@ public class StudentService implements IStudentService {
     public StudentModel createStudent(StudentModel studentModel) {
         Student student = studentsMapping.makeMapping(studentModel);
         student = studentRepository.save(student);
-        return  studentsMapping.makeMapping(student);
+        return studentsMapping.makeMapping(student);
     }
 
     @Override
     public StudentModel getStudentById(int id) {
-        return  studentsMapping.makeMapping(studentRepository.findOne(id));
+        return studentsMapping.makeMapping(studentRepository.findOne(id));
     }
 
     @Override
     public StudentModel updateStudent(StudentModel studentModel) {
         Student student = studentRepository.save(studentsMapping.makeMapping(studentModel));
-        return  studentsMapping.makeMapping(student);
+        return studentsMapping.makeMapping(student);
     }
 
     @Override
@@ -83,7 +80,7 @@ public class StudentService implements IStudentService {
     @Override
     public List<StudentModel> getAllStudentsFiltered(String filter) {
         return (studentsMapping.makeMapping(studentRepository.findAllByLastnameContaining(filter)));
-}
+    }
 
 
 }

@@ -23,6 +23,15 @@ public class StudentModel implements IStudent,Serializable {
     private String gender;
     private Date birthdate;
     private int lessonsCount;
+    private int version;
+
+    public int getVersion() {
+        return version;
+    }
+
+    public void setVersion(int version) {
+        this.version = version;
+    }
 
     @Override
     public int getId() {

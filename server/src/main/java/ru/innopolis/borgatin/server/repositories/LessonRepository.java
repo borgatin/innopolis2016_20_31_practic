@@ -10,13 +10,10 @@ import java.util.List;
  */
 
 public interface LessonRepository extends CrudRepository<Lesson, Integer> {
-
-
     List<Lesson> findAllByOrderByTopicAsc();
     List<Lesson> findAllByOrderByTopicDesc();
     List<Lesson> findAllByTopicContaining(String filter);
-
-
-
-
 }
+
+
+

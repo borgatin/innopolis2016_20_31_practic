@@ -1,12 +1,13 @@
 package ru.innopolis.borgatin.common.apistudent;
 
+import java.io.Serializable;
 import java.text.ParseException;
 import java.util.Date;
 
 /**
  * Интерфейс описывает сущность студент
  */
-public interface IStudent {
+public interface IStudent extends Serializable {
     int getId();
 
     void setId(int id);

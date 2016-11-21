@@ -7,18 +7,18 @@ import org.springframework.stereotype.Component;
 import ru.innopolis.borgatin.common.model.LessonModel;
 import ru.innopolis.borgatin.server.entity.Lesson;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 import static ru.innopolis.borgatin.common.MainConst.*;
-import static ru.innopolis.borgatin.common.MainConst.SQL_FIELD_DURATION;
 
 /**
  * Класс предназначен для маппинга из типа Lesson(не должен уходить дальше DAO)
  * в тип LessonModel(используется во view)
  */
 @Component
-public class LessonsMapping {
+public class LessonsMapping implements Serializable{
 
     private MapperFactory mapperFactory;
 
@@ -30,6 +30,7 @@ public class LessonsMapping {
                 .field(SQL_FIELD_DESCRIPTION,SQL_FIELD_DESCRIPTION)
                 .field(SQL_FIELD_DURATION,SQL_FIELD_DURATION)
                 .field(CONST_DATE_FIELD,CONST_DATE_FIELD)
+                .field(CONST_VERSION_FIELD,CONST_VERSION_FIELD)
                 .byDefault()
                 .register();
         this.mapperFactory = mapperFactory ;

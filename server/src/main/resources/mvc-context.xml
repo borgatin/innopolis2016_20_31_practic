@@ -7,9 +7,9 @@
         http://www.springframework.org/schema/context
         http://www.springframework.org/schema/context/spring-context-4.1.xsd">
 
-    <context:component-scan base-package="ru.innopolis.borgatin" />
+    <!--<context:component-scan base-package="ru.innopolis.borgatin" />-->
 
-    <bean class = "org.springframework.remoting.rmi.RmiServiceExporter">
+ <!--   <bean class = "org.springframework.remoting.rmi.RmiServiceExporter">
         <property name="serviceName" value="UserDetailsService"/>
         <property name="service" ref="userDetailsService"/>
         <property name="serviceInterface" value="org.springframework.security.core.userdetails.UserDetailsService"/>
@@ -20,27 +20,43 @@
         <constructor-arg ref="userServiceImpl"/>
     </bean>
     <bean id="userServiceImpl" class="ru.innopolis.borgatin.server.service.UserServiceImpl"/>
-
-    <bean class = "org.springframework.remoting.rmi.RmiServiceExporter">
+-->
+<!--    <bean class = "org.springframework.remoting.rmi.RmiServiceExporter">
         <property name="serviceName" value="LessonService"/>
         <property name="service" ref="lessonServiceImpl"/>
         <property name="serviceInterface" value="ru.innopolis.borgatin.common.service.ILessonService"/>
         <property name="registryPort" value="4444"/>
-    </bean>
+    </bean>-->
+
+<!--
+
     <bean id="lessonServiceImpl" class="ru.innopolis.borgatin.server.service.LessonService" />
 
+    <bean class="org.springframework.remoting.rmi.RmiServiceExporter">
+        &lt;!&ndash; does not necessarily have to be the same name as the bean to be exported &ndash;&gt;
+        <property name="serviceName" value="LessonService"/>
+        <property name="service" ref="lessonServiceImpl"/>
+        <property name="serviceInterface" value="ru.innopolis.borgatin.server.service.ILessonService"/>
+        &lt;!&ndash; defaults to 1099 &ndash;&gt;
+        <property name="registryPort" value="1199"/>
+    </bean>
+-->
 
+
+    <!--
     <bean class = "org.springframework.remoting.rmi.RmiServiceExporter">
         <property name="serviceName" value="StudentService"/>
         <property name="service" ref="studentServiceImpl"/>
         <property name="serviceInterface" value="ru.innopolis.borgatin.common.service.IStudentService"/>
         <property name="registryPort" value="4444"/>
     </bean>
-    <bean id="studentServiceImpl" class="ru.innopolis.borgatin.server.service.StudentService" />
+    <bean id="studentServiceImpl" class="ru.innopolis.borgatin.server.service.StudentService" />-->
+<!--
 
     <bean id = "transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
         <property name="entityManagerFactory" ref="entityManagerFactory"/>
     </bean>
+-->
 
 <!--    <bean id="persistence" class="javax.persistence.Persistence"
           scope="prototype"
@@ -55,8 +71,8 @@
     </bean>-->
 
 
-    <bean id="entityManagerFactory"  class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
-        <!--<property name="dataSource" ref="dataSource" />-->
+<!--    <bean id="entityManagerFactory"  class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+        &lt;!&ndash;<property name="dataSource" ref="dataSource" />&ndash;&gt;
         <property name="persistenceUnitName" value="TEST"/>
         <property name="jpaVendorAdapter">
             <bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
@@ -64,10 +80,10 @@
                 <property name="showSql" value="true" />
             </bean>
         </property>
-<!--        <property name="loadTimeWeaver">
+&lt;!&ndash;        <property name="loadTimeWeaver">
             <bean class="org.springframework.instrument.classloading.ReflectiveLoadTimeWeaver" />
-        </property>-->
-    </bean>
+        </property>&ndash;&gt;
+    </bean>-->
 
 
 

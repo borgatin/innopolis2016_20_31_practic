@@ -1,5 +1,6 @@
 package ru.innopolis.borgatin.server.mapping;
 
+
 import ma.glasnost.orika.CustomMapper;
 import ma.glasnost.orika.MapperFacade;
 import ma.glasnost.orika.MapperFactory;
@@ -17,6 +18,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import static ru.innopolis.borgatin.common.MainConst.*;
+
 
 /**
  * Класс предназначен для маппинга из типа User(не должен уходить дальше DAO)
@@ -30,9 +33,11 @@ public class UsersMapping {
     public UsersMapping()  {
         MapperFactory mapperFactory = new DefaultMapperFactory.Builder().build();
 
+
         mapperFactory.classMap(User.class, UserModel.class)
-                .field("username","username")
-                .field("password","password")
+                .field(SQL_FIELD_USERNAME,SQL_FIELD_USERNAME)
+                .field(CONST_PASSWORD_FIELD,CONST_PASSWORD_FIELD)
+                .field(CONST_VERSION_FIELD,CONST_VERSION_FIELD)
                 .customize(new CustomMapper<User, UserModel>() {
                     @Override
                     public void mapAtoB(User user, UserModel userModel, MappingContext context) {
@@ -47,6 +52,7 @@ public class UsersMapping {
 
                 .byDefault()
                 .register();
+
 
         this.mapperFactory = mapperFactory ;
     }

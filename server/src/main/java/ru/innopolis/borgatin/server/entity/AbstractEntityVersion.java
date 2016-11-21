@@ -1,14 +1,19 @@
 package ru.innopolis.borgatin.server.entity;
 
+//import javax.persistence.Column;
+//import javax.persistence.MappedSuperclass;
+//import javax.persistence.Version;
+
 import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.Version;
+import java.io.Serializable;
 
 /**
  * Абстрактный класс нужен для работы с полем версия
  */
 @MappedSuperclass
-public abstract class AbstractEntityVersion {
+public abstract class AbstractEntityVersion implements Serializable{
 
     @Version
     @Column

@@ -1,0 +1,21 @@
+<beans:beans xmlns:beans="http://www.springframework.org/schema/beans"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xmlns="http://www.springframework.org/schema/data/jpa"
+             xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans.xsd
+    http://www.springframework.org/schema/data/jpa
+    http://www.springframework.org/schema/data/jpa/spring-jpa.xsd">
+    <beans:bean id="userDetailsService" class="org.springframework.remoting.rmi.RmiProxyFactoryBean">
+        <beans:property name="serviceUrl" value="rmi://localhost:1199/UserDetailsService"/>
+        <beans:property name="serviceInterface" value="org.springframework.security.core.userdetails.UserDetailsService"/>
+    </beans:bean>
+    <beans:bean id="lessonService" class="org.springframework.remoting.rmi.RmiProxyFactoryBean">
+        <beans:property name="serviceUrl" value="rmi://localhost:1199/LessonService"/>
+        <beans:property name="serviceInterface" value="ru.innopolis.borgatin.common.service.ILessonService"/>
+    </beans:bean>
+
+    <beans:bean id="studentService" class="org.springframework.remoting.rmi.RmiProxyFactoryBean">
+        <beans:property name="serviceUrl" value="rmi://localhost:1199/StudentService"/>
+        <beans:property name="serviceInterface" value="ru.innopolis.borgatin.common.service.IStudentService"/>
+    </beans:bean>
+</beans:beans>

@@ -1,7 +1,11 @@
 package ru.innopolis.borgatin.server.entity;
 
+//import ru.innopolis.borgatin.common.apistudent.IStudent;
+
+//import javax.persistence.*;
 import ru.innopolis.borgatin.common.apistudent.IStudent;
 
+//import javax.persistence.*;
 import javax.persistence.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -15,6 +19,7 @@ import static ru.innopolis.borgatin.common.MainConst.*;
  * Переопределены методы hashCode и equals класса Object для коректной работы
  * в HashMap
  */
+
 @Entity
 @Table(name = SQL_TABLE_STUDENT)
 public class Student extends AbstractEntityVersion implements IStudent {

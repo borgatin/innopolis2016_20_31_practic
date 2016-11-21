@@ -4,6 +4,9 @@ import ru.innopolis.borgatin.common.apistudent.ILesson;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.Iterator;
+import java.util.Spliterator;
+import java.util.function.Consumer;
 
 /**
  * Модель сущности урок. Используется в сервисных классах и во view.
@@ -16,6 +19,15 @@ public class LessonModel implements ILesson,Serializable {
     private String description;
     private int duration;
     private Date date;
+    private int version;
+
+    public int getVersion() {
+        return version;
+    }
+
+    public void setVersion(int version) {
+        this.version = version;
+    }
 
     @Override
     public int getId() {
@@ -82,4 +94,6 @@ public class LessonModel implements ILesson,Serializable {
     public int hashCode() {
         return id;
     }
+
+
 }

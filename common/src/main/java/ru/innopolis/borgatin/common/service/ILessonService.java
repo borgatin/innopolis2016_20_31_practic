@@ -25,6 +25,7 @@ public interface ILessonService {
      */
     List<LessonModel> getAllLessons(SortType sortType) ;
 
+
     /**
      * Метод необходим для получения всех уроков в отфильтрованном виде.
      * Фильтр применяется к полю topic в формате like %filter%
@@ -33,12 +34,14 @@ public interface ILessonService {
      */
     List<LessonModel> getAllLessonsFiltered(String filter) ;
 
+
     /**
      * Метод предназначен для создания урока
      * @param lesson урок, который необходимо создать
      * @return созданный урок с заполненным полем id
      */
     LessonModel createLesson(LessonModel lesson);
+
 
     /**
      * Метод предназначен для получения урока
@@ -48,6 +51,7 @@ public interface ILessonService {
      */
     LessonModel getLessonById(int id);
 
+
     /**
      * Метод предназначен для обнвления урока
      * @param lesson урок, который нужно обновить
@@ -55,11 +59,13 @@ public interface ILessonService {
      */
     LessonModel updateLesson(LessonModel lesson);
 
+
     /**
      * Метод предназначен для удаления урока по его идентификатору
      * @param id идентификатор урока, который нужно удалить
      */
     void deleteLessonById(int id);
+
 
     /**
      * Метод предназначен для получения списка студентов,
@@ -68,6 +74,7 @@ public interface ILessonService {
      * @return список студентов, записанных на урок
      */
     List<StudentModel> getStudentsByLessonID(int id);
+
 
     /**
      * Метод предназначен для получения списка студентов,
@@ -84,10 +91,12 @@ public interface ILessonService {
      */
     void addStudentOnLesson(int id, int studentId);
 
+
     /**
      * Метод предназначен для удаления записи студента на урок
      * @param id идентификатор урока
      * @param studentId идентификатор студента
      */
     void deleteStudentFromLesson(int id, int studentId);
+
 }

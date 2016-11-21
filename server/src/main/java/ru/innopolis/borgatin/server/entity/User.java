@@ -1,14 +1,19 @@
 package ru.innopolis.borgatin.server.entity;
 
+//import ru.innopolis.borgatin.common.apistudent.IUser;
+
+//import javax.persistence.*;
 import ru.innopolis.borgatin.common.apistudent.IUser;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Set;
+//import java.util.Set;
 
 /**
  * Класс содержит описение сущности Пользователь. Используется в DAO.
  */
+
 @Entity
 @Table(name = "Users")
 public class User extends AbstractEntityVersion implements IUser, Serializable {
@@ -52,6 +57,7 @@ public class User extends AbstractEntityVersion implements IUser, Serializable {
     public void setPassword(String password) {
         this.password = password;
     }
+
 
 
 }

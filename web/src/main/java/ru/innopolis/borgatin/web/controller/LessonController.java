@@ -24,7 +24,6 @@ import java.util.List;
  */
 
 @Controller
-@Component
 @RequestMapping(value = CONST_URL_LESSONS)
 public class LessonController {
 

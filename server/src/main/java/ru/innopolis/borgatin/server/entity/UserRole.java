@@ -1,7 +1,10 @@
 package ru.innopolis.borgatin.server.entity;
 
-import javax.persistence.*;
+//import javax.persistence.*;
 
+
+import javax.persistence.*;
+import java.io.Serializable;
 
 /**
  * Класс содержит описение сущности Роль пользователь. Используется в DAO и
@@ -9,7 +12,7 @@ import javax.persistence.*;
  */
 @Entity
 @Table(name = "user_roles")
-public class UserRole extends AbstractEntityVersion {
+public class UserRole {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

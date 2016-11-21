@@ -32,6 +32,9 @@ public class MainConst {
     public static final String CONST_DATE_SQL_FORMAT = "yyyy-MM-dd";
 
     public static final String CONST_DATE_FIELD = "date";
+    public static final String CONST_VERSION_FIELD = "version";
+    public static final String CONST_PASSWORD_FIELD = "password";
+
     public static final String CONST_STUDENT = "student";
     public static final String CONST_LESSON = "lesson";
 

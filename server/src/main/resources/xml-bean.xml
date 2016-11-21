@@ -1,0 +1,82 @@
+
+<beans:beans xmlns:beans="http://www.springframework.org/schema/beans"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xmlns="http://www.springframework.org/schema/data/jpa"
+             xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans.xsd
+    http://www.springframework.org/schema/data/jpa
+    http://www.springframework.org/schema/data/jpa/spring-jpa.xsd">
+
+
+
+    <repositories base-package="ru.innopolis.borgatin.server.repositories"/>
+
+    <beans:bean class = "org.springframework.remoting.rmi.RmiServiceExporter">
+       <beans:property name="serviceName" value="UserDetailsService"/>
+       <beans:property name="service" ref="userDetailsService"/>
+       <beans:property name="serviceInterface" value="org.springframework.security.core.userdetails.UserDetailsService"/>
+       <beans:property name="registryPort" value="1199"/>
+   </beans:bean>
+
+   <beans:bean id="userDetailsService" class="ru.innopolis.borgatin.server.service.UserDetailsServiceImpl">
+       <beans:constructor-arg ref="userServiceImpl"/>
+   </beans:bean>
+
+    <beans:bean id="userServiceImpl" class="ru.innopolis.borgatin.server.service.UserServiceImpl">
+        <beans:property name="usersMapping" ref="userMapping"/>
+        <beans:property name="userRepository" ref="userRepository"/>
+    </beans:bean>
+
+
+
+
+    <beans:bean class="org.springframework.remoting.rmi.RmiServiceExporter">
+        <!-- does not necessarily have to be the same name as the bean to be exported -->
+        <beans:property name="serviceName" value="LessonService"/>
+        <beans:property name="service" ref="lessonServiceImpl"/>
+        <beans:property name="serviceInterface" value="ru.innopolis.borgatin.common.service.ILessonService"/>
+        <!-- defaults to 1099 -->
+        <beans:property name="registryPort" value="1199"/>
+    </beans:bean>
+    <beans:bean id="lessonServiceImpl" class="ru.innopolis.borgatin.server.service.LessonService" >
+        <beans:property name="studentsMapping" ref="studentsMapping"/>
+        <beans:property name="lessonRepository" ref="lessonRepository"/>
+        <beans:property name="lessonsMapping" ref="lessonsMapping"/>
+        <beans:property name="studentRepository" ref="studentRepository"/>
+    </beans:bean>
+
+
+    <beans:bean id="lessonsMapping" class="ru.innopolis.borgatin.server.mapping.LessonsMapping"/>
+    <beans:bean id="studentsMapping" class="ru.innopolis.borgatin.server.mapping.StudentsMapping"/>
+    <beans:bean id="userMapping" class="ru.innopolis.borgatin.server.mapping.UsersMapping"/>
+
+
+        <beans:bean class = "org.springframework.remoting.rmi.RmiServiceExporter">
+            <beans:property name="serviceName" value="StudentService"/>
+            <beans:property name="service" ref="studentServiceImpl"/>
+            <beans:property name="serviceInterface" value="ru.innopolis.borgatin.common.service.IStudentService"/>
+            <beans:property name="registryPort" value="1199"/>
+        </beans:bean>
+        <beans:bean id="studentServiceImpl"  class="ru.innopolis.borgatin.server.service.StudentService">
+            <beans:property name="studentRepository" ref="studentRepository"/>
+            <beans:property name="studentsMapping" ref="studentsMapping"/>
+        </beans:bean>
+
+
+        <beans:bean id="entityManagerFactory"  class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+        <beans:property name="persistenceUnitName" value="TEST"/>
+        <beans:property name="jpaVendorAdapter">
+            <beans:bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
+                <beans:property name="database" value="POSTGRESQL" />
+                <beans:property name="showSql" value="true" />
+            </beans:bean>
+        </beans:property>
+    </beans:bean>
+
+    <beans:bean id = "transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+        <beans:property name="entityManagerFactory" ref="entityManagerFactory"/>
+    </beans:bean>
+
+
+
+</beans:beans>

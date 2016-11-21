@@ -1,11 +1,12 @@
 package ru.innopolis.borgatin.common.apistudent;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
  * Интерфейс описывает сущность урок
  */
-public interface ILesson {
+public interface ILesson extends Serializable {
     int getId();
 
     void setId(int id);
