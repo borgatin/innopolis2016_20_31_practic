@@ -12,6 +12,7 @@
 </head>
 <body>
 View student<br/>
+<p style="color:red">${msgError}</p> <br/>
 
     id: ${student.id} <br/>
     First Name: ${student.firstname} <br/>

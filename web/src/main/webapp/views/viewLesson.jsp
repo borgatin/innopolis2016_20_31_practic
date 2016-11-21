@@ -6,6 +6,7 @@
 </head>
 <body>
 View lesson<br/>
+<p style="color:red">${msgError}</p> <br/>
 
     id: ${lesson.id} <br/>
     Topic: ${lesson.topic} <br/>

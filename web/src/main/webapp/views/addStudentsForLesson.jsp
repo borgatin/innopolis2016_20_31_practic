@@ -12,6 +12,9 @@
     <br/>
     <a href="${pageContext.request.contextPath}/"> Home </a>
     <br/>
+    <p style="color:red">${msgError}</p> <br/>
+
+
     <form method="post" action="${pageContext.request.contextPath}/lessons/${lesson.id}/add-student">
     <select name="student">
         <c:forEach items="${list}" var="student">

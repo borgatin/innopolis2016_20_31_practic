@@ -17,6 +17,7 @@ All lessons
     <input type="submit" value="Filter">
 </form> <a href="${pageContext.request.contextPath}/lessons/all">Clear filter</a>
 <br/>
+<p style="color:red">${msgError}</p> <br/>
 <table>
     <thead>
     <td>ID</td>

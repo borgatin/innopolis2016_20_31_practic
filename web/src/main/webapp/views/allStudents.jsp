@@ -19,6 +19,7 @@ All students
     <input type="submit" value="Filter"><a href="${pageContext.request.contextPath}/students/all">Clear filter</a>
 </form>
 <br/>
+<p style="color:red">${msgError}</p> <br/>
 <table border="1">
     <thead>
     <td>ID</td>

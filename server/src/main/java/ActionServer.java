@@ -9,7 +9,6 @@ public class ActionServer {
     public static void main(String[] args) {
 
         new ClassPathXmlApplicationContext("xml-bean.xml" );
-//        new ClassPathXmlApplicationContext("mvc-context.xml" );
 
     }
 }

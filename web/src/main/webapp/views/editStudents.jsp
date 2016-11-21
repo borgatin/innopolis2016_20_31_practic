@@ -10,6 +10,8 @@
 
 <body>
 Edit student
+<p style="color:red">${msgError}</p> <br/>
+
 <spring:form method="post"  modelAttribute="student" action="${pageContext.request.contextPath}/students/update">
 
     ID: <spring:input readonly="true" path="id"/>   <br/>

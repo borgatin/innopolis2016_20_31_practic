@@ -1,5 +1,7 @@
 package ru.innopolis.borgatin.web.controller;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Component;
@@ -31,6 +33,10 @@ import java.util.List;
 @RequestMapping(value = CONST_URL_STUDENTS)
 public class StudentController {
 
+    Logger logger = LoggerFactory.getLogger(StudentController.class);
+
+
+
     private final IStudentService studentService;
 
 
@@ -54,9 +60,17 @@ public class StudentController {
     @RequestMapping(value = CONST_URL_ALL)
     public ModelAndView getAllStudents() {
         ModelAndView modelAndView = new ModelAndView();
-        List list = studentService.getAllStudents();
-        modelAndView.addObject(VIEW_VARIABLE_LIST, list);
-        modelAndView.addObject(VIEW_VARIABLE_SORT_TYPE, ASC.name());
+        try {
+            List list = studentService.getAllStudents();
+            modelAndView.addObject(VIEW_VARIABLE_LIST, list);
+            modelAndView.addObject(VIEW_VARIABLE_SORT_TYPE, ASC.name());
+        } catch (RuntimeException ex){
+            logger.error(
+                    new StringBuilder("Произошла ошибка при получении списка студентов: ")
+                            .append(ex.getMessage()).toString());
+            modelAndView.addObject(VIEW_VARIABLE_MSG_ERROR, VIEW_MSG_ERROR);
+        }
+
         modelAndView.setViewName(CONST_VIEW_ALL_STUDENTS);
         return modelAndView;
     }
@@ -71,9 +85,16 @@ public class StudentController {
     @RequestMapping(value = CONST_URL_FILTER)
     public ModelAndView getAllStudents(@RequestParam(VIEW_VARIABLE_FILTER) String filter) {
         ModelAndView modelAndView = new ModelAndView();
-        List list = studentService.getAllStudentsFiltered(filter);
-        modelAndView.addObject(VIEW_VARIABLE_LIST, list);
-        modelAndView.addObject(VIEW_VARIABLE_SORT_TYPE, DESC.name());
+        try {
+            List list = studentService.getAllStudentsFiltered(filter);
+            modelAndView.addObject(VIEW_VARIABLE_LIST, list);
+            modelAndView.addObject(VIEW_VARIABLE_SORT_TYPE, DESC.name());
+        } catch (RuntimeException ex){
+            logger.error(
+                    new StringBuilder("Произошла ошибка при получении отфильтрованного списка студентов: ")
+                            .append(ex.getMessage()).toString());
+            modelAndView.addObject(VIEW_VARIABLE_MSG_ERROR, VIEW_MSG_ERROR);
+        }
         modelAndView.setViewName(CONST_VIEW_ALL_STUDENTS);
         return modelAndView;
     }
@@ -89,8 +110,15 @@ public class StudentController {
     @RequestMapping(value = CONST_URL_VIEW_BY_ID)
     public ModelAndView viewStudent(@PathVariable(CONST_ID) int id) {
         ModelAndView modelAndView = new ModelAndView();
-        StudentModel studentModel = studentService.getStudentById(id);
-        modelAndView.addObject(CONST_STUDENT, studentModel);
+        try {
+            StudentModel studentModel = studentService.getStudentById(id);
+            modelAndView.addObject(CONST_STUDENT, studentModel);
+        } catch (RuntimeException ex){
+            logger.error(
+                    new StringBuilder("Произошла ошибка при получении студента по идентификатору: ")
+                            .append(ex.getMessage()).toString());
+            modelAndView.addObject(VIEW_VARIABLE_MSG_ERROR, VIEW_MSG_ERROR);
+        }
         modelAndView.setViewName(CONST_VIEW_STUDENT);
         return modelAndView;
     }
@@ -106,9 +134,16 @@ public class StudentController {
     @Secured(ROLE_ADMIN)
     @RequestMapping(value = CONST_URL_EDIT_BY_ID)
     public ModelAndView editStudentView(@PathVariable(CONST_ID) int id) {
-        StudentModel student = studentService.getStudentById(id);
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.addObject(CONST_STUDENT, student);
+        try {
+            StudentModel student = studentService.getStudentById(id);
+            modelAndView.addObject(CONST_STUDENT, student);
+        } catch (RuntimeException ex){
+            logger.error(
+                    new StringBuilder("Произошла ошибка при получении студента по идентификатору: ")
+                            .append(ex.getMessage()).toString());
+            modelAndView.addObject(VIEW_VARIABLE_MSG_ERROR, VIEW_MSG_ERROR);
+        }
         modelAndView.setViewName(CONST_VIEW_EDIT_STUDENTS);
         return modelAndView;
     }
@@ -136,14 +171,28 @@ public class StudentController {
     @RequestMapping(value = CONST_URL_ADD)
     public ModelAndView addStudent(StudentModel student, @RequestParam(VIEW_VARIABLE_BIRTHDAY) String birthday) {
         try {
-            student.setBirthdate(birthday);
-            student = studentService.createStudent(student);
             ModelAndView modelAndView = new ModelAndView();
-            modelAndView.addObject(CONST_STUDENT, student);
+            student.setBirthdate(birthday);
+            try {
+                student = studentService.createStudent(student);
+                modelAndView.addObject(CONST_STUDENT, student);
+            } catch (RuntimeException ex){
+                logger.error(
+                        new StringBuilder("Произошла ошибка при создании студента: ")
+                                .append(ex.getMessage()).toString());
+                modelAndView.addObject(VIEW_VARIABLE_MSG_ERROR, VIEW_MSG_ERROR);
+            }
             modelAndView.setViewName(CONST_VIEW_STUDENT);
             return modelAndView;
         } catch (ParseException e) {
-            return addStudentView();
+            logger.error(
+                    new StringBuilder("Произошла ошибка при парсинге даты из формы: ")
+                            .append(e.getMessage()).toString());
+            ModelAndView modelAndView = new ModelAndView();
+            modelAndView.addObject(CONST_STUDENT, new StudentModel());
+            modelAndView.addObject(VIEW_VARIABLE_MSG_ERROR, VIEW_MSG_ERROR);
+            modelAndView.setViewName(CONST_VIEW_ADD_STUDENTS);
+            return modelAndView;
         }
     }
     /**
@@ -154,9 +203,16 @@ public class StudentController {
     @Secured(ROLE_ADMIN)
     @RequestMapping(value = CONST_URL_UPDATE)
     public ModelAndView updateStudent(StudentModel student) {
-        student = studentService.updateStudent(student);
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.addObject(CONST_STUDENT, student);
+        try {
+            student = studentService.updateStudent(student);
+            modelAndView.addObject(CONST_STUDENT, student);
+        } catch (RuntimeException ex){
+            logger.error(
+                    new StringBuilder("Произошла ошибка при обновлении студента: ")
+                            .append(ex.getMessage()).toString());
+            modelAndView.addObject(VIEW_VARIABLE_MSG_ERROR, VIEW_MSG_ERROR);
+        }
         modelAndView.setViewName(CONST_VIEW_STUDENT);
         return modelAndView;
     }
@@ -170,8 +226,15 @@ public class StudentController {
     @Secured(ROLE_ADMIN)
     @RequestMapping(value = CONST_URL_DEL_BY_ID)
     public ModelAndView deleteStudent(@PathVariable(CONST_ID) int id) {
-        studentService.deleteStudentById(id);
         ModelAndView modelAndView = new ModelAndView();
+        try {
+            studentService.deleteStudentById(id);
+        } catch (RuntimeException ex){
+            logger.error(
+                    new StringBuilder("Произошла ошибка при удалении студента: ")
+                            .append(ex.getMessage()).toString());
+            modelAndView.addObject(VIEW_VARIABLE_MSG_ERROR, VIEW_MSG_ERROR);
+        }
         modelAndView.setViewName(CONST_URL_REDIRECT_ALL);
         return modelAndView;
     }
@@ -186,10 +249,17 @@ public class StudentController {
     @RequestMapping(value = CONST_URL_SORT_BY_SORT_TYPE)
     public ModelAndView sortAllByName(@PathVariable(VIEW_VARIABLE_SORT_TYPE) String sortType) {
         ModelAndView modelAndView = new ModelAndView();
-        SortType sortTypeEnum = SortType.valueOf(sortType);
-        List list = studentService.getAllStudents(sortTypeEnum);
-        modelAndView.addObject(VIEW_VARIABLE_LIST, list);
-        modelAndView.addObject(VIEW_VARIABLE_SORT_TYPE, ASC == sortTypeEnum ? DESC.name() : ASC.name());
+        try {
+            SortType sortTypeEnum = SortType.valueOf(sortType);
+            List list = studentService.getAllStudents(sortTypeEnum);
+            modelAndView.addObject(VIEW_VARIABLE_LIST, list);
+            modelAndView.addObject(VIEW_VARIABLE_SORT_TYPE, ASC == sortTypeEnum ? DESC.name() : ASC.name());
+        } catch (RuntimeException ex){
+            logger.error(
+                    new StringBuilder("Произошла ошибка при получении списка студентов в остортированном виде: ")
+                            .append(ex.getMessage()).toString());
+            modelAndView.addObject(VIEW_VARIABLE_MSG_ERROR, VIEW_MSG_ERROR);
+        }
         modelAndView.setViewName(CONST_VIEW_ALL_STUDENTS);
         return modelAndView;
     }

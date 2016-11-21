@@ -1,5 +1,7 @@
 package ru.innopolis.borgatin.web.controller;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Component;
@@ -27,6 +29,8 @@ import java.util.List;
 @RequestMapping(value = CONST_URL_LESSONS)
 public class LessonController {
 
+    Logger logger = LoggerFactory.getLogger(LessonController.class);
+
     private final ILessonService lessonService;
 
 
@@ -49,9 +53,16 @@ public class LessonController {
     @RequestMapping(value = CONST_URL_ALL)
     public ModelAndView getAllLessons() {
         ModelAndView modelAndView = new ModelAndView();
-        List list = lessonService.getAllLessons();
-        modelAndView.addObject(VIEW_VARIABLE_LIST, list);
-        modelAndView.addObject(VIEW_VARIABLE_SORT_TYPE, DESC.name());
+        try {
+           List<LessonModel> list = lessonService.getAllLessons();
+            modelAndView.addObject(VIEW_VARIABLE_LIST, list);
+            modelAndView.addObject(VIEW_VARIABLE_SORT_TYPE, DESC.name());
+        } catch (RuntimeException ex){
+            logger.error(
+                    new StringBuilder("Произошла ошибка при получении списка уроков: ")
+                    .append(ex.getMessage()).toString());
+            modelAndView.addObject(VIEW_VARIABLE_MSG_ERROR, VIEW_MSG_ERROR);
+        }
         modelAndView.setViewName(CONST_VIEW_ALL_LESSONS);
         return modelAndView;
     }
@@ -68,10 +79,16 @@ public class LessonController {
     @RequestMapping(value = CONST_URL_FILTER)
     public ModelAndView getAllLessons(@RequestParam(VIEW_VARIABLE_FILTER) String filter) {
         ModelAndView modelAndView = new ModelAndView();
-        List list = lessonService.getAllLessonsFiltered(filter);
-        modelAndView.addObject(VIEW_VARIABLE_LIST, list);
-        modelAndView.addObject(VIEW_VARIABLE_SORT_TYPE, ASC.name());
-
+        try {
+            List list = lessonService.getAllLessonsFiltered(filter);
+            modelAndView.addObject(VIEW_VARIABLE_LIST, list);
+            modelAndView.addObject(VIEW_VARIABLE_SORT_TYPE, ASC.name());
+        } catch (RuntimeException ex){
+            logger.error(
+                    new StringBuilder("Произошла ошибка при получении отфильтрованного списка уроков: ")
+                            .append(ex.getMessage()).toString());
+            modelAndView.addObject(VIEW_VARIABLE_MSG_ERROR, VIEW_MSG_ERROR);
+        }
         modelAndView.setViewName(CONST_VIEW_ALL_LESSONS);
         return modelAndView;
     }
@@ -87,8 +104,17 @@ public class LessonController {
     @RequestMapping(value = CONST_URL_VIEW_BY_ID)
     public ModelAndView viewLesson(@PathVariable(CONST_ID) int id) {
         ModelAndView modelAndView = new ModelAndView();
-        LessonModel lesson = lessonService.getLessonById(id);
-        modelAndView.addObject(CONST_LESSON, lesson);
+
+        try {
+            LessonModel lesson = lessonService.getLessonById(id);
+            modelAndView.addObject(CONST_LESSON, lesson);
+        } catch (RuntimeException ex){
+            logger.error(
+                    new StringBuilder("Произошла ошибка при получении урока по его идентификатору: ")
+                            .append(ex.getMessage()).toString());
+            modelAndView.addObject(VIEW_VARIABLE_MSG_ERROR, VIEW_MSG_ERROR);
+        }
+
 
         modelAndView.setViewName(CONST_VIEW_LESSON);
         return modelAndView;
@@ -105,9 +131,18 @@ public class LessonController {
     @Secured(ROLE_ADMIN)
     @RequestMapping(value = CONST_URL_EDIT_BY_ID)
     public ModelAndView editLessonView(@PathVariable(CONST_ID) int id) {
-        LessonModel lesson = lessonService.getLessonById(id);
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.addObject(CONST_LESSON, lesson);
+        try {
+            LessonModel lesson = lessonService.getLessonById(id);
+            modelAndView.addObject(CONST_LESSON, lesson);
+        } catch (RuntimeException ex){
+            logger.error(
+                    new StringBuilder("Произошла ошибка при получении урока по идентификатору: ")
+                            .append(ex.getMessage()).toString());
+            modelAndView.addObject(VIEW_VARIABLE_MSG_ERROR, VIEW_MSG_ERROR);
+        }
+
+
         modelAndView.setViewName(CONST_VIEW_EDIT_LESSONS);
         return modelAndView;
     }
@@ -135,9 +170,16 @@ public class LessonController {
     @Secured({ROLE_ADMIN})
     @RequestMapping(value = CONST_URL_ADD)
     public ModelAndView addLesson(LessonModel lesson) {
-        lesson = lessonService.createLesson(lesson);
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.addObject(CONST_LESSON, lesson);
+        try {
+            lesson = lessonService.createLesson(lesson);
+            modelAndView.addObject(CONST_LESSON, lesson);
+        } catch (RuntimeException ex){
+            logger.error(
+                    new StringBuilder("Произошла ошибка при создании урока: ")
+                            .append(ex.getMessage()).toString());
+            modelAndView.addObject(VIEW_VARIABLE_MSG_ERROR, VIEW_MSG_ERROR);
+        }
         modelAndView.setViewName(CONST_VIEW_LESSON);
         return modelAndView;
     }
@@ -151,9 +193,16 @@ public class LessonController {
     @Secured(ROLE_ADMIN)
     @RequestMapping(value = CONST_URL_UPDATE)
     public ModelAndView updateLesson(LessonModel lesson) {
-        lesson = lessonService.updateLesson(lesson);
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.addObject(CONST_LESSON, lesson);
+        try {
+            lesson = lessonService.updateLesson(lesson);
+            modelAndView.addObject(CONST_LESSON, lesson);
+        } catch (RuntimeException ex){
+            logger.error(
+                    new StringBuilder("Произошла ошибка при обновлении урока: ")
+                            .append(ex.getMessage()).toString());
+            modelAndView.addObject(VIEW_VARIABLE_MSG_ERROR, VIEW_MSG_ERROR);
+        }
         modelAndView.setViewName(CONST_VIEW_LESSON);
         return modelAndView;
     }
@@ -167,9 +216,16 @@ public class LessonController {
     @Secured(ROLE_ADMIN)
     @RequestMapping(value = CONST_URL_DEL_BY_ID)
     public ModelAndView deleteLesson(@PathVariable(CONST_ID) int id) {
-        lessonService.deleteLessonById(id);
-
         ModelAndView modelAndView = new ModelAndView();
+
+        try {
+            lessonService.deleteLessonById(id);
+        } catch (RuntimeException ex){
+            logger.error(
+                    new StringBuilder("Произошла ошибка при удалении урока: ")
+                            .append(ex.getMessage()).toString());
+            modelAndView.addObject(VIEW_VARIABLE_MSG_ERROR, VIEW_MSG_ERROR);
+        }
         modelAndView.setViewName(CONST_URL_REDIRECT_ALL);
         return modelAndView;
     }
@@ -184,10 +240,18 @@ public class LessonController {
     @RequestMapping(value = CONST_URL_SORT_BY_SORT_TYPE)
     public ModelAndView sortAllByName(@PathVariable(VIEW_VARIABLE_SORT_TYPE) String sortType) {
         ModelAndView modelAndView = new ModelAndView();
-        SortType sortTypeEnum = SortType.valueOf(sortType);
-        List list = lessonService.getAllLessons( sortTypeEnum);
-        modelAndView.addObject(VIEW_VARIABLE_LIST, list);
-        modelAndView.addObject(VIEW_VARIABLE_SORT_TYPE, ASC == sortTypeEnum ? DESC.name(): ASC.name());
+
+        try {
+            SortType sortTypeEnum = SortType.valueOf(sortType);
+            List list = lessonService.getAllLessons( sortTypeEnum);
+            modelAndView.addObject(VIEW_VARIABLE_LIST, list);
+            modelAndView.addObject(VIEW_VARIABLE_SORT_TYPE, ASC == sortTypeEnum ? DESC.name(): ASC.name());
+        } catch (RuntimeException ex){
+            logger.error(
+                    new StringBuilder("Произошла ошибка при получении отсортированного списка уроков: ")
+                            .append(ex.getMessage()).toString());
+            modelAndView.addObject(VIEW_VARIABLE_MSG_ERROR, VIEW_MSG_ERROR);
+        }
         modelAndView.setViewName(CONST_VIEW_ALL_LESSONS);
         return modelAndView;
     }
@@ -203,10 +267,18 @@ public class LessonController {
     @RequestMapping(value = CONST_URL_EDIT_STUDENTS_BY_LESSON_ID)
     public ModelAndView editStudentsForLesson(@PathVariable(CONST_ID) int id) {
         ModelAndView modelAndView = new ModelAndView();
-        LessonModel lesson = lessonService.getLessonById(id);
-        List<StudentModel> students = lessonService.getStudentsByLessonID(lesson.getId());
-        modelAndView.addObject(CONST_LESSON, lesson);
-        modelAndView.addObject(VIEW_VARIABLE_LIST, students);
+        try {
+            LessonModel lesson = lessonService.getLessonById(id);
+            List<StudentModel> students = lessonService.getStudentsByLessonID(lesson.getId());
+            modelAndView.addObject(CONST_LESSON, lesson);
+            modelAndView.addObject(VIEW_VARIABLE_LIST, students);
+        } catch (RuntimeException ex){
+            logger.error(
+                    new StringBuilder("Произошла ошибка при получении списка записанных на урок студентов: ")
+                            .append(ex.getMessage()).toString());
+            modelAndView.addObject(VIEW_VARIABLE_MSG_ERROR, VIEW_MSG_ERROR);
+        }
+
         modelAndView.setViewName(CONST_VIEW_EDIT_STUDENTS_FOR_LESSON);
         return modelAndView;
     }
@@ -221,18 +293,28 @@ public class LessonController {
     @RequestMapping(value = CONST_URL_EDIT_ADD_STUDENTS_BY_LESSONS)
     public ModelAndView addStudentsForLesson(@PathVariable(CONST_ID) int id) {
         ModelAndView modelAndView = new ModelAndView();
-        LessonModel lesson = lessonService.getLessonById(id);
-        modelAndView.addObject(CONST_LESSON, lesson);
-        List<StudentModel> students = lessonService.getFreeStudentsByLessonID(id);
-        if (students.size()>0) {
-            modelAndView.addObject(VIEW_VARIABLE_LIST, students);
-            modelAndView.setViewName(CONST_VIEW_ADD_STUDENTS_FOR_LESSON);
-        } else {
-            modelAndView.addObject(VIEW_VARIABLE_MSG_ERROR, VIEW_MSG_ALL_STUDENTS_RECORDED);
-            students = lessonService.getStudentsByLessonID(id);
-            modelAndView.addObject(VIEW_VARIABLE_LIST, students);
+
+        try {
+            LessonModel lesson = lessonService.getLessonById(id);
+            modelAndView.addObject(CONST_LESSON, lesson);
+            List<StudentModel> students = lessonService.getFreeStudentsByLessonID(id);
+            if (students.size()>0) {
+                modelAndView.addObject(VIEW_VARIABLE_LIST, students);
+                modelAndView.setViewName(CONST_VIEW_ADD_STUDENTS_FOR_LESSON);
+            } else {
+                modelAndView.addObject(VIEW_VARIABLE_MSG_ERROR, VIEW_MSG_ALL_STUDENTS_RECORDED);
+                students = lessonService.getStudentsByLessonID(id);
+                modelAndView.addObject(VIEW_VARIABLE_LIST, students);
+                modelAndView.setViewName(CONST_VIEW_EDIT_STUDENTS_FOR_LESSON);
+            }
+        } catch (RuntimeException ex){
+            logger.error(
+                    new StringBuilder("Произошла ошибка при получении списка свободных от урока студентов: ")
+                            .append(ex.getMessage()).toString());
+            modelAndView.addObject(VIEW_VARIABLE_MSG_ERROR, VIEW_MSG_ERROR);
             modelAndView.setViewName(CONST_VIEW_EDIT_STUDENTS_FOR_LESSON);
         }
+
         return modelAndView;
     }
 
@@ -247,9 +329,18 @@ public class LessonController {
     @Secured({ROLE_ADMIN, ROLE_USER})
     @RequestMapping(value = CONST_URL_EDIT_ADD_STUDENT_BY_LESSONS)
     public ModelAndView addStudentOnLesson(@PathVariable(CONST_ID) int id, @RequestParam(CONST_STUDENT) int studentId) {
-        //добавляем студента на урок
-        lessonService.addStudentOnLesson(id, studentId);
-        return editStudentsForLesson(id);
+
+        try {
+            lessonService.addStudentOnLesson(id, studentId);
+            return editStudentsForLesson(id);
+        } catch (RuntimeException ex){
+            logger.error(
+                    new StringBuilder("Произошла ошибка при добавлении студента на урок: ")
+                            .append(ex.getMessage()).toString());
+
+            return editStudentsForLesson(id);
+        }
+
     }
 
     /**
@@ -263,7 +354,16 @@ public class LessonController {
     @Secured({ROLE_ADMIN, ROLE_USER})
     @RequestMapping(value = CONST_URL_EDIT_DEL_STUDENT_BY_LESSONS)
     public ModelAndView deleteStudentFromLesson(@PathVariable(CONST_ID) int id,@PathVariable(VIEW_VARIABLE_STUDENT_ID) int studentId) {
-        lessonService.deleteStudentFromLesson(id, studentId);
-        return editStudentsForLesson(id);
+        try {
+            lessonService.deleteStudentFromLesson(id, studentId);
+            return editStudentsForLesson(id);
+        } catch (RuntimeException ex){
+            logger.error(
+                    new StringBuilder("Произошла ошибка при удалении студента с урока: ")
+                            .append(ex.getMessage()).toString());
+
+            return editStudentsForLesson(id);
+        }
+
     }
 }
